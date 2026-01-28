@@ -53,6 +53,11 @@ class PostController extends Controller
 
         $validated['slug'] = Str::slug($validated['title']);
         $validated['author_id'] = auth()->id();
+        
+        // Set published_at to now if not provided
+        if (!isset($validated['published_at']) || !$validated['published_at']) {
+            $validated['published_at'] = now();
+        }
 
         Post::create($validated);
 

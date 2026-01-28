@@ -52,6 +52,7 @@
             <div>
                 <label class="block text-sm font-semibold mb-2">Tanggal Publikasi</label>
                 <input type="datetime-local" name="published_at" value="{{ old('published_at') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                <p class="text-gray-600 text-sm mt-1">Kosongkan untuk publish sekarang</p>
                 @error('published_at')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
             </div>
             <div class="flex items-end">
