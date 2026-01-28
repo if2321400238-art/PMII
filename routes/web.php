@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\KorwilController;
 use App\Http\Controllers\Admin\RayonController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
+use App\Http\Controllers\Admin\ProfilOrganisasiController;
 use App\Http\Controllers\ProfileController;
 
 // Frontend Routes
@@ -92,6 +93,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Download Management (Admin only)
     Route::middleware('role:admin')->resource('download', AdminDownloadController::class);
+
+    // Profil Organisasi (Admin only)
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/profil-organisasi', [ProfilOrganisasiController::class, 'edit'])->name('profil-organisasi.edit');
+        Route::put('/profil-organisasi', [ProfilOrganisasiController::class, 'update'])->name('profil-organisasi.update');
+    });
 });
 
 require __DIR__.'/auth.php';

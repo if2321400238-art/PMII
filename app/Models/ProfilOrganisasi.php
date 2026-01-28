@@ -11,6 +11,7 @@ class ProfilOrganisasi extends Model
     protected $fillable = [
         'nama_organisasi',
         'logo_path',
+        'hero_image',
         'sejarah',
         'visi',
         'misi',
