@@ -76,6 +76,14 @@
                         @endif
                     </a>
                 @endif
+
+                {{-- User Management - Admin only --}}
+                @if(auth()->user()->role?->slug === 'admin')
+                    <div class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider mt-6">Sistem</div>
+                    <a href="{{ route('admin.users.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.users.*') ? 'bg-green-600 text-white' : '' }}">
+                        👤 Kelola User
+                    </a>
+                @endif
             </nav>
 
 
