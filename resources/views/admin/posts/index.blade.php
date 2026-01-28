@@ -40,9 +40,12 @@
                     <td class="px-6 py-4 text-sm">{{ $post->author->name }}</td>
                     <td class="px-6 py-4">
                         @if($post->published_at)
-                            <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-                                Published
-                            </span>
+                            <div>
+                                <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                                    Published
+                                </span>
+                                <p class="text-xs text-gray-500 mt-1">{{ $post->published_at->format('Y-m-d H:i') }}</p>
+                            </div>
                         @else
                             <span class="px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-800">
                                 Draft

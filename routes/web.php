@@ -46,6 +46,67 @@ Route::get('/data', [DataController::class, 'index'])->name('data.index');
 Route::get('/data/sk-form', [DataController::class, 'skForm'])->name('frontend.sk-form');
 Route::post('/data/sk-form', [DataController::class, 'storeSkForm'])->name('frontend.sk-store');
 
+// Debug Routes (temporary)
+Route::get('/debug-posts-all', function () {
+    $allPosts = \App\Models\Post::all();
+    $beritaPublished = \App\Models\Post::berita()->published()->get();
+    $penaSantriPublished = \App\Models\Post::penaSantri()->published()->get();
+    
+    return response()->json([
+        'all_posts' => $allPosts->map(fn($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+            'type' => $p->type,
+            'published_at' => $p->published_at?->format('Y-m-d H:i:s'),
+            'is_past' => $p->published_at ? $p->published_at <= now() : false,
+        ]),
+        'berita_published' => $beritaPublished->map(fn($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+            'published_at' => $p->published_at->format('Y-m-d H:i:s'),
+        ]),
+        'pena_santri_published' => $penaSantriPublished->map(fn($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+            'published_at' => $p->published_at->format('Y-m-d H:i:s'),
+        ]),
+        'now' => now()->format('Y-m-d H:i:s'),
+    ]);
+});
+
+Route::get('/debug-home-data', function () {
+    \Cache::forget('home.berita_populer');
+    \Cache::forget('home.berita_terkini');
+    \Cache::forget('home.pena_santri');
+    
+    $beritaPopuler = \App\Models\Post::berita()
+        ->published()
+        ->popular()
+        ->latest('published_at')
+        ->take(6)
+        ->get();
+    
+    $penaSantriHighlight = \App\Models\Post::penaSantri()
+        ->published()
+        ->latest('published_at')
+        ->take(5)
+        ->get();
+    
+    return response()->json([
+        'berita_populer_count' => $beritaPopuler->count(),
+        'berita_populer' => $beritaPopuler->map(fn($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+            'is_popular' => $p->is_popular,
+        ]),
+        'pena_santri_count' => $penaSantriHighlight->count(),
+        'pena_santri' => $penaSantriHighlight->map(fn($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+        ]),
+    ]);
+});
+
 // Profile Routes (Breeze)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

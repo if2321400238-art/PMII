@@ -20,13 +20,25 @@ class HomeController extends Controller
         $cacheTime = config('app.env') === 'local' ? 30 : 300;
 
         $beritaPopuler = Cache::remember('home.berita_populer', $cacheTime, function () {
-            return Post::berita()
+            $popular = Post::berita()
                 ->published()
                 ->popular()
                 ->latest('published_at')
                 ->take(6)
                 ->with(['author', 'category'])
                 ->get();
+            
+            // Jika tidak ada berita popular, ambil berita terkini
+            if ($popular->isEmpty()) {
+                return Post::berita()
+                    ->published()
+                    ->latest('published_at')
+                    ->take(6)
+                    ->with(['author', 'category'])
+                    ->get();
+            }
+            
+            return $popular;
         });
 
         $beritaTerkini = Cache::remember('home.berita_terkini', $cacheTime, function () {
