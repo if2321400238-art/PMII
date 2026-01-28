@@ -24,27 +24,30 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create Admin User
-        User::factory()->create([
+        User::create([
             'name' => 'Admin',
             'email' => 'admin@iskab.com',
             'password' => bcrypt('password'),
             'role_id' => \App\Models\Role::where('slug', 'admin')->first()?->id,
+            'email_verified_at' => now(),
         ]);
 
         // Create Editor User
-        User::factory()->create([
+        User::create([
             'name' => 'Editor',
             'email' => 'editor@iskab.com',
             'password' => bcrypt('password'),
             'role_id' => \App\Models\Role::where('slug', 'editor')->first()?->id,
+            'email_verified_at' => now(),
         ]);
 
         // Create BPH PB User
-        User::factory()->create([
+        User::create([
             'name' => 'BPH PB',
             'email' => 'bphpb@iskab.com',
             'password' => bcrypt('password'),
             'role_id' => \App\Models\Role::where('slug', 'bph_pb')->first()?->id,
+            'email_verified_at' => now(),
         ]);
     }
 }
