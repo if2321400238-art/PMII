@@ -31,7 +31,7 @@
             <div class="relative w-full sm:w-auto">
                 <div class="absolute inset-0 -inset-x-1 -inset-y-1 rounded-xl md:rounded-2xl" style="background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px);"></div>
                 <a href="{{ route('about.profil') }}"
-                   class="relative block text-center px-6 sm:px-8 md:px-10 py-3 md:py-4 bg-green-500 text-white text-sm md:text-base font-semibold rounded-lg md:rounded-xl hover:bg-green-600 transition-all duration-300 shadow-lg">
+                   class="relative block text-center px-6 sm:px-8 md:px-10 py-3 md:py-4 bg-gradient-to-r from-green-500 to-green-700 text-white text-sm md:text-base font-semibold rounded-lg md:rounded-xl hover:bg-green-600 transition-all duration-300 shadow-lg">
                     Tentang kami
                 </a>
             </div>
@@ -106,29 +106,31 @@
     </div>
 </section>
 
-<!-- Berita Populer -->
-<section class="bg-gradient-to-b from-green-600 to-green-700 py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12">Berita Populer</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @forelse($beritaPopuler->take(3) as $post)
-                <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1">
+<!-- Berita Terkini -->
+<section class="bg-gradient-to-b from-green-600 to-green-700 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-4">Berita Terkini</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($beritaTerkini->take(6) as $post)
+                <!-- Artikel -->
+                <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-64">
                     @if($post->thumbnail)
-                        <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-48 object-cover">
+                        <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                     @else
-                        <div class="w-full h-48 bg-gradient-to-br from-green-400 to-green-600"></div>
+                        <div class="w-full h-full bg-gradient-to-br from-green-400 to-green-600"></div>
                     @endif
-                    <div class="p-6">
-                        <div class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Berita ISKAB</div>
-                        <h3 class="text-lg font-bold mb-2 line-clamp-2 text-gray-800">
-                            <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-green-600">{{ $post->title }}</a>
+                    <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                        <div class="inline-block bg-gradient-to-l from-green-500 to-green-700 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">Berita ISKAB</div>
+                        <h3 class="text-base font-bold line-clamp-2">
+                            <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-green-300">{{ $post->title }}</a>
                         </h3>
-                        <p class="text-gray-600 text-sm line-clamp-2">{{ strip_tags($post->content) }}</p>
+                        <p class="text-gray-200 text-xs line-clamp-1">{{ strip_tags($post->content) }}</p>
                     </div>
                 </article>
             @empty
-                <div class="col-span-3 text-center">
-                    <p class="text-white text-lg">Belum ada berita populer</p>
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
+                    <p class="text-white text-lg">Belum ada berita terkini</p>
                 </div>
             @endforelse
         </div>
@@ -136,22 +138,22 @@
 </section>
 
 <!-- Pena Santri -->
-<section class="bg-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-green-700 mb-12">Pena Santri</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+<section class="bg-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-green-700 mb-4">Pena Santri</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($penaSantriHighlight as $index => $post)
                 @if($index === 0)
                     <!-- Artikel Utama -->
-                    <article class="md:col-span-2 md:row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative">
+                    <article class="md:col-span-2 lg:col-span-1 lg:row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative min-h-[320px]">
                         @if($post->thumbnail)
                             <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full bg-gradient-to-br from-green-400 to-green-600"></div>
                         @endif
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
                         <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                            <div class="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Pena Santri</div>
+                            <div class="inline-block bg-gradient-to-r from-green-500 to-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Pena Santri</div>
                             <h3 class="text-2xl font-bold mb-2">
                                 <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-green-300">{{ $post->title }}</a>
                             </h3>
@@ -160,15 +162,15 @@
                     </article>
                 @else
                     <!-- Artikel Kecil -->
-                    <article class="md:col-span-1 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-64">
+                    <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-48">
                         @if($post->thumbnail)
                             <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full bg-gradient-to-br from-green-400 to-green-600"></div>
                         @endif
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
                         <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-                            <div class="inline-block bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">Pena Santri</div>
+                            <div class="inline-block bg-gradient-to-l from-green-500 to-green-700 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">Pena Santri</div>
                             <h3 class="text-base font-bold line-clamp-2">
                                 <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-green-300">{{ $post->title }}</a>
                             </h3>
@@ -177,7 +179,7 @@
                     </article>
                 @endif
             @empty
-                <div class="col-span-5 text-center">
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
                     <p class="text-gray-500 text-lg">Belum ada artikel pena santri</p>
                 </div>
             @endforelse
@@ -186,20 +188,20 @@
                 @for($i = $penaSantriHighlight->count(); $i < 5; $i++)
                     @if($i === 0)
                         <!-- Artikel Utama Placeholder -->
-                        <article class="md:col-span-2 md:row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden relative">
-                            <div class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <article class="md:col-span-2 lg:col-span-1 lg:row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden relative min-h-[320px]">
+                            <div class="w-full h-full bg-gradient-to-br from-green-300 to-green-400"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                <div class="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Pena Santri</div>
+                                <div class="inline-block bg-gradient-to-l from-green-500 to-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Pena Santri</div>
                                 <h3 class="text-2xl font-bold mb-2">Lorem ipsum dolor consectetur</h3>
                                 <p class="text-gray-200 text-sm line-clamp-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                             </div>
                         </article>
                     @else
                         <!-- Artikel Kecil Placeholder -->
-                        <article class="md:col-span-1 bg-white rounded-2xl shadow-xl overflow-hidden relative h-64">
+                        <article class="bg-white rounded-2xl shadow-xl overflow-hidden relative h-48">
                             <div class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
                                 <div class="inline-block bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">Pena Santri</div>
                                 <h3 class="text-base font-bold line-clamp-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h3>
