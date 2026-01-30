@@ -49,7 +49,7 @@
 </section>
 
 <!-- ISKAB Dalam Angka Section -->
-<section class="bg-white py-16 md:py-16">
+<section class="bg-white py-8 md:py-16" id="iskab-stats">
     <div class="max-w-7xl mx-auto px-6 sm:px-12 lg:px-40">
         <h2 class="text-3xl md:text-4xl font-bold text-center text-green-700 mb-8 md:mb-12">ISKAB dalam Angka</h2>
         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-6 md:gap-8">
@@ -58,7 +58,7 @@
                 <div class="absolute -inset-x-1 -inset-y-1 bg-gray-200 rounded-2xl md:rounded-3xl"></div>
                 <!-- Card Content -->
                 <div class="relative bg-gradient-to-br from-[#48D853] to-[#26722C] rounded-2xl md:rounded-3xl p-6 md:p-8 text-center shadow-2xl transform hover:scale-105 transition">
-                    <div class="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-2">{{ $stats['korwil'] }}</div>
+                    <div class="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-2 counter" data-target="{{ $stats['korwil'] }}">0</div>
                     <div class="text-md md:text-xl font-semibold text-white text-center uppercase">KORWIL</div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                 <div class="absolute -inset-x-1 -inset-y-1 bg-gray-200 rounded-2xl md:rounded-3xl"></div>
                 <!-- Card Content -->
                 <div class="relative bg-gradient-to-br from-[#48D853] to-[#26722C] rounded-2xl md:rounded-3xl p-6 md:p-8 text-center shadow-2xl transform hover:scale-105 transition">
-                    <div class="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-2">{{ $stats['rayon'] }}</div>
+                    <div class="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-2 counter" data-target="{{ $stats['rayon'] }}">0</div>
                     <div class="text-md md:text-xl font-semibold text-white text-center uppercase">RAYON</div>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                 <div class="absolute -inset-x-1 -inset-y-1 bg-gray-200 rounded-2xl md:rounded-3xl"></div>
                 <!-- Card Content -->
                 <div class="relative bg-gradient-to-br from-[#48D853] to-[#26722C] rounded-2xl md:rounded-3xl p-6 md:p-8 text-center shadow-2xl transform hover:scale-105 transition">
-                    <div class="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-2">{{ $stats['anggota'] }}</div>
+                    <div class="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-2 counter" data-target="{{ $stats['anggota'] }}">0</div>
                     <div class="text-md md:text-xl font-semibold text-white text-center uppercase">SANTRI</div>
                 </div>
             </div>
@@ -104,45 +104,125 @@
 </section>
 
 <!-- Berita Terkini -->
-<section class="bg-gradient-to-b from-green-600 to-green-700 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-4">Berita Terkini</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @forelse($beritaTerkini->take(6) as $post)
-                <!-- Artikel -->
-                <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-64">
-                    @if($post->thumbnail)
-                        <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
-                    @else
-                        <div class="w-full h-full bg-gradient-to-br from-green-400 to-green-600"></div>
-                    @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-                        <div class="inline-block bg-gradient-to-l from-green-500 to-green-700 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">Berita ISKAB</div>
-                        <h3 class="text-base font-bold line-clamp-2">
-                            <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-green-300">{{ $post->title }}</a>
-                        </h3>
-                        <p class="text-gray-200 text-xs line-clamp-1">{{ strip_tags($post->content) }}</p>
+<section class="bg-gradient-to-b from-green-600 to-green-700 py-12 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-8">Berita Terkini</h2>
+
+        <!-- Carousel Container -->
+        <div class="relative">
+            <!-- Tombol Panah Kiri -->
+            <button id="prevBerita" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 text-green-700 rounded-full p-2 md:p-3 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+
+            <!-- Tombol Panah Kanan -->
+            <button id="nextBerita" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 text-green-700 rounded-full p-2 md:p-3 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+
+            <!-- Carousel Wrapper - Fixed Pages -->
+            <div class="relative overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide mx-8">
+                <div id="beritaCarousel">
+                    <div id="beritaContainer" class="flex gap-4 lg:gap-6 py-2">
+                        @forelse($beritaTerkini as $post)
+                            <!-- Artikel - 1 card per slide di mobile, 3 cards per slide di desktop -->
+                            <article class="flex-none w-full lg:w-[calc(33.333%-1rem)] bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-64">
+                                @if($post->thumbnail)
+                                    <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-green-400 to-green-600"></div>
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                    <div class="inline-block bg-gradient-to-l from-green-500 to-green-700 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">Berita ISKAB</div>
+                                    <h3 class="text-sm md:text-base font-bold line-clamp-2">
+                                        <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-green-300">{{ $post->title }}</a>
+                                    </h3>
+                                    <p class="text-gray-200 text-xs line-clamp-1">{{ strip_tags($post->content) }}</p>
+                                </div>
+                            </article>
+                        @empty
+                            <div class="w-full text-center py-8">
+                                <p class="text-white text-lg">Belum ada berita terkini</p>
+                            </div>
+                        @endforelse
                     </div>
-                </article>
-            @empty
-                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
-                    <p class="text-white text-lg">Belum ada berita terkini</p>
                 </div>
-            @endforelse
+            </div>
         </div>
+
+        <!-- Dots Indicators -->
+        <div id="beritaDots" class="flex justify-center gap-2 mt-6"></div>
     </div>
 </section>
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 
 <!-- Pena Santri -->
 <section class="bg-white py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-green-700 mb-4">Pena Santri</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-green-700 mb-8">Pena Santri</h2>
+
+        <!-- Mobile: Carousel with arrows -->
+        <div class="lg:hidden relative">
+            <!-- Tombol Panah Kiri Mobile -->
+            <button id="prevPenaSantri" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-green-700 hover:bg-green-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+
+            <!-- Tombol Panah Kanan Mobile -->
+            <button id="nextPenaSantri" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-green-700 hover:bg-green-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+
+            <!-- Carousel Mobile -->
+            <div id="penaSantriCarousel" class="overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide mx-8">
+                <div class="flex gap-4 py-2">
+                    @forelse($penaSantriHighlight as $post)
+                        <article class="flex-none w-full bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-72">
+                            @if($post->thumbnail)
+                                <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-green-400 to-green-600"></div>
+                            @endif
+                            <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
+                                <div class="inline-block bg-gradient-to-r from-green-500 to-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Pena Santri</div>
+                                <h3 class="text-lg font-bold mb-2 line-clamp-2">
+                                    <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-green-300">{{ $post->title }}</a>
+                                </h3>
+                                <p class="text-gray-200 text-sm line-clamp-2">{{ strip_tags($post->content) }}</p>
+                            </div>
+                        </article>
+                    @empty
+                        <div class="w-full text-center py-8">
+                            <p class="text-gray-500 text-lg">Belum ada artikel pena santri</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Dots Indicators Mobile -->
+            <div id="penaSantriDots" class="flex justify-center gap-2 mt-6"></div>
+        </div>
+
+        <!-- Desktop: Grid Layout -->
+        <div class="hidden lg:grid grid-cols-3 gap-6">
             @forelse($penaSantriHighlight as $index => $post)
                 @if($index === 0)
                     <!-- Artikel Utama -->
-                    <article class="md:col-span-2 lg:col-span-1 lg:row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative min-h-[320px]">
+                    <article class="col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative min-h-[320px]">
                         @if($post->thumbnail)
                             <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                         @else
@@ -176,7 +256,7 @@
                     </article>
                 @endif
             @empty
-                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
+                <div class="col-span-3 text-center">
                     <p class="text-gray-500 text-lg">Belum ada artikel pena santri</p>
                 </div>
             @endforelse
@@ -185,7 +265,7 @@
                 @for($i = $penaSantriHighlight->count(); $i < 5; $i++)
                     @if($i === 0)
                         <!-- Artikel Utama Placeholder -->
-                        <article class="md:col-span-2 lg:col-span-1 lg:row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden relative min-h-[320px]">
+                        <article class="col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden relative min-h-[320px]">
                             <div class="w-full h-full bg-gradient-to-br from-green-300 to-green-400"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-green-900 via-transparent to-transparent"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -211,4 +291,204 @@
         </div>
     </div>
 </section>
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ==================== Counter Animation ====================
+    const counters = document.querySelectorAll('.counter');
+    let animated = false;
+
+    const animateCounter = (counter) => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+
+        const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+                counter.textContent = Math.floor(current);
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.textContent = target;
+            }
+        };
+
+        updateCounter();
+    };
+
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !animated) {
+                animated = true;
+                counters.forEach(counter => {
+                    animateCounter(counter);
+                });
+            }
+        });
+    }, observerOptions);
+
+    const statsSection = document.getElementById('iskab-stats');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+
+    // ==================== Carousel Utility ====================
+    function initCarousel(config) {
+        const { carouselId, prevBtnId, nextBtnId, dotsId, getCardsPerPage, dotActiveClass, dotInactiveClass } = config;
+
+        const carousel = document.getElementById(carouselId);
+        const prevBtn = document.getElementById(prevBtnId);
+        const nextBtn = document.getElementById(nextBtnId);
+        const dotsContainer = document.getElementById(dotsId);
+
+        if (!carousel || !prevBtn || !nextBtn) return;
+
+        const articles = Array.from(carousel.querySelectorAll('article'));
+        const totalArticles = articles.length;
+        let currentPage = 0;
+
+        const getTotalPages = () => Math.ceil(totalArticles / getCardsPerPage());
+
+        const createDots = () => {
+            dotsContainer.innerHTML = '';
+            const totalPages = getTotalPages();
+
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'w-2.5 h-2.5 rounded-full transition-all duration-300';
+                dot.onclick = () => goToPage(i);
+                dotsContainer.appendChild(dot);
+            }
+            updateDots();
+        };
+
+        const updateDots = () => {
+            const dots = dotsContainer.querySelectorAll('button');
+            dots.forEach((dot, index) => {
+                dot.className = index === currentPage ? dotActiveClass : dotInactiveClass;
+            });
+        };
+
+        const goToPage = (page) => {
+            const totalPages = getTotalPages();
+            currentPage = Math.max(0, Math.min(page, totalPages - 1));
+
+            const cardsPerPage = getCardsPerPage();
+            const cardIndex = currentPage * cardsPerPage;
+            const targetCard = articles[cardIndex];
+
+            if (targetCard) {
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }
+
+            setTimeout(() => {
+                updateDots();
+                updateButtons();
+            }, 100);
+        };
+
+        const updateButtons = () => {
+            const totalPages = getTotalPages();
+
+            prevBtn.style.opacity = currentPage === 0 ? '0.5' : '1';
+            prevBtn.style.cursor = currentPage === 0 ? 'not-allowed' : 'pointer';
+            nextBtn.style.opacity = currentPage >= totalPages - 1 ? '0.5' : '1';
+            nextBtn.style.cursor = currentPage >= totalPages - 1 ? 'not-allowed' : 'pointer';
+        };
+
+        const updateCurrentPage = () => {
+            const scrollLeft = carousel.scrollLeft;
+            const cardsPerPage = getCardsPerPage();
+            let closestIndex = 0;
+            let minDistance = Infinity;
+
+            articles.forEach((article, index) => {
+                const cardLeft = article.offsetLeft - carousel.offsetLeft;
+                const distance = Math.abs(scrollLeft - cardLeft);
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestIndex = index;
+                }
+            });
+
+            const newPage = Math.floor(closestIndex / cardsPerPage);
+
+            if (newPage !== currentPage) {
+                currentPage = newPage;
+                updateDots();
+                updateButtons();
+            }
+        };
+
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentPage > 0) goToPage(currentPage - 1);
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const totalPages = getTotalPages();
+            if (currentPage < totalPages - 1) goToPage(currentPage + 1);
+        });
+
+        let scrollTimeout;
+        carousel.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(updateCurrentPage, 150);
+        });
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                currentPage = 0;
+                carousel.scrollLeft = 0;
+                createDots();
+                updateButtons();
+            }, 250);
+        });
+
+        createDots();
+        updateButtons();
+    }
+
+    // ==================== Initialize Carousels ====================
+    // Berita Terkini
+    initCarousel({
+        carouselId: 'beritaCarousel',
+        prevBtnId: 'prevBerita',
+        nextBtnId: 'nextBerita',
+        dotsId: 'beritaDots',
+        getCardsPerPage: () => window.innerWidth >= 1024 ? 3 : 1,
+        dotActiveClass: 'w-8 h-2.5 rounded-full bg-white transition-all duration-300',
+        dotInactiveClass: 'w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300'
+    });
+
+    // Pena Santri (Mobile only)
+    if (window.innerWidth < 1024) {
+        initCarousel({
+            carouselId: 'penaSantriCarousel',
+            prevBtnId: 'prevPenaSantri',
+            nextBtnId: 'nextPenaSantri',
+            dotsId: 'penaSantriDots',
+            getCardsPerPage: () => 1,
+            dotActiveClass: 'w-8 h-2.5 rounded-full bg-green-700 transition-all duration-300',
+            dotInactiveClass: 'w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300'
+        });
+    }
+});
+</script>
+
 @endsection
