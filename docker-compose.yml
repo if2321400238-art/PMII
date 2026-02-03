@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: iskab-app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./storage:/var/www/storage
+      - ./database:/var/www/database
+      - ./.env:/var/www/.env:ro
+    networks:
+      - iskab-network
+
+networks:
+  iskab-network:
+    driver: bridge
