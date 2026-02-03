@@ -1,33 +1,32 @@
 # Build stage for Node.js assets
 FROM node:20-alpine AS node-builder
-
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm ci
-
 COPY . .
 RUN npm run build
 
 # PHP production stage
 FROM php:8.2-fpm-alpine
 
-# Install system dependencies
+# Update dependencies
 RUN apk add --no-cache \
     nginx \
     supervisor \
-    sqlite \
     zip \
     unzip \
     git \
     curl \
     libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
     oniguruma-dev \
     libxml2-dev \
     libzip-dev
 
-# Install PHP extensions
-RUN docker-php-ext-install \
+# Konfigurasi GD agar bisa memproses JPG/PNG
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
     pdo_mysql \
     mbstring \
     exif \
@@ -51,12 +50,20 @@ COPY --from=node-builder --chown=www-data:www-data /app/public/build ./public/bu
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Create necessary directories and set permissions
+# PERBAIKAN IZIN AKSES (STORAGE & NGINX TMP)
 RUN mkdir -p /var/www/storage/logs \
     /var/www/storage/framework/{sessions,views,cache} \
     /var/www/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+    # Buat folder temp Nginx agar tidak error saat upload file besar
+    && mkdir -p /var/lib/nginx/tmp/client_body \
+    # Set owner ke www-data untuk semua folder terkait
+    && chown -R www-data:www-data /var/www/storage \
+    && chown -R www-data:www-data /var/www/bootstrap/cache \
+    && chown -R www-data:www-data /var/lib/nginx \
+    # Set permission folder
+    && chmod -R 775 /var/www/storage \
+    && chmod -R 775 /var/www/bootstrap/cache \
+    && chmod -R 775 /var/lib/nginx
 
 # Create SQLite database directory
 RUN mkdir -p /var/www/database && \

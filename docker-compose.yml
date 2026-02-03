@@ -6,14 +6,32 @@ services:
     container_name: iskab-app
     restart: unless-stopped
     ports:
-      - "8000:80"
+      - "80:80"
     volumes:
       - ./storage:/var/www/storage
-      - ./database:/var/www/database
       - ./.env:/var/www/.env:ro
+    depends_on:
+      - mysql
+    networks:
+      - iskab-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: iskab-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: iskab
+      MYSQL_USER: iskab_user
+      MYSQL_PASSWORD: passwordku
+      MYSQL_ROOT_PASSWORD: root_password_rahasia
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - iskab-network
 
 networks:
   iskab-network:
     driver: bridge
+
+volumes:
+  mysql_data:
