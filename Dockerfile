@@ -50,22 +50,21 @@ COPY --from=node-builder --chown=www-data:www-data /app/public/build ./public/bu
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# PERBAIKAN IZIN AKSES (STORAGE & NGINX TMP)
+# PERBAIKAN IZIN AKSES & OTOMATISASI STORAGE LINK
 RUN mkdir -p /var/www/storage/logs \
     /var/www/storage/framework/{sessions,views,cache} \
     /var/www/bootstrap/cache \
-    # Buat folder temp Nginx agar tidak error saat upload file besar
-    && mkdir -p /var/lib/nginx/tmp/client_body \
-    # Set owner ke www-data untuk semua folder terkait
+    /var/lib/nginx/tmp/client_body \
     && chown -R www-data:www-data /var/www/storage \
     && chown -R www-data:www-data /var/www/bootstrap/cache \
     && chown -R www-data:www-data /var/lib/nginx \
-    # Set permission folder
     && chmod -R 775 /var/www/storage \
     && chmod -R 775 /var/www/bootstrap/cache \
-    && chmod -R 775 /var/lib/nginx
+    && chmod -R 775 /var/lib/nginx \
+    # Membuat symlink otomatis di dalam image
+    && ln -s /var/www/storage/app/public /var/www/public/storage
 
-# Create SQLite database directory
+# Create SQLite database directory (jika pakai SQLite)
 RUN mkdir -p /var/www/database && \
     touch /var/www/database/database.sqlite && \
     chown -R www-data:www-data /var/www/database && \
@@ -77,8 +76,5 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/php.ini /usr/local/etc/php/conf.d/custom.ini
 
-# Expose port
 EXPOSE 80
-
-# Start supervisor
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
