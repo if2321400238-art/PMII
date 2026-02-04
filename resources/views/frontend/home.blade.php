@@ -5,7 +5,7 @@
 @section('content')
     <!-- Hero Section Full Width dari Atas dengan Rounded Bottom -->
     <section
-        class="relative bg-gradient-to-r from-green-700 to-green-800 text-white overflow-hidden rounded-b-[2rem] md:rounded-b-[3rem] min-h-screen pt-18 md:pt-24">
+        class="relative bg-gradient-to-r from-green-700 to-green-800 text-white overflow-hidden rounded-b-[2rem] md:rounded-b-[3rem] min-h-[500px] md:min-h-[600px] lg:min-h-[700px] pt-20 md:pt-24">
         <!-- Hero Image Slider dengan Overlay Hijau Gelap -->
         @php
             $heroImages = array_filter([
@@ -49,7 +49,7 @@
 
         <!-- Konten Hero - Centered -->
         <div
-            class="relative z-10 flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-12 lg:px-20 min-h-screen pb-20 md:pb-24">
+            class="relative z-10 flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-12 lg:px-20 min-h-[500px] md:min-h-[600px] lg:min-h-[700px] pt-8 sm:pt-12 md:pt-20 lg:pt-32 pb-8 sm:pb-12 md:pb-20 lg:pb-32">
             <!-- Heading Besar -->
             <h1
                 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 md:mb-10 leading-tight text-white">
