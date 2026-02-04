@@ -61,7 +61,8 @@ RUN mkdir -p /var/www/storage/logs \
     && chmod -R 775 /var/www/storage \
     && chmod -R 775 /var/www/bootstrap/cache \
     && chmod -R 775 /var/lib/nginx \
-    # Membuat symlink otomatis di dalam image
+    # Membuat symlink otomatis di dalam image (hapus dulu jika sudah ada)
+    && rm -f /var/www/public/storage \
     && ln -s /var/www/storage/app/public /var/www/public/storage
 
 # Create SQLite database directory (jika pakai SQLite)

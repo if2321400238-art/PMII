@@ -1,37 +1,36 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: iskab-app
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - ./storage:/var/www/storage
-      - ./.env:/var/www/.env:ro
-    depends_on:
-      - mysql
-    networks:
-      - iskab-network
-
-  mysql:
-    image: mysql:8.0
-    container_name: iskab-db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: iskab
-      MYSQL_USER: iskab_user
-      MYSQL_PASSWORD: passwordku
-      MYSQL_ROOT_PASSWORD: root_password_rahasia
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - iskab-network
-
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: iskab-app
+        restart: unless-stopped
+        ports:
+            - '80:80'
+        volumes:
+            - './storage:/var/www/storage'
+            - './.env.docker:/var/www/.env'
+        depends_on:
+            - mysql
+        networks:
+            - iskab-network
+    mysql:
+        image: 'mysql:8.0'
+        container_name: iskab-db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: iskab
+            MYSQL_USER: iskab_user
+            MYSQL_PASSWORD: passwordku
+            MYSQL_ROOT_PASSWORD: root_password_rahasia
+        volumes:
+            - 'mysql_data:/var/lib/mysql'
+        networks:
+            - iskab-network
 networks:
-  iskab-network:
-    driver: bridge
-
+    iskab-network:
+        driver: bridge
 volumes:
-  mysql_data:
+    mysql_data: null
+    sail-mysql:
+        driver: local
