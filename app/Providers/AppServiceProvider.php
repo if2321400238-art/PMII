@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,5 +24,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Pastikan alias middleware 'role' terdaftar (jaga-jaga jika cache bermasalah)
         Route::aliasMiddleware('role', CheckRole::class);
+        
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
