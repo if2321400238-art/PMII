@@ -7,7 +7,7 @@
 <div class="mb-6 flex justify-between items-center">
     <h2 class="text-2xl font-bold">Posts (Berita & Pena Santri)</h2>
     <a href="{{ route('admin.posts.create') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-        ➕ Buat Post Baru
+        Buat Post Baru
     </a>
 </div>
 
@@ -32,7 +32,7 @@
                         <p class="text-sm text-gray-600">{{ $post->slug }}</p>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="px-3 py-1 rounded-full text-sm font-semibold {{ $post->type === 'berita' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800' }}">
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold {{ $post->type === 'berita' ? 'bg-green-100 text-green-800' : 'bg-green-100 text-green-800' }}">
                             {{ ucfirst($post->type) }}
                         </span>
                     </td>
@@ -52,9 +52,9 @@
                             </span>
                         @endif
                     </td>
-                    <td class="px-6 py-4 text-sm">👁️ {{ $post->view_count }}</td>
+                    <td class="px-6 py-4 text-sm">{{ $post->view_count }} views</td>
                     <td class="px-6 py-4 text-center">
-                        <a href="{{ route('admin.posts.edit', $post) }}" class="inline-block px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 mr-2">
+                        <a href="{{ route('admin.posts.edit', $post) }}" class="inline-block px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 mr-2">
                             Edit
                         </a>
                         <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" class="inline-block" onsubmit="return confirm('Yakin hapus?')">

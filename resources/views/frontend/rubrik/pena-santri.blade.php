@@ -3,7 +3,7 @@
 @section('title', 'Pena Santri - ISKAB')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
     <h1 class="text-4xl font-bold mb-4">Pena Santri</h1>
     <p class="text-gray-600 text-lg mb-8">Wadah bagi santri untuk mengekspresikan pemikiran dan ide-ide cemerlang</p>
 

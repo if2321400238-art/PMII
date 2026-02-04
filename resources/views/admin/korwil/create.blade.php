@@ -15,7 +15,7 @@
             <div>
                 <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Korwil <span class="text-red-500">*</span></label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('name') border-red-500 @enderror"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('name') border-red-500 @enderror"
                     placeholder="contoh: Korwil Jawa Barat" required>
                 @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -26,7 +26,7 @@
             <div>
                 <label for="wilayah" class="block text-sm font-semibold text-gray-700 mb-2">Wilayah <span class="text-red-500">*</span></label>
                 <input type="text" id="wilayah" name="wilayah" value="{{ old('wilayah') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('wilayah') border-red-500 @enderror"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('wilayah') border-red-500 @enderror"
                     placeholder="contoh: Jawa Barat" required>
                 @error('wilayah')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -37,7 +37,7 @@
             <div>
                 <label for="nomor_sk" class="block text-sm font-semibold text-gray-700 mb-2">Nomor SK</label>
                 <input type="text" id="nomor_sk" name="nomor_sk" value="{{ old('nomor_sk') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('nomor_sk') border-red-500 @enderror"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('nomor_sk') border-red-500 @enderror"
                     placeholder="contoh: SK/BPH-PB/001/2025">
                 @error('nomor_sk')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -48,7 +48,7 @@
             <div>
                 <label for="tanggal_sk" class="block text-sm font-semibold text-gray-700 mb-2">Tanggal SK</label>
                 <input type="date" id="tanggal_sk" name="tanggal_sk" value="{{ old('tanggal_sk') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_sk') border-red-500 @enderror">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('tanggal_sk') border-red-500 @enderror">
                 @error('tanggal_sk')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -58,7 +58,7 @@
             <div>
                 <label for="contact" class="block text-sm font-semibold text-gray-700 mb-2">Kontak</label>
                 <input type="text" id="contact" name="contact" value="{{ old('contact') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('contact') border-red-500 @enderror"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('contact') border-red-500 @enderror"
                     placeholder="contoh: 081234567890">
                 @error('contact')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -69,7 +69,7 @@
             <div>
                 <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi</label>
                 <textarea id="description" name="description" rows="4"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('description') border-red-500 @enderror"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('description') border-red-500 @enderror"
                     placeholder="Deskripsi tentang Korwil ini...">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -78,7 +78,7 @@
 
             <!-- Buttons -->
             <div class="flex gap-4 pt-6 border-t">
-                <button type="submit" class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                <button type="submit" class="flex-1 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
                     Simpan Korwil
                 </button>
                 <a href="{{ route('admin.korwil.index') }}" class="flex-1 px-6 py-3 bg-gray-300 text-gray-800 font-semibold rounded-lg hover:bg-gray-400 transition text-center">

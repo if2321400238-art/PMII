@@ -10,6 +10,11 @@ services:
         volumes:
             - './storage:/var/www/storage'
             - './.env.docker:/var/www/.env'
+            - './app:/var/www/app'
+            - './resources:/var/www/resources'
+            - './routes:/var/www/routes'
+            - './config:/var/www/config'
+            - './database/migrations:/var/www/database/migrations'
         depends_on:
             - mysql
         networks:

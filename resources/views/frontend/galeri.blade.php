@@ -3,7 +3,7 @@
 @section('title', 'Galeri - ISKAB')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
     <h1 class="text-4xl font-bold mb-8">Galeri</h1>
 
     <!-- Filter -->

@@ -28,6 +28,8 @@ class ProfilOrganisasiController extends Controller
             'nama_organisasi' => 'required|string|max:255',
             'logo_path' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'hero_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'hero_image_2' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'hero_image_3' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'sejarah' => 'nullable|string',
             'visi' => 'nullable|string',
             'misi' => 'nullable|string',
@@ -60,6 +62,22 @@ class ProfilOrganisasiController extends Controller
                 Storage::disk('public')->delete($profil->hero_image);
             }
             $profil->hero_image = $request->file('hero_image')->store('profil/hero', 'public');
+        }
+
+        // Handle hero image 2 upload
+        if ($request->hasFile('hero_image_2')) {
+            if ($profil->hero_image_2 && Storage::disk('public')->exists($profil->hero_image_2)) {
+                Storage::disk('public')->delete($profil->hero_image_2);
+            }
+            $profil->hero_image_2 = $request->file('hero_image_2')->store('profil/hero', 'public');
+        }
+
+        // Handle hero image 3 upload
+        if ($request->hasFile('hero_image_3')) {
+            if ($profil->hero_image_3 && Storage::disk('public')->exists($profil->hero_image_3)) {
+                Storage::disk('public')->delete($profil->hero_image_3);
+            }
+            $profil->hero_image_3 = $request->file('hero_image_3')->store('profil/hero', 'public');
         }
 
         $profil->save();

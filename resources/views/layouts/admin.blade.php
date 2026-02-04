@@ -16,21 +16,21 @@
             </div>
 
             <nav class="mt-8">
-                <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.dashboard') ? 'bg-green-600 text-white' : '' }}">
-                    📊 Dashboard
+                <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.dashboard') ? 'bg-green-600 text-white' : '' }}">
+                    Dashboard
                 </a>
 
                 {{-- Konten - Hanya Admin & Editor --}}
                 @if(in_array(auth()->user()->role?->slug, ['admin', 'editor']))
                     <div class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Konten</div>
-                    <a href="{{ route('admin.posts.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.posts.*') ? 'bg-green-600 text-white' : '' }}">
-                        📰 Posts (Berita & Pena Santri)
+                    <a href="{{ route('admin.posts.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.posts.*') ? 'bg-green-600 text-white' : '' }}">
+                        Posts
                     </a>
-                    <a href="{{ route('admin.gallery.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.gallery.*') ? 'bg-green-600 text-white' : '' }}">
-                        🖼️ Galeri
+                    <a href="{{ route('admin.gallery.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.gallery.*') ? 'bg-green-600 text-white' : '' }}">
+                        Galeri
                     </a>
-                    <a href="{{ route('admin.download.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.download.*') ? 'bg-green-600 text-white' : '' }}">
-                        ⬇️ Download
+                    <a href="{{ route('admin.download.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.download.*') ? 'bg-green-600 text-white' : '' }}">
+                        Download
                     </a>
                 @endif
 
@@ -39,40 +39,40 @@
 
                 {{-- Profil Organisasi - Hanya Admin --}}
                 @if(auth()->user()->role?->slug === 'admin')
-                    <a href="{{ route('admin.profil-organisasi.edit') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.profil-organisasi.*') ? 'bg-green-600 text-white' : '' }}">
-                        🏢 Profil Organisasi
+                    <a href="{{ route('admin.profil-organisasi.edit') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.profil-organisasi.*') ? 'bg-green-600 text-white' : '' }}">
+                        Profil Organisasi
                     </a>
                 @endif
 
                 {{-- Korwil - Admin & BPH PB --}}
                 @if(in_array(auth()->user()->role?->slug, ['admin', 'bph_pb']))
-                    <a href="{{ route('admin.korwil.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.korwil.*') ? 'bg-green-600 text-white' : '' }}">
-                        🗺️ Korwil
+                    <a href="{{ route('admin.korwil.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.korwil.*') ? 'bg-green-600 text-white' : '' }}">
+                        Korwil
                     </a>
                 @endif
 
                 {{-- Rayon - Admin, BPH PB, & BPH Korwil --}}
                 @if(in_array(auth()->user()->role?->slug, ['admin', 'bph_pb', 'bph_korwil']))
-                    <a href="{{ route('admin.rayon.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.rayon.*') ? 'bg-green-600 text-white' : '' }}">
-                        📍 Rayon
+                    <a href="{{ route('admin.rayon.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.rayon.*') ? 'bg-green-600 text-white' : '' }}">
+                        Rayon
                     </a>
                 @endif
 
                 {{-- Anggota - Admin, BPH Korwil, & BPH Rayon --}}
                 @if(in_array(auth()->user()->role?->slug, ['admin', 'bph_korwil', 'bph_rayon']))
-                    <a href="{{ route('admin.anggota.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.anggota.*') ? 'bg-green-600 text-white' : '' }}">
-                        👥 Anggota
+                    <a href="{{ route('admin.anggota.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.anggota.*') ? 'bg-green-600 text-white' : '' }}">
+                        Anggota
                     </a>
                 @endif
 
                 {{-- SK Pengajuan - Semua Role kecuali Editor --}}
                 @if(auth()->user()->role?->slug !== 'editor')
                     <div class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider mt-6">SK Pengajuan</div>
-                    <a href="{{ route('admin.sk-pengajuan.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.sk-pengajuan.*') ? 'bg-green-600 text-white' : '' }}">
+                    <a href="{{ route('admin.sk-pengajuan.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.sk-pengajuan.*') ? 'bg-green-600 text-white' : '' }}">
                         @if(auth()->user()->role?->slug === 'bph_pb')
-                            ✅ Approval SK
+                            Approval SK
                         @else
-                            📝 SK Saya
+                            SK Saya
                         @endif
                     </a>
                 @endif
@@ -80,8 +80,8 @@
                 {{-- User Management - Admin only --}}
                 @if(auth()->user()->role?->slug === 'admin')
                     <div class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider mt-6">Sistem</div>
-                    <a href="{{ route('admin.users.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white {{ request()->routeIs('admin.users.*') ? 'bg-green-600 text-white' : '' }}">
-                        👤 Kelola User
+                    <a href="{{ route('admin.users.index') }}" class="block px-6 py-3 text-gray-300 hover:bg-green-700 hover:text-white {{ request()->routeIs('admin.users.*') ? 'bg-green-600 text-white' : '' }}">
+                        Kelola User
                     </a>
                 @endif
             </nav>
@@ -97,7 +97,7 @@
                 <div class="flex items-center gap-4">
                     <div class="relative" x-data="{ profileOpen: false }">
                         <button @click="profileOpen = !profileOpen" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg">
-                            👤 Profile
+                            Profile
                         </button>
                         <div x-show="profileOpen" @click.outside="profileOpen = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg">

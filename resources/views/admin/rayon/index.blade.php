@@ -7,7 +7,7 @@
 <div class="mb-6 flex justify-between items-center">
     <h2 class="text-2xl font-bold">Data Rayon</h2>
     <a href="{{ route('admin.rayon.create') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-        ➕ Tambah Rayon
+        Tambah Rayon
     </a>
 </div>
 
@@ -30,7 +30,7 @@
                     <td class="px-6 py-4 text-sm font-mono">{{ $rayon->nomor_sk ?? '-' }}</td>
                     <td class="px-6 py-4 text-sm">{{ $rayon->anggota_count ?? $rayon->anggota->count() }} anggota</td>
                     <td class="px-6 py-4 text-center">
-                        <a href="{{ route('admin.rayon.edit', $rayon) }}" class="inline-block px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 mr-2">
+                        <a href="{{ route('admin.rayon.edit', $rayon) }}" class="inline-block px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 mr-2">
                             Edit
                         </a>
                         <form method="POST" action="{{ route('admin.rayon.destroy', $rayon) }}" class="inline-block" onsubmit="return confirm('Yakin hapus?')">

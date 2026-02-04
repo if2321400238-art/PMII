@@ -43,15 +43,13 @@ Route::get('/download/{download}', [DownloadController::class, 'download'])->nam
 
 // Data Routes
 Route::get('/data', [DataController::class, 'index'])->name('data.index');
-Route::get('/data/sk-form', [DataController::class, 'skForm'])->name('frontend.sk-form');
-Route::post('/data/sk-form', [DataController::class, 'storeSkForm'])->name('frontend.sk-store');
 
 // Debug Routes (temporary)
 Route::get('/debug-posts-all', function () {
     $allPosts = \App\Models\Post::all();
     $beritaPublished = \App\Models\Post::berita()->published()->get();
     $penaSantriPublished = \App\Models\Post::penaSantri()->published()->get();
-    
+
     return response()->json([
         'all_posts' => $allPosts->map(fn($p) => [
             'id' => $p->id,
@@ -78,20 +76,20 @@ Route::get('/debug-home-data', function () {
     \Cache::forget('home.berita_populer');
     \Cache::forget('home.berita_terkini');
     \Cache::forget('home.pena_santri');
-    
+
     $beritaPopuler = \App\Models\Post::berita()
         ->published()
         ->popular()
         ->latest('published_at')
         ->take(6)
         ->get();
-    
+
     $penaSantriHighlight = \App\Models\Post::penaSantri()
         ->published()
         ->latest('published_at')
         ->take(5)
         ->get();
-    
+
     return response()->json([
         'berita_populer_count' => $beritaPopuler->count(),
         'berita_populer' => $beritaPopuler->map(fn($p) => [
@@ -127,14 +125,22 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     })->name('dashboard');
 
     // Posts Management (Editor & Admin)
-    Route::middleware('role:editor')->resource('posts', AdminPostController::class);
+    Route::middleware('role:editor,admin')->resource('posts', AdminPostController::class);
 
-    // SK Pengajuan Management (BPH PB only)
-    Route::middleware('role:bph_pb')->group(function () {
-        Route::resource('sk-pengajuan', SKPengajuanController::class);
-        Route::post('/sk-pengajuan/{pengajuan}/approve', [SKPengajuanController::class, 'approve'])->name('sk-pengajuan.approve');
-        Route::post('/sk-pengajuan/{pengajuan}/revise', [SKPengajuanController::class, 'revise'])->name('sk-pengajuan.revise');
-        Route::post('/sk-pengajuan/{pengajuan}/reject', [SKPengajuanController::class, 'reject'])->name('sk-pengajuan.reject');
+    // SK Pengajuan Management
+    // Korwil & Rayon bisa create & view sendiri, BPH PB bisa approve/revise/reject semua
+    Route::middleware('role:bph_korwil,bph_rayon,bph_pb')->group(function () {
+        Route::get('/sk-pengajuan', [SKPengajuanController::class, 'index'])->name('sk-pengajuan.index');
+        Route::get('/sk-pengajuan/create', [SKPengajuanController::class, 'create'])->name('sk-pengajuan.create');
+        Route::post('/sk-pengajuan', [SKPengajuanController::class, 'store'])->name('sk-pengajuan.store');
+        Route::get('/sk-pengajuan/{pengajuan}', [SKPengajuanController::class, 'show'])->name('sk-pengajuan.show');
+
+        // Only BPH PB can approve/revise/reject
+        Route::middleware('role:bph_pb')->group(function () {
+            Route::post('/sk-pengajuan/{pengajuan}/approve', [SKPengajuanController::class, 'approve'])->name('sk-pengajuan.approve');
+            Route::post('/sk-pengajuan/{pengajuan}/revise', [SKPengajuanController::class, 'revise'])->name('sk-pengajuan.revise');
+            Route::post('/sk-pengajuan/{pengajuan}/reject', [SKPengajuanController::class, 'reject'])->name('sk-pengajuan.reject');
+        });
     });
 
     // Anggota Management (BPH Korwil & BPH Rayon)
@@ -151,7 +157,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     });
 
     // Gallery Management (Editor & Admin)
-    Route::middleware('role:editor')->resource('gallery', AdminGalleryController::class);
+    Route::middleware('role:editor,admin')->resource('gallery', AdminGalleryController::class);
 
     // Download Management (Admin only)
     Route::middleware('role:admin')->resource('download', AdminDownloadController::class);

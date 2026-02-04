@@ -14,6 +14,18 @@ class SKPengajuanController extends Controller
     {
         $query = SKPengajuan::with('submittedBy', 'approvedBy', 'korwil', 'rayon');
 
+        // Filter berdasarkan role user
+        $userRole = auth()->user()->role?->slug;
+
+        if ($userRole === 'bph_korwil') {
+            // BPH Korwil hanya lihat SK korwil yang dia submit
+            $query->where('submitted_by', auth()->id());
+        } elseif ($userRole === 'bph_rayon') {
+            // BPH Rayon hanya lihat SK rayon yang dia submit
+            $query->where('submitted_by', auth()->id());
+        }
+        // BPH PB bisa lihat semua
+
         if ($request->has('status') && $request->status) {
             $query->where('status', $request->status);
         }
@@ -25,6 +37,57 @@ class SKPengajuanController extends Controller
         $pengajuan = $query->latest()->paginate(15);
 
         return view('admin.sk-pengajuan.index', compact('pengajuan'));
+    }
+
+    public function create()
+    {
+        $user = auth()->user();
+        $userRole = $user->role?->slug;
+
+        // Ambil data korwil/rayon dari user yang login
+        $korwil = $user->korwil;
+        $rayon = $user->rayon;
+
+        return view('admin.sk-pengajuan.create', compact('korwil', 'rayon', 'userRole'));
+    }
+
+    public function store(Request $request)
+    {
+        $user = auth()->user();
+        $userRole = $user->role?->slug;
+
+        // Tentukan tipe dan ID berdasarkan user
+        if ($userRole === 'bph_korwil') {
+            $tipe = 'korwil';
+            $korwilId = $user->korwil_id;
+            $rayonId = null;
+        } elseif ($userRole === 'bph_rayon') {
+            $tipe = 'rayon';
+            $korwilId = null;
+            $rayonId = $user->rayon_id;
+        } else {
+            return back()->withErrors(['error' => 'Anda tidak memiliki akses untuk mengajukan SK']);
+        }
+
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'dokumen' => 'required|file|mimes:pdf,doc,docx|max:5120',
+        ]);
+
+        if ($request->hasFile('dokumen')) {
+            $validated['dokumen'] = $request->file('dokumen')->store('sk-pengajuan', 'public');
+        }
+
+        $validated['tipe'] = $tipe;
+        $validated['korwil_id'] = $korwilId;
+        $validated['rayon_id'] = $rayonId;
+        $validated['submitted_by'] = auth()->id();
+        $validated['status'] = 'pending';
+
+        SKPengajuan::create($validated);
+
+        return redirect()->route('admin.sk-pengajuan.index')->with('success', 'Pengajuan SK berhasil dikirim');
     }
 
     public function show(SKPengajuan $pengajuan)

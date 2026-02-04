@@ -12,6 +12,8 @@ class ProfilOrganisasi extends Model
         'nama_organisasi',
         'logo_path',
         'hero_image',
+        'hero_image_2',
+        'hero_image_3',
         'sejarah',
         'visi',
         'misi',

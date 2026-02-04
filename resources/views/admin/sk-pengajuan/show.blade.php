@@ -77,7 +77,7 @@
                 <form method="POST" action="{{ route('admin.sk-pengajuan.approve', $pengajuan) }}" class="mb-4">
                     @csrf
                     <button type="submit" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg" onclick="return confirm('Setujui pengajuan ini?')">
-                        ✅ Setujui Pengajuan
+                        Setujui Pengajuan
                     </button>
                 </form>
 
@@ -88,8 +88,8 @@
                         <label class="block text-sm font-semibold mb-2">Catatan Revisi</label>
                         <textarea name="catatan_revisi" rows="4" placeholder="Masukkan catatan untuk revisi" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required></textarea>
                     </div>
-                    <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg">
-                        📝 Minta Revisi
+                    <button type="submit" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg">
+                        Minta Revisi
                     </button>
                 </form>
 
@@ -108,7 +108,7 @@
         @else
             <div class="p-6 rounded-lg {{ $pengajuan->status === 'approved' ? 'bg-green-50' : 'bg-gray-50' }}">
                 <p class="font-semibold text-gray-700 mb-2">
-                    {{ $pengajuan->status === 'approved' ? '✅ Pengajuan Telah Disetujui' : '⏳ Status: ' . ucfirst($pengajuan->status) }}
+                    {{ $pengajuan->status === 'approved' ? 'Pengajuan Telah Disetujui' : 'Status: ' . ucfirst($pengajuan->status) }}
                 </p>
                 @if($pengajuan->approvedBy)
                     <p class="text-sm text-gray-600">Oleh: {{ $pengajuan->approvedBy->name }}</p>

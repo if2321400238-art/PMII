@@ -3,7 +3,7 @@
 @section('title', $post->title . ' - ISKAB')
 
 @section('content')
-<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
     <!-- Breadcrumb -->
     <div class="mb-8">
         <a href="{{ route('home') }}" class="text-green-600 hover:text-green-700">Beranda</a>

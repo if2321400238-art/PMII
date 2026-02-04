@@ -50,21 +50,25 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        // Create BPH Korwil User
+        // Create BPH Korwil User (assign ke Korwil pertama)
+        $firstKorwil = \App\Models\Korwil::first();
         User::create([
             'name' => 'BPH Korwil',
             'email' => 'bphkorwil@iskab.com',
             'password' => bcrypt('password'),
             'role_id' => \App\Models\Role::where('slug', 'bph_korwil')->first()?->id,
+            'korwil_id' => $firstKorwil?->id,
             'email_verified_at' => now(),
         ]);
 
-        // Create BPH Rayon User
+        // Create BPH Rayon User (assign ke Rayon pertama)
+        $firstRayon = \App\Models\Rayon::first();
         User::create([
             'name' => 'BPH Rayon',
             'email' => 'bphrayon@iskab.com',
             'password' => bcrypt('password'),
             'role_id' => \App\Models\Role::where('slug', 'bph_rayon')->first()?->id,
+            'rayon_id' => $firstRayon?->id,
             'email_verified_at' => now(),
         ]);
     }

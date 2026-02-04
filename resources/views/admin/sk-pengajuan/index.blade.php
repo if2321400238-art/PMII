@@ -4,10 +4,22 @@
 @section('page_title', 'SK Pengajuan')
 
 @section('content')
-<div class="mb-6">
-    <h2 class="text-2xl font-bold mb-4">Kelola Pengajuan SK</h2>
+<div class="mb-6 flex justify-between items-center">
+    <h2 class="text-2xl font-bold">
+        @if(auth()->user()->role?->slug === 'bph_pb')
+            Kelola Pengajuan SK
+        @else
+            SK Saya
+        @endif
+    </h2>
+    @if(in_array(auth()->user()->role?->slug, ['bph_korwil', 'bph_rayon']))
+        <a href="{{ route('admin.sk-pengajuan.create') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+            Ajukan SK Baru
+        </a>
+    @endif
+</div>
 
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+<div class="bg-white rounded-lg shadow-md p-6 mb-6"
         <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
@@ -25,7 +37,7 @@
                     <option value="rayon" {{ request('tipe') == 'rayon' ? 'selected' : '' }}>Rayon</option>
                 </select>
             </div>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
                 Filter
             </button>
         </form>
@@ -96,14 +108,14 @@
             @endif
 
             <div class="flex gap-2">
-                <a href="{{ route('admin.sk-pengajuan.show', $sk) }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold">
+                <a href="{{ route('admin.sk-pengajuan.show', $sk) }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
                     Detail
                 </a>
                 @if($sk->status === 'pending')
                     <form method="POST" action="{{ route('admin.sk-pengajuan.approve', $sk) }}" class="inline">
                         @csrf
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold" onclick="return confirm('Setujui pengajuan ini?')">
-                            ✅ Setujui
+                            Setujui
                         </button>
                     </form>
                 @endif

@@ -6,28 +6,24 @@
 @section('content')
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
     <!-- Stats Card -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="text-4xl mb-2">📰</div>
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-600">
         <h3 class="text-gray-600 text-sm font-semibold">Total Posts</h3>
         <p class="text-3xl font-bold text-green-600">{{ \App\Models\Post::count() }}</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="text-4xl mb-2">👥</div>
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-600">
         <h3 class="text-gray-600 text-sm font-semibold">Total Anggota</h3>
-        <p class="text-3xl font-bold text-blue-600">{{ \App\Models\Anggota::count() }}</p>
+        <p class="text-3xl font-bold text-green-600">{{ \App\Models\Anggota::count() }}</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="text-4xl mb-2">🗺️</div>
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-600">
         <h3 class="text-gray-600 text-sm font-semibold">Total Korwil</h3>
-        <p class="text-3xl font-bold text-purple-600">{{ \App\Models\Korwil::count() }}</p>
+        <p class="text-3xl font-bold text-green-600">{{ \App\Models\Korwil::count() }}</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="text-4xl mb-2">⏳</div>
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-600">
         <h3 class="text-gray-600 text-sm font-semibold">SK Pending</h3>
-        <p class="text-3xl font-bold text-yellow-600">{{ \App\Models\SKPengajuan::where('status', 'pending')->count() }}</p>
+        <p class="text-3xl font-bold text-green-600">{{ \App\Models\SKPengajuan::where('status', 'pending')->count() }}</p>
     </div>
 </div>
 
@@ -37,13 +33,13 @@
         <h2 class="text-2xl font-bold mb-4">Quick Actions</h2>
         <div class="space-y-3">
             <a href="{{ route('admin.posts.create') }}" class="block px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 text-center font-semibold">
-                ➕ Buat Post Baru
+                Buat Post Baru
             </a>
-            <a href="{{ route('admin.anggota.create') }}" class="block px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center font-semibold">
-                ➕ Tambah Anggota
+            <a href="{{ route('admin.anggota.create') }}" class="block px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 text-center font-semibold">
+                Tambah Anggota
             </a>
-            <a href="{{ route('admin.gallery.create') }}" class="block px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-center font-semibold">
-                ➕ Upload Galeri
+            <a href="{{ route('admin.gallery.create') }}" class="block px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 text-center font-semibold">
+                Upload Galeri
             </a>
         </div>
     </div>

@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'korwil_id',
+        'rayon_id',
     ];
 
     /**
@@ -52,6 +54,16 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function korwil(): BelongsTo
+    {
+        return $this->belongsTo(Korwil::class);
+    }
+
+    public function rayon(): BelongsTo
+    {
+        return $this->belongsTo(Rayon::class);
     }
 
     public function posts(): HasMany

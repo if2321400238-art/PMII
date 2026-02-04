@@ -3,7 +3,7 @@
 @section('title', 'Form Pengajuan SK - ISKAB')
 
 @section('content')
-<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
     <div class="bg-white rounded-lg shadow-lg p-8">
         <h1 class="text-3xl font-bold mb-2">Form Pengajuan Surat Keputusan (SK)</h1>
         <p class="text-gray-600 mb-8">Silakan isi form di bawah untuk mengajukan SK baru untuk Korwil atau Rayon</p>
