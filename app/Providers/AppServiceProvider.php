@@ -25,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
         // Pastikan alias middleware 'role' terdaftar (jaga-jaga jika cache bermasalah)
         Route::aliasMiddleware('role', CheckRole::class);
 
-        // Force HTTPS hanya di production dengan APP_URL yang valid
-        if (config('app.env') === 'production' && !app()->runningInConsole() && str_contains(config('app.url'), 'https://')) {
+        // Force HTTPS di production kecuali di localhost
+        if (config('app.env') === 'production' && !str_contains(request()->getHost(), 'localhost')) {
             URL::forceScheme('https');
         }
     }
