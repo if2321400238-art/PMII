@@ -7,17 +7,17 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Sidebar styles */
-        #sidebar { 
+        #sidebar {
             transition: transform 0.3s ease-in-out;
             transform: translateX(-100%);
         }
         /* Desktop: sidebar selalu tampil */
         @media (min-width: 1024px) {
-            #sidebar { 
-                transform: translateX(0) !important; 
+            #sidebar {
+                transform: translateX(0) !important;
             }
-            #mainContent { 
-                margin-left: 16rem !important; 
+            #mainContent {
+                margin-left: 16rem !important;
             }
         }
         /* Mobile: toggle dengan class */
@@ -192,7 +192,7 @@
         // Buka dropdown jika ada menu aktif di dalamnya
         var kontenMenu = document.getElementById('kontenMenu');
         var orgMenu = document.getElementById('orgMenu');
-        
+
         if (kontenMenu && kontenMenu.querySelector('.bg-green-600')) {
             kontenMenu.classList.remove('hidden');
             var arrow = document.getElementById('kontenMenuArrow');
