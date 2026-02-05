@@ -57,11 +57,9 @@
                         <a href="{{ route('admin.anggota.edit', $a) }}" class="inline-block px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 mr-2">
                             Edit
                         </a>
-                        @if($a->kta_path)
-                            <a href="{{ route('admin.anggota.download-kta', $a) }}" class="inline-block px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 mr-2">
-                                KTA
-                            </a>
-                        @endif
+                        <a href="{{ route('admin.anggota.download-kta', $a) }}" class="inline-block px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 mr-2">
+                            📥 KTA
+                        </a>
                         <form method="POST" action="{{ route('admin.anggota.destroy', $a) }}" class="inline-block" onsubmit="return confirm('Yakin hapus?')">
                             @csrf
                             @method('DELETE')

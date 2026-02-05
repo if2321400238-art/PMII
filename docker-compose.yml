@@ -14,6 +14,7 @@ services:
             - './resources:/var/www/resources'
             - './routes:/var/www/routes'
             - './config:/var/www/config'
+            - './bootstrap:/var/www/bootstrap'
             - './database/migrations:/var/www/database/migrations'
         depends_on:
             - mysql

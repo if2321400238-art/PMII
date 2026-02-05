@@ -3,66 +3,86 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\Korwil;
+use App\Models\Rayon;
 use App\Models\SKPengajuan;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class SKPengajuanPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(Authenticatable $user): bool
     {
-        return $user->role?->slug === 'bph_pb' || $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, SKPengajuan $sk): bool
+    public function view(Authenticatable $user, SKPengajuan $sk): bool
     {
-        return $user->role?->slug === 'bph_pb' || $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(Authenticatable $user): bool
     {
-        return in_array($user->role?->slug, ['admin', 'bph_korwil', 'bph_rayon']);
+        return in_array($this->role($user), ['admin', 'korwil_admin', 'rayon_admin']);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, SKPengajuan $sk): bool
+    public function update(Authenticatable $user, SKPengajuan $sk): bool
     {
         // Only pending SKs can be updated by submitter
-        return ($user->id === $sk->submitted_by && $sk->status === 'pending') || $user->role?->slug === 'admin';
+        return ($user->getAuthIdentifier() === $sk->submitted_by && $sk->status === 'pending') || $this->role($user) === 'admin';
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, SKPengajuan $sk): bool
+    public function delete(Authenticatable $user, SKPengajuan $sk): bool
     {
-        return $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
     }
 
     /**
-     * Only BPH PB can approve/reject/revise
+     * Only Admin can approve/reject/revise
      */
-    public function approve(User $user, SKPengajuan $sk): bool
+    public function approve(Authenticatable $user, SKPengajuan $sk): bool
     {
-        return $user->role?->slug === 'bph_pb' || $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
     }
 
-    public function revise(User $user, SKPengajuan $sk): bool
+    public function revise(Authenticatable $user, SKPengajuan $sk): bool
     {
-        return $user->role?->slug === 'bph_pb' || $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
     }
 
-    public function reject(User $user, SKPengajuan $sk): bool
+    public function reject(Authenticatable $user, SKPengajuan $sk): bool
     {
-        return $user->role?->slug === 'bph_pb' || $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
+    }
+
+    private function role(Authenticatable $user): ?string
+    {
+        if ($user instanceof User) {
+            return $user->role === 'pb' ? 'admin' : $user->role;
+        }
+
+        if ($user instanceof Korwil) {
+            return 'korwil_admin';
+        }
+
+        if ($user instanceof Rayon) {
+            return 'rayon_admin';
+        }
+
+        return null;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -16,8 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')->latest()->paginate(15);
-        return view('admin.users.index', compact('users'));
+        $users = User::latest()->get();
+        return view('admin.user.index', compact('users'));
     }
 
     /**
@@ -25,8 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
-        return view('admin.users.create', compact('roles'));
+        return view('admin.user.create');
     }
 
     /**
@@ -37,8 +35,8 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Password::min(8)],
-            'role_id' => 'required|exists:roles,id',
+            'password' => ['required', Password::min(8)],
+            'role' => 'required|in:admin,pb',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -46,8 +44,8 @@ class UserController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('admin.user.index')
+            ->with('success', 'Admin berhasil ditambahkan');
     }
 
     /**
@@ -55,7 +53,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('admin.users.show', compact('user'));
+        return view('admin.user.show', compact('user'));
     }
 
     /**
@@ -63,8 +61,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::all();
-        return view('admin.users.edit', compact('user', 'roles'));
+        return view('admin.user.edit', compact('user'));
     }
 
     /**
@@ -75,8 +72,8 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => ['nullable', 'confirmed', Password::min(8)],
-            'role_id' => 'required|exists:roles,id',
+            'password' => ['nullable', Password::min(8)],
+            'role' => 'required|in:admin,pb',
         ]);
 
         if ($request->filled('password')) {
@@ -87,8 +84,8 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User berhasil diupdate');
+        return redirect()->route('admin.user.index')
+            ->with('success', 'Admin berhasil diupdate');
     }
 
     /**
@@ -103,7 +100,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User berhasil dihapus');
+        return redirect()->route('admin.user.index')
+            ->with('success', 'Admin berhasil dihapus');
     }
 }

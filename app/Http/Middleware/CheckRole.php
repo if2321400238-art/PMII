@@ -13,15 +13,34 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (!auth()->check()) {
+        if (!\Illuminate\Support\Facades\Auth::guard('web')->check()
+            && !\Illuminate\Support\Facades\Auth::guard('korwil')->check()
+            && !\Illuminate\Support\Facades\Auth::guard('rayon')->check()) {
             return redirect()->route('login');
         }
 
-        $userRole = auth()->user()->role?->slug;
+        $userRole = null;
 
-        if ($userRole !== $role && $userRole !== 'admin') {
+        if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
+            $userRole = \Illuminate\Support\Facades\Auth::guard('web')->user()->role;
+            if ($userRole === 'pb') {
+                $userRole = 'admin';
+            }
+        } elseif (\Illuminate\Support\Facades\Auth::guard('korwil')->check()) {
+            $userRole = 'korwil_admin';
+        } elseif (\Illuminate\Support\Facades\Auth::guard('rayon')->check()) {
+            $userRole = 'rayon_admin';
+        }
+
+        // Admin always has access
+        if ($userRole === 'admin') {
+            return $next($request);
+        }
+
+        // Check if user has one of the allowed roles
+        if (!in_array($userRole, $roles)) {
             abort(403, 'Unauthorized access');
         }
 

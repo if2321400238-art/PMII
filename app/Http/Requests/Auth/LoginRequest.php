@@ -34,6 +34,7 @@ class LoginRequest extends FormRequest
 
     /**
      * Attempt to authenticate the request's credentials.
+        * Try all guards: user, korwil, rayon
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -41,15 +42,33 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        $credentials = $this->only('email', 'password');
+        $remember = $this->boolean('remember');
 
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+        // Try User guard first (admin)
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
+            RateLimiter::clear($this->throttleKey());
+            return;
         }
 
-        RateLimiter::clear($this->throttleKey());
+        // Try Korwil guard
+        if (Auth::guard('korwil')->attempt($credentials, $remember)) {
+            RateLimiter::clear($this->throttleKey());
+            return;
+        }
+
+        // Try Rayon guard
+        if (Auth::guard('rayon')->attempt($credentials, $remember)) {
+            RateLimiter::clear($this->throttleKey());
+            return;
+        }
+
+        // All guards failed
+        RateLimiter::hit($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
     }
 
     /**

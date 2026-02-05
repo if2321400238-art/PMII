@@ -40,6 +40,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'korwil' => [
+            'driver' => 'session',
+            'provider' => 'korwils',
+        ],
+        'rayon' => [
+            'driver' => 'session',
+            'provider' => 'rayons',
+        ],
     ],
 
     /*
@@ -63,6 +71,14 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+        'korwils' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Korwil::class,
+        ],
+        'rayons' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Rayon::class,
         ],
 
         // 'users' => [

@@ -18,6 +18,7 @@ class Anggota extends Model
         'korwil_id',
         'foto',
         'kta_path',
+        'kta_template_id',
     ];
 
     public function rayon(): BelongsTo
@@ -28,5 +29,10 @@ class Anggota extends Model
     public function korwil(): BelongsTo
     {
         return $this->belongsTo(Korwil::class);
+    }
+
+    public function ktaTemplate(): BelongsTo
+    {
+        return $this->belongsTo(KTATemplate::class, 'kta_template_id');
     }
 }

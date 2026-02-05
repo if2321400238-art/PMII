@@ -10,7 +10,17 @@ class GalleryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Gallery::query();
+        $query = Gallery::with('uploadedBy', 'approvedBy');
+
+        // Filter approval status untuk non-admin
+        $userRole = auth()->user()->role;
+        if ($userRole !== 'admin') {
+            $query->where('uploaded_by', auth()->id());
+        }
+
+        if ($request->has('approval_status') && $request->approval_status) {
+            $query->where('approval_status', $request->approval_status);
+        }
 
         if ($request->has('type') && $request->type) {
             $query->where('type', $request->type);
@@ -44,9 +54,25 @@ class GalleryController extends Controller
             $validated['file_path'] = $request->file('file_path')->store('galleries/videos', 'public');
         }
 
+        $validated['uploaded_by'] = auth()->id();
+
+        // Set approval status: admin langsung approved, lainnya pending
+        $userRole = auth()->user()->role;
+        if ($userRole === 'admin') {
+            $validated['approval_status'] = 'approved';
+            $validated['approved_by'] = auth()->id();
+            $validated['approved_at'] = now();
+        } else {
+            $validated['approval_status'] = 'pending';
+        }
+
         Gallery::create($validated);
 
-        return redirect()->route('admin.gallery.index')->with('success', 'Galeri berhasil ditambahkan');
+        $message = $validated['approval_status'] === 'pending'
+            ? 'Galeri berhasil dibuat dan menunggu persetujuan admin/PB'
+            : 'Galeri berhasil dibuat';
+
+        return redirect()->route('admin.gallery.index')->with('success', $message);
     }
 
     public function edit(Gallery $gallery)
@@ -79,5 +105,31 @@ class GalleryController extends Controller
     {
         $gallery->delete();
         return redirect()->route('admin.gallery.index')->with('success', 'Galeri berhasil dihapus');
+    }
+
+    public function approve(Gallery $gallery)
+    {
+        $gallery->update([
+            'approval_status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'rejection_reason' => null,
+        ]);
+
+        return redirect()->back()->with('success', 'Galeri berhasil disetujui');
+    }
+
+    public function reject(Request $request, Gallery $gallery)
+    {
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|max:500',
+        ]);
+
+        $gallery->update([
+            'approval_status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
+
+        return redirect()->back()->with('success', 'Galeri berhasil ditolak');
     }
 }

@@ -36,17 +36,21 @@
                 <h3 class="text-3xl font-bold mb-4">Ajukan Surat Keputusan (SK)</h3>
                 <p class="text-green-100 mb-8 text-lg">
                     @auth
-                        @if(in_array(auth()->user()->role?->slug, ['bph_korwil', 'bph_rayon']))
+                        @php
+                            $role = auth()->user()->role
+                                ?? (auth()->guard('korwil')->check() ? 'korwil_admin' : (auth()->guard('rayon')->check() ? 'rayon_admin' : null));
+                        @endphp
+                        @if(in_array($role, ['korwil_admin', 'rayon_admin']))
                             Anda dapat mengajukan SK melalui panel admin
                         @else
-                            Hanya BPH Korwil dan BPH Rayon yang dapat mengajukan SK
+                            Hanya Korwil Admin dan Rayon Admin yang dapat mengajukan SK
                         @endif
                     @else
                         Silakan login terlebih dahulu untuk mengajukan SK Korwil atau Rayon
                     @endauth
                 </p>
                 @auth
-                    @if(in_array(auth()->user()->role?->slug, ['bph_korwil', 'bph_rayon']))
+                    @if(in_array($role, ['korwil_admin', 'rayon_admin']))
                         <a href="{{ route('admin.sk-pengajuan.create') }}" class="inline-block px-8 py-4 bg-white text-green-600 rounded-lg font-bold text-lg hover:bg-green-50 transition">
                             Ajukan SK Baru
                         </a>

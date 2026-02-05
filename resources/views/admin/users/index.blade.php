@@ -37,13 +37,14 @@
                     <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->email }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
-                            @if($user->role?->slug === 'admin') bg-red-100 text-red-800
-                            @elseif($user->role?->slug === 'bph_pb') bg-purple-100 text-purple-800
-                            @elseif($user->role?->slug === 'bph_korwil') bg-blue-100 text-blue-800
-                            @elseif($user->role?->slug === 'bph_rayon') bg-teal-100 text-teal-800
+                            @if($user->role === 'admin') bg-purple-100 text-purple-800
+                            @elseif($user->role === 'pb') bg-blue-100 text-blue-800
                             @else bg-gray-100 text-gray-800
                             @endif">
-                            {{ $user->role?->name ?? 'No Role' }}
+                            @if($user->role === 'admin') Admin
+                            @elseif($user->role === 'pb') PB
+                            @else {{ $user->role }}
+                            @endif
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

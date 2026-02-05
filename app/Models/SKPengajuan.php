@@ -12,14 +12,12 @@ class SKPengajuan extends Model
     protected $fillable = [
         'tipe',
         'nama',
-        'alamat',
-        'pondok',
+        'deskripsi',
+        'dokumen',
         'rayon_id',
         'korwil_id',
-        'file_pendukung',
         'status',
         'catatan_revisi',
-        'submitted_by',
         'approved_by',
         'approved_at',
     ];
@@ -39,11 +37,6 @@ class SKPengajuan extends Model
     public function korwil(): BelongsTo
     {
         return $this->belongsTo(Korwil::class);
-    }
-
-    public function submittedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'submitted_by');
     }
 
     public function approvedBy(): BelongsTo

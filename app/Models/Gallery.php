@@ -16,13 +16,44 @@ class Gallery extends Model
         'embed_url',
         'kegiatan',
         'tahun',
+        'approval_status',
+        'approved_by',
+        'approved_at',
+        'rejection_reason',
+        'uploaded_by',
     ];
 
     protected function casts(): array
     {
         return [
             'tahun' => 'integer',
+            'approved_at' => 'datetime',
         ];
+    }
+
+    public function uploadedBy()
+    {
+        return $this->belongsTo(User::class, 'uploaded_by');
+    }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('approval_status', 'approved');
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('approval_status', 'pending');
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->where('approval_status', 'draft');
     }
 
     public function scopePhotos($query)

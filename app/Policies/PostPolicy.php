@@ -3,22 +3,25 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\Korwil;
+use App\Models\Rayon;
 use App\Models\Post;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class PostPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(Authenticatable $user): bool
     {
-        return auth()->check();
+        return $user !== null;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Post $post): bool
+    public function view(Authenticatable $user, Post $post): bool
     {
         return true; // Everyone can view published posts
     }
@@ -26,40 +29,73 @@ class PostPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(Authenticatable $user): bool
     {
-        return in_array($user->role?->slug, ['admin', 'editor']);
+        return $user !== null; // Semua user bisa buat post (akan pending)
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Post $post): bool
+    public function update(Authenticatable $user, Post $post): bool
     {
-        return $user->id === $post->author_id || $user->role?->slug === 'admin';
+        return ($user instanceof User && $user->id === $post->author_id) || $this->role($user) === 'admin';
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Post $post): bool
+    public function delete(Authenticatable $user, Post $post): bool
     {
-        return $user->id === $post->author_id || $user->role?->slug === 'admin';
+        return ($user instanceof User && $user->id === $post->author_id) || $this->role($user) === 'admin';
+    }
+
+    /**
+     * Determine whether the user can approve the model.
+     */
+    public function approve(Authenticatable $user, Post $post): bool
+    {
+        return $this->role($user) === 'admin';
+    }
+
+    /**
+     * Determine whether the user can reject the model.
+     */
+    public function reject(Authenticatable $user, Post $post): bool
+    {
+        return $this->role($user) === 'admin';
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Post $post): bool
+    public function restore(Authenticatable $user, Post $post): bool
     {
-        return $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Post $post): bool
+    public function forceDelete(Authenticatable $user, Post $post): bool
     {
-        return $user->role?->slug === 'admin';
+        return $this->role($user) === 'admin';
+    }
+
+    private function role(Authenticatable $user): ?string
+    {
+        if ($user instanceof User) {
+            return $user->role === 'pb' ? 'admin' : $user->role;
+        }
+
+        if ($user instanceof Korwil) {
+            return 'korwil_admin';
+        }
+
+        if ($user instanceof Rayon) {
+            return 'rayon_admin';
+        }
+
+        return null;
     }
 }

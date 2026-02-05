@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@iskab.com',
             'password' => bcrypt('password'),
-            'role_id' => \App\Models\Role::where('slug', 'admin')->first()?->id,
+            'role' => 'admin',
             'email_verified_at' => now(),
         ]);
 
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Editor',
             'email' => 'editor@iskab.com',
             'password' => bcrypt('password'),
-            'role_id' => \App\Models\Role::where('slug', 'editor')->first()?->id,
+            'role' => 'pb',
             'email_verified_at' => now(),
         ]);
 
@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'BPH PB',
             'email' => 'bphpb@iskab.com',
             'password' => bcrypt('password'),
-            'role_id' => \App\Models\Role::where('slug', 'bph_pb')->first()?->id,
+            'role' => 'pb',
             'email_verified_at' => now(),
         ]);
 
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'BPH Korwil',
             'email' => 'bphkorwil@iskab.com',
             'password' => bcrypt('password'),
-            'role_id' => \App\Models\Role::where('slug', 'bph_korwil')->first()?->id,
+            'role' => 'korwil_admin',
             'korwil_id' => $firstKorwil?->id,
             'email_verified_at' => now(),
         ]);
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'BPH Rayon',
             'email' => 'bphrayon@iskab.com',
             'password' => bcrypt('password'),
-            'role_id' => \App\Models\Role::where('slug', 'bph_rayon')->first()?->id,
+            'role' => 'rayon_admin',
             'rayon_id' => $firstRayon?->id,
             'email_verified_at' => now(),
         ]);

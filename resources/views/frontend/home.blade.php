@@ -1,6 +1,7 @@
 @extends('layouts.app')
-
-@section('title', 'Beranda - ISKAB')
+@section('title', 'Beranda - ISKAB | Ikatan Santri Kalimantan Barat')
+@section('description', 'Website resmi Ikatan Santri Kalimantan Barat (ISKAB). Organisasi santri se-Kalimantan Barat yang mempererat silaturahmi dan mengembangkan potensi santri.')
+@section('keywords', 'ISKAB, Ikatan Santri Kalimantan Barat, Santri Kalbar, Organisasi Santri, Pesantren Kalbar')
 
 @section('content')
     <!-- Hero Section Full Width dari Atas dengan Rounded Bottom -->

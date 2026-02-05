@@ -23,9 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
-        'korwil_id',
-        'rayon_id',
+        'role',
     ];
 
     /**
@@ -51,21 +49,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function korwil(): BelongsTo
-    {
-        return $this->belongsTo(Korwil::class);
-    }
-
-    public function rayon(): BelongsTo
-    {
-        return $this->belongsTo(Rayon::class);
-    }
-
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class, 'author_id');
@@ -79,5 +62,17 @@ class User extends Authenticatable
     public function skApproved(): HasMany
     {
         return $this->hasMany(SKPengajuan::class, 'approved_by');
+    }
+
+    /**
+     * Check if user has a specific role
+     */
+    public function hasRole(string ...$roles): bool
+    {
+        if (!$this->role) {
+            return false;
+        }
+
+        return in_array($this->role, $roles);
     }
 }

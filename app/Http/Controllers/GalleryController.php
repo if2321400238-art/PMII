@@ -9,7 +9,7 @@ class GalleryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Gallery::query();
+        $query = Gallery::approved();
 
         if ($request->has('type') && $request->type) {
             $query->where('type', $request->type);
@@ -24,8 +24,8 @@ class GalleryController extends Controller
         }
 
         $galleries = $query->latest()->paginate(12);
-        $kegiatan = Gallery::distinct()->pluck('kegiatan')->filter();
-        $tahun = Gallery::distinct()->pluck('tahun')->filter()->sort();
+        $kegiatan = Gallery::approved()->distinct()->pluck('kegiatan')->filter();
+        $tahun = Gallery::approved()->distinct()->pluck('tahun')->filter()->sort();
 
         return view('frontend.galeri', compact('galleries', 'kegiatan', 'tahun'));
     }

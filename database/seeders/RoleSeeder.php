@@ -16,27 +16,22 @@ class RoleSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'slug' => 'admin',
-                'description' => 'Administrator dengan akses penuh',
+                'description' => 'Administrator dengan akses penuh ke seluruh sistem',
             ],
             [
-                'name' => 'BPH PB',
-                'slug' => 'bph_pb',
-                'description' => 'BPH Pusat Besar - Approve/Tolak/Revisi SK',
+                'name' => 'Pengurus Besar',
+                'slug' => 'pb',
+                'description' => 'Pengurus Besar - Mengelola dan approve SK pengajuan',
             ],
             [
-                'name' => 'BPH Korwil',
-                'slug' => 'bph_korwil',
-                'description' => 'BPH Koordinator Wilayah - Input Rayon & Anggota',
+                'name' => 'Korwil',
+                'slug' => 'korwil',
+                'description' => 'Koordinator Wilayah - Mengelola rayon dan anggota di wilayahnya',
             ],
             [
-                'name' => 'BPH Rayon',
-                'slug' => 'bph_rayon',
-                'description' => 'BPH Rayon - Input Anggota',
-            ],
-            [
-                'name' => 'Editor',
-                'slug' => 'editor',
-                'description' => 'Editor Berita & Pena Santri',
+                'name' => 'Rayon',
+                'slug' => 'rayon',
+                'description' => 'Pengurus Rayon - Mengelola anggota di rayonnya',
             ],
         ];
 

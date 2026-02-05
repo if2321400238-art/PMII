@@ -14,21 +14,21 @@ return new class extends Migration
         Schema::create('sk_pengajuan', function (Blueprint $table) {
             $table->id();
             $table->enum('tipe', ['korwil', 'rayon'])->default('rayon');
-            $table->string('nama');
-            $table->text('alamat')->nullable();
-            $table->string('pondok')->nullable();
-            $table->foreignId('rayon_id')->nullable()->constrained('rayons')->onDelete('set null');
-            $table->foreignId('korwil_id')->nullable()->constrained('korwils')->onDelete('set null');
-            $table->string('file_pendukung')->nullable();
+            $table->string('nama'); // Nomor SK
+            $table->text('deskripsi')->nullable();
+            $table->string('dokumen')->nullable();
+            $table->foreignId('rayon_id')->nullable()->constrained('rayons')->onDelete('cascade');
+            $table->foreignId('korwil_id')->nullable()->constrained('korwils')->onDelete('cascade');
             $table->enum('status', ['pending', 'approved', 'revised', 'rejected'])->default('pending');
             $table->text('catatan_revisi')->nullable();
-            $table->foreignId('submitted_by')->constrained('users')->onDelete('cascade');
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->dateTime('approved_at')->nullable();
             $table->timestamps();
 
             $table->index('status');
             $table->index('tipe');
+            $table->index('korwil_id');
+            $table->index('rayon_id');
         });
     }
 

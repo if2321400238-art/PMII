@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
 use App\Http\Controllers\Admin\ProfilOrganisasiController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\KTATemplateController;
 use App\Http\Controllers\ProfileController;
 
 // Frontend Routes
@@ -113,51 +114,65 @@ Route::middleware('auth')->group(function () {
 });
 
 // Breeze default dashboard route -> redirect ke admin dashboard
-Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth.any'])->get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
 })->name('dashboard');
 
 // Admin Routes
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth.any'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Posts Management (Editor & Admin)
-    Route::middleware('role:editor,admin')->resource('posts', AdminPostController::class);
+    // Posts Management (Admin, Korwil Admin, Rayon Admin)
+    Route::middleware('role:admin,korwil_admin,rayon_admin')->group(function () {
+        Route::resource('posts', AdminPostController::class);
+        Route::post('/posts/{post}/approve', [AdminPostController::class, 'approve'])->name('posts.approve');
+        Route::post('/posts/{post}/reject', [AdminPostController::class, 'reject'])->name('posts.reject');
+        Route::post('/posts/{post}/publish', [AdminPostController::class, 'publish'])->name('posts.publish');
+    });
 
     // SK Pengajuan Management
-    // Korwil & Rayon bisa create & view sendiri, BPH PB bisa approve/revise/reject semua
-    Route::middleware('role:bph_korwil,bph_rayon,bph_pb')->group(function () {
+    // Korwil Admin & Rayon Admin bisa create & view sendiri, Admin bisa approve/revise/reject semua
+    Route::middleware('role:korwil_admin,rayon_admin,admin')->group(function () {
         Route::get('/sk-pengajuan', [SKPengajuanController::class, 'index'])->name('sk-pengajuan.index');
         Route::get('/sk-pengajuan/create', [SKPengajuanController::class, 'create'])->name('sk-pengajuan.create');
         Route::post('/sk-pengajuan', [SKPengajuanController::class, 'store'])->name('sk-pengajuan.store');
         Route::get('/sk-pengajuan/{pengajuan}', [SKPengajuanController::class, 'show'])->name('sk-pengajuan.show');
 
-        // Only BPH PB can approve/revise/reject
-        Route::middleware('role:bph_pb')->group(function () {
+        // Only Admin can approve/revise/reject
+        Route::middleware('role:admin')->group(function () {
             Route::post('/sk-pengajuan/{pengajuan}/approve', [SKPengajuanController::class, 'approve'])->name('sk-pengajuan.approve');
             Route::post('/sk-pengajuan/{pengajuan}/revise', [SKPengajuanController::class, 'revise'])->name('sk-pengajuan.revise');
             Route::post('/sk-pengajuan/{pengajuan}/reject', [SKPengajuanController::class, 'reject'])->name('sk-pengajuan.reject');
         });
     });
 
-    // Anggota Management (BPH Korwil & BPH Rayon)
-    Route::middleware('role:bph_korwil')->resource('anggota', AnggotaController::class);
-    Route::get('/anggota/{anggota}/download-kta', [AnggotaController::class, 'downloadKTA'])->name('anggota.download-kta');
+    // Anggota Management (Admin, Korwil Admin, Rayon Admin)
+    Route::middleware('role:admin,korwil_admin,rayon_admin')->group(function () {
+        Route::resource('anggota', AnggotaController::class);
+        Route::get('/anggota/{anggota}/download-kta', [AnggotaController::class, 'downloadKTA'])->name('anggota.download-kta');
+    });
+
+    // KTA Template Management (Admin only)
+    Route::middleware('role:admin')->resource('kta-template', KTATemplateController::class);
 
     // Korwil Management (Admin only)
     Route::middleware('role:admin')->resource('korwil', KorwilController::class);
 
-    // Rayon Management (Admin & BPH Korwil)
-    Route::middleware('role:bph_korwil')->group(function () {
+    // Rayon Management (Admin & Korwil Admin)
+    Route::middleware('role:admin,korwil_admin')->group(function () {
         Route::resource('rayon', RayonController::class);
         Route::get('/rayon/by-korwil/{korwil}', [RayonController::class, 'listByKorwil'])->name('rayon.by-korwil');
     });
 
-    // Gallery Management (Editor & Admin)
-    Route::middleware('role:editor,admin')->resource('gallery', AdminGalleryController::class);
+    // Gallery Management (Admin, Korwil Admin, Rayon Admin)
+    Route::middleware('role:admin,korwil_admin,rayon_admin')->group(function () {
+        Route::resource('gallery', AdminGalleryController::class);
+        Route::post('/gallery/{gallery}/approve', [AdminGalleryController::class, 'approve'])->name('gallery.approve');
+        Route::post('/gallery/{gallery}/reject', [AdminGalleryController::class, 'reject'])->name('gallery.reject');
+    });
 
     // Download Management (Admin only)
     Route::middleware('role:admin')->resource('download', AdminDownloadController::class);
@@ -168,7 +183,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::put('/profil-organisasi', [ProfilOrganisasiController::class, 'update'])->name('profil-organisasi.update');
 
         // User Management (Admin only)
-        Route::resource('users', UserController::class);
+        Route::resource('user', UserController::class);
     });
 });
 

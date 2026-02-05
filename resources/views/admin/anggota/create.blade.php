@@ -22,20 +22,46 @@
 
         <div class="mb-6">
             <label class="block text-sm font-semibold mb-2">Korwil</label>
-            <select name="korwil_id" id="korwil_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('korwil_id') border-red-500 @enderror">
-                <option value="">Pilih Korwil</option>
-                @foreach($korwils as $k)
-                    <option value="{{ $k->id }}" {{ old('korwil_id') == $k->id ? 'selected' : '' }}>{{ $k->name }}</option>
-                @endforeach
-            </select>
+            @if($rayonCurrent)
+                <input type="hidden" name="korwil_id" value="{{ $rayonCurrent->korwil_id }}">
+                <div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                    {{ $rayonCurrent->korwil->name }}
+                </div>
+            @elseif($korwilCurrent)
+                <input type="hidden" name="korwil_id" value="{{ $korwilCurrent->id }}">
+                <div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                    {{ $korwilCurrent->name }}
+                </div>
+            @else
+                <select name="korwil_id" id="korwil_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('korwil_id') border-red-500 @enderror">
+                    <option value="">Pilih Korwil</option>
+                    @foreach($korwils as $k)
+                        <option value="{{ $k->id }}" {{ old('korwil_id') == $k->id ? 'selected' : '' }}>{{ $k->name }}</option>
+                    @endforeach
+                </select>
+            @endif
             @error('korwil_id')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
 
         <div class="mb-6">
             <label class="block text-sm font-semibold mb-2">Rayon</label>
-            <select name="rayon_id" id="rayon_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('rayon_id') border-red-500 @enderror">
-                <option value="">Pilih Rayon</option>
-            </select>
+            @if($rayonCurrent)
+                <input type="hidden" name="rayon_id" value="{{ $rayonCurrent->id }}">
+                <div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                    {{ $rayonCurrent->name }}
+                </div>
+            @elseif($korwilCurrent)
+                <select name="rayon_id" id="rayon_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('rayon_id') border-red-500 @enderror">
+                    <option value="">Pilih Rayon</option>
+                    @foreach($rayons as $r)
+                        <option value="{{ $r->id }}" {{ old('rayon_id') == $r->id ? 'selected' : '' }}>{{ $r->name }}</option>
+                    @endforeach
+                </select>
+            @else
+                <select name="rayon_id" id="rayon_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('rayon_id') border-red-500 @enderror">
+                    <option value="">Pilih Rayon</option>
+                </select>
+            @endif
             @error('rayon_id')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
 
@@ -55,6 +81,19 @@
             <p class="text-gray-600 text-sm mt-1">Format: JPG, PNG (max 2MB)</p>
         </div>
 
+        <div class="mb-6">
+            <label class="block text-sm font-semibold mb-2">Template KTA</label>
+            <select name="kta_template_id" id="kta_template_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                <option value="">-- Gunakan Template Default --</option>
+                @foreach($ktaTemplates as $template)
+                    <option value="{{ $template->id }}" {{ old('kta_template_id') == $template->id ? 'selected' : '' }}>
+                        {{ $template->name }} {{ $template->is_active ? '(Aktif)' : '' }}
+                    </option>
+                @endforeach
+            </select>
+            <p class="text-gray-600 text-sm mt-1">Pilih template KTA yang akan digunakan untuk download KTA</p>
+        </div>
+
         <div class="flex gap-4">
             <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold">
                 Simpan Anggota
@@ -68,6 +107,9 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    if ({{ $korwilCurrent ? 'true' : 'false' }} || {{ $rayonCurrent ? 'true' : 'false' }}) {
+        return;
+    }
     const korwilSelect = document.getElementById('korwil_id');
     const rayonSelect = document.getElementById('rayon_id');
     const fetchRayons = (korwilId, selectedId = null) => {

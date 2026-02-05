@@ -8,12 +8,25 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PostController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(Request $request)
     {
-        $query = Post::with('author', 'category');
+        $query = Post::with('author', 'category', 'approvedBy');
+
+        // Filter approval status untuk non-admin
+        $userRole = auth()->user()->role;
+        if ($userRole !== 'admin') {
+            $query->where('author_id', auth()->id());
+        }
+
+        if ($request->has('approval_status') && $request->approval_status) {
+            $query->where('approval_status', $request->approval_status);
+        }
 
         if ($request->has('type') && $request->type) {
             $query->where('type', $request->type);
@@ -61,6 +74,16 @@ class PostController extends Controller
         $validated['slug'] = $slug;
         $validated['author_id'] = auth()->id();
 
+        // Set approval status: admin langsung approved, lainnya pending
+        $userRole = auth()->user()->role;
+        if ($userRole === 'admin') {
+            $validated['approval_status'] = 'approved';
+            $validated['approved_by'] = auth()->id();
+            $validated['approved_at'] = now();
+        } else {
+            $validated['approval_status'] = 'pending';
+        }
+
         // Set published_at to now if not provided
         if (!isset($validated['published_at']) || !$validated['published_at']) {
             $validated['published_at'] = now();
@@ -68,7 +91,11 @@ class PostController extends Controller
 
         Post::create($validated);
 
-        return redirect()->route('admin.posts.index')->with('success', 'Post berhasil dibuat');
+        $message = $validated['approval_status'] === 'pending'
+            ? 'Post berhasil dibuat dan menunggu persetujuan admin/PB'
+            : 'Post berhasil dibuat dan dipublikasikan';
+
+        return redirect()->route('admin.posts.index')->with('success', $message);
     }
 
     public function edit(Post $post)
@@ -104,6 +131,21 @@ class PostController extends Controller
             $validated['slug'] = $slug;
         }
 
+        // Reset approval status jika post ditolak dan di-update
+        if ($post->approval_status === 'rejected') {
+            $userRole = auth()->user()->role;
+            if ($userRole === 'admin') {
+                $validated['approval_status'] = 'approved';
+                $validated['approved_by'] = auth()->id();
+                $validated['approved_at'] = now();
+            } else {
+                $validated['approval_status'] = 'pending';
+                $validated['approved_by'] = null;
+                $validated['approved_at'] = null;
+            }
+            $validated['rejection_reason'] = null;
+        }
+
         $post->update($validated);
 
         return redirect()->route('admin.posts.index')->with('success', 'Post berhasil diperbarui');
@@ -113,5 +155,48 @@ class PostController extends Controller
     {
         $post->delete();
         return redirect()->route('admin.posts.index')->with('success', 'Post berhasil dihapus');
+    }
+
+    public function approve(Post $post)
+    {
+        $this->authorize('approve', $post);
+
+        $post->update([
+            'approval_status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'rejection_reason' => null,
+        ]);
+
+        return redirect()->back()->with('success', 'Post berhasil disetujui');
+    }
+
+    public function reject(Request $request, Post $post)
+    {
+        $this->authorize('reject', $post);
+
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|max:500',
+        ]);
+
+        $post->update([
+            'approval_status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
+
+        return redirect()->back()->with('success', 'Post berhasil ditolak');
+    }
+
+    public function publish(Request $request, Post $post)
+    {
+        $validated = $request->validate([
+            'published_at' => 'required|date',
+        ]);
+
+        $post->update([
+            'published_at' => $validated['published_at'],
+        ]);
+
+        return redirect()->back()->with('success', 'Post berhasil dipublikasikan');
     }
 }

@@ -4,26 +4,25 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="{{ url()->current() }}">
 
-        <!-- SEO Meta Tags -->
-        <title>@yield('title', 'ISKAB - Ikatan Santri Kota Bandung')</title>
-        <meta name="description" content="@yield('description', 'Ikatan Santri Kota Bandung (ISKAB) - Organisasi santri se-Kota Bandung untuk mempererat silaturahmi dan mengembangkan potensi santri.')">
-        <meta name="keywords" content="ISKAB, Ikatan Santri, Bandung, Santri, Pesantren, Organisasi Santri">
+        <title>@yield('title', 'ISKAB - Ikatan Santri Kalimantan Barat')</title>
+        <meta name="description" content="@yield('description', 'Ikatan Santri Kalimantan Barat (ISKAB) - Organisasi santri se-Kalimantan Barat untuk mempererat silaturahmi dan mengembangkan potensi santri.')">
+        <meta name="keywords" content="@yield('keywords', 'ISKAB, Ikatan Santri, Kalimantan Barat, Santri, Pesantren, Organisasi Santri')">
         <meta name="author" content="ISKAB">
 
-        <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:title" content="@yield('title', 'ISKAB - Ikatan Santri Kota Bandung')">
-        <meta property="og:description" content="@yield('description', 'Ikatan Santri Kota Bandung (ISKAB) - Organisasi santri se-Kota Bandung')">
+        <meta property="og:title" content="@yield('title', 'ISKAB - Ikatan Santri Kalimantan Barat')">
+        <meta property="og:description" content="@yield('description', 'Organisasi santri se-Kalimantan Barat')">
         <meta property="og:image" content="@yield('image', asset('images/iskab-og.jpg'))">
+        <meta property="og:locale" content="id_ID">
 
-        <!-- Twitter -->
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="{{ url()->current() }}">
-        <meta property="twitter:title" content="@yield('title', 'ISKAB - Ikatan Santri Kota Bandung')">
-        <meta property="twitter:description" content="@yield('description', 'Ikatan Santri Kota Bandung')">
-        <meta property="twitter:image" content="@yield('image', asset('images/iskab-og.jpg'))">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="@yield('title', 'ISKAB - Ikatan Santri Kalimantan Barat')">
+        <meta name="twitter:description" content="@yield('description', 'Organisasi santri se-Kalimantan Barat')">
+        <meta name="twitter:image" content="@yield('image', asset('images/iskab-og.jpg'))">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -31,6 +30,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('head')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 flex flex-col relative">
