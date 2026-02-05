@@ -16,6 +16,7 @@ services:
             - './config:/var/www/config'
             - './bootstrap:/var/www/bootstrap'
             - './database/migrations:/var/www/database/migrations'
+            - './public/build:/var/www/public/build'
         depends_on:
             - mysql
         networks:
