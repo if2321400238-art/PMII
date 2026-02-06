@@ -6,17 +6,13 @@ services:
         container_name: iskab-app
         restart: unless-stopped
         ports:
-            - '80:80'
+            - '${APP_PORT:-80}:80'
         volumes:
             - './storage:/var/www/storage'
             - './.env.docker:/var/www/.env'
-            - './app:/var/www/app'
-            - './resources:/var/www/resources'
-            - './routes:/var/www/routes'
-            - './config:/var/www/config'
-            - './bootstrap:/var/www/bootstrap'
-            - './database/migrations:/var/www/database/migrations'
-            - './public/build:/var/www/public/build'
+        environment:
+            - APP_ENV=${APP_ENV:-production}
+            - APP_DEBUG=${APP_DEBUG:-false}
         depends_on:
             - mysql
         networks:
@@ -26,10 +22,10 @@ services:
         container_name: iskab-db
         restart: unless-stopped
         environment:
-            MYSQL_DATABASE: iskab
-            MYSQL_USER: iskab_user
-            MYSQL_PASSWORD: passwordku
-            MYSQL_ROOT_PASSWORD: root_password_rahasia
+            MYSQL_DATABASE: ${DB_DATABASE:-iskab}
+            MYSQL_USER: ${DB_USERNAME:-iskab_user}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-passwordku}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password_rahasia}
         volumes:
             - 'mysql_data:/var/lib/mysql'
         networks:
@@ -39,5 +35,3 @@ networks:
         driver: bridge
 volumes:
     mysql_data: null
-    sail-mysql:
-        driver: local

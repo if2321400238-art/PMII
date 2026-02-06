@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
 use App\Http\Controllers\Admin\ProfilOrganisasiController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\KTATemplateController;
+
 use App\Http\Controllers\ProfileController;
 
 // Frontend Routes
@@ -44,6 +44,19 @@ Route::get('/download/{download}', [DownloadController::class, 'download'])->nam
 
 // Data Routes
 Route::get('/data', [DataController::class, 'index'])->name('data.index');
+
+// KTA Verification Route (public - for QR code scanning)
+Route::get('/verify/anggota/{nomor_anggota}', function ($nomor_anggota) {
+    $anggota = \App\Models\Anggota::with(['rayon', 'korwil'])
+        ->where('nomor_anggota', $nomor_anggota)
+        ->first();
+
+    if (!$anggota) {
+        return view('verify.not-found', ['nomor_anggota' => $nomor_anggota]);
+    }
+
+    return view('verify.anggota', ['anggota' => $anggota]);
+})->name('verify.anggota');
 
 // Debug Routes (temporary)
 Route::get('/debug-posts-all', function () {
@@ -154,9 +167,6 @@ Route::middleware(['auth.any'])->prefix('admin')->name('admin.')->group(function
         Route::resource('anggota', AnggotaController::class);
         Route::get('/anggota/{anggota}/download-kta', [AnggotaController::class, 'downloadKTA'])->name('anggota.download-kta');
     });
-
-    // KTA Template Management (Admin only)
-    Route::middleware('role:admin')->resource('kta-template', KTATemplateController::class);
 
     // Korwil Management (Admin only)
     Route::middleware('role:admin')->resource('korwil', KorwilController::class);

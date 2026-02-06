@@ -7,6 +7,7 @@ use App\Models\Anggota;
 use App\Models\KTATemplate;
 use App\Models\Korwil;
 use App\Models\Rayon;
+use App\Services\KTAGeneratorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -149,91 +150,16 @@ class AnggotaController extends Controller
         return redirect()->route('admin.anggota.index')->with('success', 'Anggota berhasil dihapus');
     }
 
-    public function downloadKTA(Anggota $anggota)
+    public function downloadKTA(Anggota $anggota, KTAGeneratorService $ktaGenerator)
     {
         try {
-            // Gunakan default template atau template yang dipilih
-            $template = $anggota->ktaTemplate ?? \App\Models\KTATemplate::where('is_active', true)->first();
+            // Load relationships
+            $anggota->load(['rayon', 'korwil']);
 
-            if (!$template) {
-                return back()->with('error', 'KTA template tidak ditemukan. Silakan upload template terlebih dahulu.');
-            }
+            // Generate KTA using the service
+            $tempFile = $ktaGenerator->generate($anggota);
 
-            // Get path to template image (public disk)
-            $templatePath = Storage::disk('public')->path($template->image_path);
-
-            if (!file_exists($templatePath)) {
-                return back()->with('error', 'File template KTA tidak ditemukan');
-            }
-
-            // Create image dari template
-            $image = @imagecreatefrompng($templatePath) ?? @imagecreatefromjpeg($templatePath);
-
-            if (!$image) {
-                return back()->with('error', 'Gagal membaca template image. Format harus PNG atau JPEG.');
-            }
-
-            // Warna text (hitam)
-            $textColor = imagecolorallocate($image, 0, 0, 0);
-            $fontPath = base_path('public/fonts/arial.ttf');
-
-            if (!file_exists($fontPath)) {
-                return back()->with('error', 'Font file tidak ditemukan');
-            }
-
-            // Get field positions dari template (atau gunakan default)
-            $positions = $template->field_positions ?? [
-                'nama' => ['x' => 50, 'y' => 100, 'size' => 12],
-                'nomor_anggota' => ['x' => 50, 'y' => 130, 'size' => 14],
-                'rayon' => ['x' => 50, 'y' => 160, 'size' => 10],
-                'korwil' => ['x' => 50, 'y' => 190, 'size' => 10],
-                'foto' => ['x' => 200, 'y' => 50, 'width' => 60, 'height' => 80],
-            ];
-
-            // Add text fields
-            if (isset($positions['nama']) && $anggota->nama) {
-                $pos = $positions['nama'];
-                imagettftext($image, $pos['size'], 0, $pos['x'], $pos['y'], $textColor, $fontPath, $anggota->nama);
-            }
-
-            if (isset($positions['nomor_anggota']) && $anggota->nomor_anggota) {
-                $pos = $positions['nomor_anggota'];
-                imagettftext($image, $pos['size'], 0, $pos['x'], $pos['y'], $textColor, $fontPath, 'No. ' . $anggota->nomor_anggota);
-            }
-
-            if (isset($positions['rayon']) && $anggota->rayon) {
-                $pos = $positions['rayon'];
-                imagettftext($image, $pos['size'], 0, $pos['x'], $pos['y'], $textColor, $fontPath, 'Rayon: ' . $anggota->rayon->nama);
-            }
-
-            if (isset($positions['korwil']) && $anggota->korwil) {
-                $pos = $positions['korwil'];
-                imagettftext($image, $pos['size'], 0, $pos['x'], $pos['y'], $textColor, $fontPath, 'Korwil: ' . $anggota->korwil->nama);
-            }
-
-            // Add photo jika ada
-            if (isset($positions['foto']) && $anggota->foto && file_exists(public_path($anggota->foto))) {
-                $pos = $positions['foto'];
-                $photoImage = @imagecreatefromjpeg(public_path($anggota->foto)) ?? @imagecreatefrompng(public_path($anggota->foto));
-
-                if ($photoImage) {
-                    imagecopyresampled(
-                        $image, $photoImage,
-                        $pos['x'], $pos['y'],
-                        0, 0,
-                        $pos['width'], $pos['height'],
-                        imagesx($photoImage), imagesy($photoImage)
-                    );
-                    imagedestroy($photoImage);
-                }
-            }
-
-            // Save to temporary file
-            $tempFile = tempnam(sys_get_temp_dir(), 'kta_');
-            imagepng($image, $tempFile);
-            imagedestroy($image);
-
-            if (!file_exists($tempFile)) {
+            if (!$tempFile || !file_exists($tempFile)) {
                 return back()->with('error', 'Gagal generate KTA');
             }
 
@@ -252,7 +178,8 @@ class AnggotaController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('KTA Download Error: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine(), [
-                'anggota_id' => $anggota->id
+                'anggota_id' => $anggota->id,
+                'trace' => $e->getTraceAsString()
             ]);
             return back()->with('error', 'Error: ' . $e->getMessage());
         }

@@ -22,7 +22,15 @@ RUN apk add --no-cache \
     freetype-dev \
     oniguruma-dev \
     libxml2-dev \
-    libzip-dev
+    libzip-dev \
+    imagemagick \
+    imagemagick-dev
+
+# Install imagick from PECL
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
+    && apk del .build-deps
 
 # Konfigurasi GD agar bisa memproses JPG/PNG
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -70,6 +78,11 @@ RUN mkdir -p /var/www/database && \
     touch /var/www/database/database.sqlite && \
     chown -R www-data:www-data /var/www/database && \
     chmod -R 775 /var/www/database
+
+# Ensure fonts directory exists and has correct permissions
+RUN mkdir -p /var/www/public/fonts && \
+    chown -R www-data:www-data /var/www/public/fonts && \
+    chmod -R 755 /var/www/public/fonts
 
 # Copy configuration files
 COPY docker/nginx.conf /etc/nginx/nginx.conf
