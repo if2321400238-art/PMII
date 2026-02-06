@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\AuthHelper;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PostController extends Controller
@@ -18,10 +20,14 @@ class PostController extends Controller
     {
         $query = Post::with('author', 'category', 'approvedBy');
 
-        // Filter approval status untuk non-admin
-        $userRole = auth()->user()->role;
-        if ($userRole !== 'admin') {
-            $query->where('author_id', auth()->id());
+        // Get current user from any guard
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+
+        // Filter: non-admin hanya lihat postingan sendiri
+        if ($userType !== 'user' || $currentUser->role !== 'admin') {
+            $query->where('author_id', $currentUser->id)
+                  ->where('author_type', get_class($currentUser));
         }
 
         if ($request->has('approval_status') && $request->approval_status) {
@@ -72,13 +78,19 @@ class PostController extends Controller
             $count++;
         }
         $validated['slug'] = $slug;
-        $validated['author_id'] = auth()->id();
+
+        // Set author dengan polymorphic relation
+        $currentUser = AuthHelper::user();
+        $validated['author_id'] = $currentUser->id;
+        $validated['author_type'] = get_class($currentUser);
 
         // Set approval status: admin langsung approved, lainnya pending
-        $userRole = auth()->user()->role;
-        if ($userRole === 'admin') {
+        $userType = AuthHelper::userType();
+        $isAdmin = $userType === 'user' && $currentUser->role === 'admin';
+
+        if ($isAdmin) {
             $validated['approval_status'] = 'approved';
-            $validated['approved_by'] = auth()->id();
+            $validated['approved_by'] = $currentUser->id;
             $validated['approved_at'] = now();
         } else {
             $validated['approval_status'] = 'pending';
@@ -133,10 +145,13 @@ class PostController extends Controller
 
         // Reset approval status jika post ditolak dan di-update
         if ($post->approval_status === 'rejected') {
-            $userRole = auth()->user()->role;
-            if ($userRole === 'admin') {
+            $currentUser = AuthHelper::user();
+            $userType = AuthHelper::userType();
+            $isAdmin = $userType === 'user' && $currentUser->role === 'admin';
+
+            if ($isAdmin) {
                 $validated['approval_status'] = 'approved';
-                $validated['approved_by'] = auth()->id();
+                $validated['approved_by'] = $currentUser->id;
                 $validated['approved_at'] = now();
             } else {
                 $validated['approval_status'] = 'pending';
@@ -161,9 +176,10 @@ class PostController extends Controller
     {
         $this->authorize('approve', $post);
 
+        $currentUser = AuthHelper::user();
         $post->update([
             'approval_status' => 'approved',
-            'approved_by' => auth()->id(),
+            'approved_by' => $currentUser->id,
             'approved_at' => now(),
             'rejection_reason' => null,
         ]);

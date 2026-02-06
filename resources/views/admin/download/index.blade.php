@@ -22,24 +22,91 @@
 
         @if(session('success'))
             <div class="bg-green-50 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded mb-6 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
                 <span>{{ session('success') }}</span>
             </div>
         @endif
 
-        <!-- Table Card -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Mobile Cards View -->
+        <h2 class="sr-only">Daftar File Download</h2>
+        <div class="block md:hidden space-y-4">
+            @forelse($downloads as $download)
+                <article class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                    <div class="flex items-start gap-3 mb-3">
+                        <svg class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-gray-900 text-base">{{ $download->nama_file }}</h3>
+                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ \Illuminate\Support\Str::limit($download->deskripsi, 80) }}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 items-center mb-3">
+                        @php
+                            $colors = [
+                                'logo' => 'bg-blue-100 text-blue-700 border-blue-200',
+                                'ad_art' => 'bg-green-100 text-green-700 border-green-200',
+                                'administrasi' => 'bg-yellow-100 text-yellow-700 border-yellow-200',
+                                'surat_template' => 'bg-purple-100 text-purple-700 border-purple-200',
+                                'panduan_lain' => 'bg-gray-100 text-gray-700 border-gray-200',
+                            ];
+                        @endphp
+                        <span class="px-2.5 py-1 text-xs font-medium rounded-full border {{ $colors[$download->kategori] ?? 'bg-gray-100 text-gray-700 border-gray-200' }}">
+                            {{ str_replace('_', ' ', ucwords(str_replace('_', ' ', $download->kategori))) }}
+                        </span>
+                        <span class="flex items-center text-xs text-gray-600">
+                            <svg class="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            {{ $download->download_count ?? 0 }} unduhan
+                        </span>
+                    </div>
+                    <div class="flex gap-2 pt-3 border-t border-gray-100">
+                        <a href="{{ route('admin.download.edit', $download) }}"
+                           class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            Edit
+                        </a>
+                        <form action="{{ route('admin.download.destroy', $download) }}" method="POST"
+                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus file ini?')" class="flex-1">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            @empty
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    <p class="text-gray-500 font-medium">Belum ada file download</p>
+                    <p class="text-gray-500 text-sm mt-1">Tambahkan file pertama Anda untuk memulai</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Desktop Table View -->
+        <div class="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gradient-to-r from-green-50 to-green-100">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Nama File</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Kategori</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Deskripsi</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Unduhan</th>
-                            <th class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Aksi</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Nama File</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Kategori</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Deskripsi</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Unduhan</th>
+                            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -109,7 +176,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                     </svg>
                                     <p class="text-gray-500 font-medium">Belum ada file download</p>
-                                    <p class="text-gray-400 text-sm mt-1">Tambahkan file pertama Anda untuk memulai</p>
+                                    <p class="text-gray-500 text-sm mt-1">Tambahkan file pertama Anda untuk memulai</p>
                                 </td>
                             </tr>
                         @endforelse

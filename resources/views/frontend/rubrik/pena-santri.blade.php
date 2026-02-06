@@ -23,7 +23,7 @@
                 <label class="block text-sm font-semibold mb-2">Penulis</label>
                 <select name="author" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     <option value="">Semua Penulis</option>
-                    @foreach($categories as $author)
+                    @foreach($authors as $author)
                         <option value="{{ $author->id }}" {{ request('author') == $author->id ? 'selected' : '' }}>{{ $author->name }}</option>
                     @endforeach
                 </select>
@@ -47,7 +47,7 @@
                 </h3>
                 <p class="text-gray-600 line-clamp-3 mb-4">{{ strip_tags($post->content) }}</p>
                 <div class="border-t pt-4">
-                    <div class="text-sm text-gray-500 mb-3">Penulis: <span class="font-semibold">{{ $post->author->name }}</span></div>
+                    <div class="text-sm text-gray-500 mb-3">Penulis: <span class="font-semibold">{{ $post->author?->name ?? 'Unknown' }}</span></div>
                     <a href="{{ route('posts.show', $post->slug) }}" class="text-green-600 hover:text-green-700 font-semibold">Baca Selengkapnya →</a>
                 </div>
             </article>

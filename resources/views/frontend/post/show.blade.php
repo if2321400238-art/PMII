@@ -24,7 +24,7 @@
         </div>
         <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ $post->title }}</h1>
         <div class="flex flex-wrap items-center gap-4 text-gray-600">
-            <span>Oleh <strong>{{ $post->author->name }}</strong></span>
+            <span>Oleh <strong>{{ $post->author?->name ?? 'Unknown' }}</strong></span>
             <span>{{ $post->published_at?->format('d F Y') }}</span>
             <span>👁️ {{ $post->view_count }} views</span>
         </div>

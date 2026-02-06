@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Post extends Model
 {
@@ -15,6 +16,7 @@ class Post extends Model
         'thumbnail',
         'category_id',
         'author_id',
+        'author_type',
         'view_count',
         'is_popular',
         'published_at',
@@ -38,9 +40,20 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function author(): BelongsTo
+    /**
+     * Get the author (polymorphic: User, Korwil, or Rayon)
+     */
+    public function author(): MorphTo
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->morphTo('author', 'author_type', 'author_id');
+    }
+
+    /**
+     * Get author name helper
+     */
+    public function getAuthorNameAttribute(): string
+    {
+        return $this->author?->name ?? 'Unknown';
     }
 
     public function approvedBy(): BelongsTo

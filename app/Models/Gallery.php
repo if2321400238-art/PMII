@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Gallery extends Model
 {
@@ -21,6 +22,7 @@ class Gallery extends Model
         'approved_at',
         'rejection_reason',
         'uploaded_by',
+        'uploader_type',
     ];
 
     protected function casts(): array
@@ -31,9 +33,20 @@ class Gallery extends Model
         ];
     }
 
-    public function uploadedBy()
+    /**
+     * Get the uploader (polymorphic: User, Korwil, or Rayon)
+     */
+    public function uploadedBy(): MorphTo
     {
-        return $this->belongsTo(User::class, 'uploaded_by');
+        return $this->morphTo('uploadedBy', 'uploader_type', 'uploaded_by');
+    }
+
+    /**
+     * Get uploader name helper
+     */
+    public function getUploaderNameAttribute(): string
+    {
+        return $this->uploadedBy?->name ?? 'Unknown';
     }
 
     public function approvedBy()

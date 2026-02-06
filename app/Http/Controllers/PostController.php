@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -16,8 +17,17 @@ class PostController extends Controller
             $query->where('category_id', $request->category);
         }
 
+        // Filter by author (using author_id + author_type for polymorphic)
         if ($request->has('author') && $request->author) {
-            $query->where('author_id', $request->author);
+            // Format: "type:id" e.g. "App\Models\User:1" or just "id" for backward compatibility
+            $authorParam = $request->author;
+            if (str_contains($authorParam, ':')) {
+                [$type, $id] = explode(':', $authorParam);
+                $query->where('author_type', $type)->where('author_id', $id);
+            } else {
+                // Backward compatibility: assume User type
+                $query->where('author_id', $authorParam);
+            }
         }
 
         if ($request->has('sort')) {
@@ -34,9 +44,25 @@ class PostController extends Controller
         $categories = \App\Models\Category::whereHas('posts', function ($q) {
             $q->berita()->published();
         })->get();
-        $authors = \App\Models\User::whereHas('posts', function ($q) {
-            $q->berita()->published();
-        })->get();
+
+        // Get unique authors from published berita posts (supports polymorphic)
+        $authors = Post::berita()->published()
+            ->select('author_id', 'author_type')
+            ->distinct()
+            ->get()
+            ->map(function ($post) {
+                $author = $post->author;
+                if ($author) {
+                    return (object) [
+                        'id' => $post->author_type . ':' . $post->author_id,
+                        'name' => $author->name,
+                    ];
+                }
+                return null;
+            })
+            ->filter()
+            ->unique('name')
+            ->values();
 
         return view('frontend.rubrik.berita', compact('posts', 'categories', 'authors'));
     }
@@ -49,8 +75,15 @@ class PostController extends Controller
             $query->where('category_id', $request->category);
         }
 
+        // Filter by author (using author_id + author_type for polymorphic)
         if ($request->has('author') && $request->author) {
-            $query->where('author_id', $request->author);
+            $authorParam = $request->author;
+            if (str_contains($authorParam, ':')) {
+                [$type, $id] = explode(':', $authorParam);
+                $query->where('author_type', $type)->where('author_id', $id);
+            } else {
+                $query->where('author_id', $authorParam);
+            }
         }
 
         $query->latest('published_at');
@@ -60,7 +93,26 @@ class PostController extends Controller
             $q->penaSantri()->published();
         })->get();
 
-        return view('frontend.rubrik.pena-santri', compact('posts', 'categories'));
+        // Get unique authors from published pena_santri posts
+        $authors = Post::penaSantri()->published()
+            ->select('author_id', 'author_type')
+            ->distinct()
+            ->get()
+            ->map(function ($post) {
+                $author = $post->author;
+                if ($author) {
+                    return (object) [
+                        'id' => $post->author_type . ':' . $post->author_id,
+                        'name' => $author->name,
+                    ];
+                }
+                return null;
+            })
+            ->filter()
+            ->unique('name')
+            ->values();
+
+        return view('frontend.rubrik.pena-santri', compact('posts', 'categories', 'authors'));
     }
 
     public function show(Post $post)

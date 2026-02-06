@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\AuthHelper;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GalleryController extends Controller
 {
@@ -12,10 +14,14 @@ class GalleryController extends Controller
     {
         $query = Gallery::with('uploadedBy', 'approvedBy');
 
-        // Filter approval status untuk non-admin
-        $userRole = auth()->user()->role;
-        if ($userRole !== 'admin') {
-            $query->where('uploaded_by', auth()->id());
+        // Get current user from any guard
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+
+        // Filter: non-admin hanya lihat galeri sendiri
+        if ($userType !== 'user' || $currentUser->role !== 'admin') {
+            $query->where('uploaded_by', $currentUser->id)
+                  ->where('uploader_type', get_class($currentUser));
         }
 
         if ($request->has('approval_status') && $request->approval_status) {
@@ -54,13 +60,18 @@ class GalleryController extends Controller
             $validated['file_path'] = $request->file('file_path')->store('galleries/videos', 'public');
         }
 
-        $validated['uploaded_by'] = auth()->id();
+        // Set uploader dengan polymorphic relation
+        $currentUser = AuthHelper::user();
+        $validated['uploaded_by'] = $currentUser->id;
+        $validated['uploader_type'] = get_class($currentUser);
 
         // Set approval status: admin langsung approved, lainnya pending
-        $userRole = auth()->user()->role;
-        if ($userRole === 'admin') {
+        $userType = AuthHelper::userType();
+        $isAdmin = $userType === 'user' && $currentUser->role === 'admin';
+
+        if ($isAdmin) {
             $validated['approval_status'] = 'approved';
-            $validated['approved_by'] = auth()->id();
+            $validated['approved_by'] = $currentUser->id;
             $validated['approved_at'] = now();
         } else {
             $validated['approval_status'] = 'pending';

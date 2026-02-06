@@ -36,13 +36,15 @@
         <!-- Filter -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
             <form method="GET" class="flex gap-3 items-center flex-wrap">
-                <label class="text-sm font-semibold text-gray-700">Filter:</label>
-                <select name="type" class="border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="this.form.submit()">
+                <span class="text-sm font-semibold text-gray-700">Filter:</span>
+                <label for="filter-type" class="sr-only">Filter berdasarkan tipe</label>
+                <select id="filter-type" name="type" class="border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="this.form.submit()">
                     <option value="">Semua Tipe</option>
                     <option value="photo" {{ request('type') === 'photo' ? 'selected' : '' }}>Foto</option>
                     <option value="video" {{ request('type') === 'video' ? 'selected' : '' }}>Video</option>
                 </select>
-                <select name="approval_status" class="border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="this.form.submit()">
+                <label for="filter-status" class="sr-only">Filter berdasarkan status</label>
+                <select id="filter-status" name="approval_status" class="border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="this.form.submit()">
                     <option value="">Semua Status</option>
                     <option value="draft" {{ request('approval_status') === 'draft' ? 'selected' : '' }}>Draft</option>
                     <option value="pending" {{ request('approval_status') === 'pending' ? 'selected' : '' }}>Menunggu Approval</option>
@@ -55,8 +57,127 @@
             </form>
         </div>
 
-        <!-- Table -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Mobile Cards View -->
+        <h2 class="sr-only">Daftar Galeri</h2>
+        <div class="block md:hidden space-y-4">
+            @forelse($galleries as $gallery)
+                <article class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex-1 min-w-0 pr-2">
+                            <h3 class="font-semibold text-gray-900 text-base line-clamp-2">{{ $gallery->title }}</h3>
+                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ Str::limit($gallery->description, 60) }}</p>
+                        </div>
+                        <span class="flex-shrink-0 px-2.5 py-1 text-xs font-semibold rounded-full {{ $gallery->type === 'photo' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800' }}">
+                            {{ ucfirst($gallery->type) }}
+                        </span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+                        @if($gallery->kegiatan)
+                            <span class="flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                {{ $gallery->kegiatan }}
+                            </span>
+                        @endif
+                        @if($gallery->tahun)
+                            <span class="flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                {{ $gallery->tahun }}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        @if($gallery->approval_status === 'approved')
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Disetujui</span>
+                        @elseif($gallery->approval_status === 'pending')
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                        @elseif($gallery->approval_status === 'rejected')
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Ditolak</span>
+                        @else
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Draft</span>
+                        @endif
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
+                        @if(in_array($role, ['admin', 'pb']) && $gallery->approval_status === 'pending')
+                            <form action="{{ route('admin.gallery.approve', $gallery) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="px-3 py-2 text-xs font-medium bg-green-600 text-white rounded-lg hover:bg-green-700">
+                                    <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Setujui
+                                </button>
+                            </form>
+                            <button onclick="showRejectFormGallery({{ $gallery->id }})"
+                                    class="px-3 py-2 text-xs font-medium bg-red-600 text-white rounded-lg hover:bg-red-700">
+                                <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                Tolak
+                            </button>
+                        @endif
+                        <a href="{{ route('admin.gallery.edit', $gallery) }}"
+                           class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            Edit
+                        </a>
+                        <form action="{{ route('admin.gallery.destroy', $gallery) }}" method="POST" onsubmit="return confirm('Hapus item ini?')" class="flex-1">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                </article>
+
+                <!-- Form Reject Modal (for mobile) -->
+                @if(in_array($role, ['admin', 'pb']) && $gallery->approval_status === 'pending')
+                    <div id="reject-form-gallery-{{ $gallery->id }}" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div class="bg-white p-4 md:p-6 rounded-lg max-w-md w-full shadow-xl">
+                            <h3 class="font-bold text-lg mb-4 text-gray-900">Tolak Galeri</h3>
+                            <form method="POST" action="{{ route('admin.gallery.reject', $gallery) }}">
+                                @csrf
+                                <div class="mb-4">
+                                    <label class="block text-sm font-semibold mb-2 text-gray-700">Alasan Penolakan:</label>
+                                    <textarea name="rejection_reason" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500" rows="4" required></textarea>
+                                </div>
+                                <div class="flex gap-2 justify-end">
+                                    <button type="button" onclick="hideRejectFormGallery({{ $gallery->id }})"
+                                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                                        Batal
+                                    </button>
+                                    <button type="submit"
+                                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                                        Tolak
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+            @empty
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <p class="text-gray-500 font-medium">Belum ada data galeri</p>
+                    <p class="text-gray-500 text-sm mt-1">Tambahkan foto atau video pertama Anda</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Desktop Table View -->
+        <div class="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gradient-to-r from-green-50 to-green-100 border-b border-green-200">
@@ -172,7 +293,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                         </svg>
                                         <p class="text-gray-500 font-medium">Belum ada data galeri</p>
-                                        <p class="text-gray-400 text-sm mt-1">Tambahkan foto atau video pertama Anda</p>
+                                        <p class="text-gray-500 text-sm mt-1">Tambahkan foto atau video pertama Anda</p>
                                     </div>
                                 </td>
                             </tr>

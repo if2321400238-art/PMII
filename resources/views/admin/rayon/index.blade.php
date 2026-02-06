@@ -18,30 +18,89 @@
 </div>
 
 @if(session('success'))
-<div class="bg-green-50 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded mb-6 flex items-center">
-    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="bg-green-50 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded mb-6 flex items-center" role="alert">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
     </svg>
     <span>{{ session('success') }}</span>
 </div>
 @endif
 
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+<!-- Mobile Cards View -->
+<h2 class="sr-only">Daftar Rayon</h2>
+<div class="block md:hidden space-y-4">
+    @forelse($rayons as $rayon)
+        <article class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-start gap-2 flex-1 min-w-0">
+                    <svg class="w-4 h-4 text-green-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <div class="min-w-0">
+                        <h3 class="font-semibold text-gray-900 text-base truncate">{{ $rayon->name }}</h3>
+                        <p class="text-sm text-gray-600 mt-1">{{ $rayon->korwil->name }}</p>
+                    </div>
+                </div>
+                <span class="ml-2 px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 border border-blue-200 flex-shrink-0 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    {{ $rayon->anggota_count ?? $rayon->anggota->count() }}
+                </span>
+            </div>
+            @if($rayon->nomor_sk)
+                <p class="text-xs text-gray-500 font-mono mb-3">SK: {{ $rayon->nomor_sk }}</p>
+            @endif
+            <div class="flex gap-2 pt-3 border-t border-gray-100">
+                <a href="{{ route('admin.rayon.edit', $rayon) }}"
+                   class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    Edit
+                </a>
+                <form method="POST" action="{{ route('admin.rayon.destroy', $rayon) }}"
+                      onsubmit="return confirm('Yakin hapus rayon ini?')" class="flex-1">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        Hapus
+                    </button>
+                </form>
+            </div>
+        </article>
+    @empty
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+            <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <p class="text-gray-500 text-lg font-medium">Belum ada data Rayon</p>
+            <p class="text-gray-500 text-sm mt-1">Klik tombol "Tambah Rayon" untuk menambahkan data</p>
+        </div>
+    @endforelse
+</div>
+
+<!-- Desktop Table View -->
+<div class="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <table class="w-full">
         <thead class="bg-gradient-to-r from-green-50 to-green-100 border-b border-green-200">
             <tr>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                     <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                         Nama Rayon
                     </div>
                 </th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Korwil</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. SK</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Jumlah Anggota</th>
-                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Aksi</th>
+                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Korwil</th>
+                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. SK</th>
+                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Jumlah Anggota</th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Aksi</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
@@ -94,7 +153,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                             <p class="text-gray-500 text-lg font-medium">Belum ada data Rayon</p>
-                            <p class="text-gray-400 text-sm mt-1">Klik tombol "Tambah Rayon" untuk menambahkan data</p>
+                            <p class="text-gray-500 text-sm mt-1">Klik tombol "Tambah Rayon" untuk menambahkan data</p>
                         </div>
                     </td>
                 </tr>
