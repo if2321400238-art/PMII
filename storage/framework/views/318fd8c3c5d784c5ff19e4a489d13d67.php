@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="description" content="Panel administrasi ISKAB - Ikatan Santri Kalimantan Barat">
+    <meta name="description" content="Panel administrasi PMII Komisariat Universitas Nurul Jadid">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <link rel="canonical" href="<?php echo e(url()->current()); ?>">
-    <title><?php echo $__env->yieldContent('title', 'Admin - ISKAB'); ?></title>
+    <title><?php echo $__env->yieldContent('title', 'Admin - PMII'); ?></title>
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/admin.js']); ?>
     <style>
         /* Sidebar styles - optimized to avoid forced reflow */
@@ -60,7 +60,7 @@
         <aside id="sidebar" class="fixed top-0 bottom-0 left-0 z-40 w-64 bg-gray-900 text-white overflow-y-auto" style="height: 100vh; min-height: 100%;" aria-label="Menu navigasi admin">
             <!-- Sidebar Header dengan Close Button -->
             <div class="flex items-center justify-between p-4 border-b border-gray-800">
-                <h1 class="text-xl font-bold">ISKAB Admin</h1>
+                <h1 class="text-xl font-bold">PMII Admin</h1>
                 <button id="closeBtn" type="button" class="p-2 rounded hover:bg-gray-800 lg:hidden" aria-label="Tutup menu navigasi">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -69,8 +69,8 @@
             </div>
 
             <?php
-                $role = auth()->user()->role
-                    ?? (auth()->guard('korwil')->check() ? 'korwil_admin' : (auth()->guard('rayon')->check() ? 'rayon_admin' : null));
+                $role = auth()->user()->role_slug
+                    ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
             ?>
 
             <!-- Sidebar Menu -->
@@ -92,7 +92,7 @@
                     <div id="kontenMenu" class="hidden pl-4 mt-1 space-y-1">
                         <a href="<?php echo e(route('admin.posts.index')); ?>" class="block px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.posts.*') ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'); ?>">Posts</a>
                         <a href="<?php echo e(route('admin.gallery.index')); ?>" class="block px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.gallery.*') ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'); ?>">Galeri</a>
-                        <?php if(in_array($role, ['admin', 'pb'])): ?>
+                        <?php if(in_array($role, ['admin'])): ?>
                         <a href="<?php echo e(route('admin.download.index')); ?>" class="block px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.download.*') ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'); ?>">Download</a>
                         <?php endif; ?>
                     </div>
@@ -100,7 +100,7 @@
 
                 <!-- Dropdown Organisasi -->
                 <div class="dropdown-menu">
-                    <button type="button" onclick="toggleDropdown('orgMenu')" class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-gray-800 <?php echo e(request()->routeIs('admin.profil-organisasi.*') || request()->routeIs('admin.korwil.*') || request()->routeIs('admin.rayon.*') || request()->routeIs('admin.anggota.*') ? 'bg-gray-800' : ''); ?>" aria-expanded="false" aria-controls="orgMenu">
+                    <button type="button" onclick="toggleDropdown('orgMenu')" class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm text-gray-300 hover:bg-gray-800 <?php echo e(request()->routeIs('admin.profil-organisasi.*') || request()->routeIs('admin.rayon.*') || request()->routeIs('admin.anggota.*') ? 'bg-gray-800' : ''); ?>" aria-expanded="false" aria-controls="orgMenu">
                         <span class="flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             Organisasi
@@ -108,24 +108,15 @@
                         <svg class="w-4 h-4 transition-transform" id="orgMenuArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div id="orgMenu" class="hidden pl-4 mt-1 space-y-1">
-                        <?php if(in_array($role, ['admin', 'pb'])): ?>
+                        <?php if(in_array($role, ['admin'])): ?>
                         <a href="<?php echo e(route('admin.profil-organisasi.edit')); ?>" class="block px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.profil-organisasi.*') ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'); ?>">Profil</a>
-                        <a href="<?php echo e(route('admin.korwil.index')); ?>" class="block px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.korwil.*') ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'); ?>">Korwil</a>
-                        <?php endif; ?>
-                        <?php if(in_array($role, ['admin', 'korwil_admin'])): ?>
                         <a href="<?php echo e(route('admin.rayon.index')); ?>" class="block px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.rayon.*') ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'); ?>">Rayon</a>
                         <?php endif; ?>
                         <a href="<?php echo e(route('admin.anggota.index')); ?>" class="block px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.anggota.*') ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'); ?>">Anggota</a>
                     </div>
                 </div>
 
-                <!-- SK Pengajuan -->
-                <a href="<?php echo e(route('admin.sk-pengajuan.index')); ?>" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.sk-pengajuan.*') ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-800'); ?>" <?php echo e(request()->routeIs('admin.sk-pengajuan.*') ? 'aria-current=page' : ''); ?>>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <?php if(in_array($role, ['admin', 'pb'])): ?> Approval SK <?php else: ?> SK Saya <?php endif; ?>
-                </a>
-
-                <?php if(in_array($role, ['admin', 'pb'])): ?>
+                <?php if(in_array($role, ['admin'])): ?>
                 <!-- Kelola User -->
                 <a href="<?php echo e(route('admin.user.index')); ?>" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm <?php echo e(request()->routeIs('admin.user.*') ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-800'); ?>" <?php echo e(request()->routeIs('admin.user.*') ? 'aria-current=page' : ''); ?>>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -341,7 +332,7 @@
         };
 
         // Initial setup - CSS handles layout, no JS needed
-        console.log('ISKAB Admin Layout V4 loaded');
+        console.log('PMII Admin Layout V4 loaded');
     });
     </script>
 </body>

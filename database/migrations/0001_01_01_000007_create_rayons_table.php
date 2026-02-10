@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('rayons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('korwil_id')->constrained('korwils')->onDelete('cascade');
-            $table->string('nomor_sk')->nullable();
-            $table->date('tanggal_sk')->nullable();
             $table->text('description')->nullable();
             $table->string('contact')->nullable();
+            $table->string('email')->unique();
+            $table->string('password');
             $table->timestamps();
+
+            $table->index('name');
         });
     }
 

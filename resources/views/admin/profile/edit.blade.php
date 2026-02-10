@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Profil - Admin ISKAB')
+@section('title', 'Edit Profil - Admin PMII')
 
 @section('content')
 <div class="space-y-6">
@@ -23,9 +23,7 @@
         <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
             <h2 class="text-lg font-semibold text-gray-900">Informasi Profil</h2>
             <p class="text-sm text-gray-600">
-                @if($userType === 'korwil')
-                    Perbarui informasi Korwil Anda
-                @elseif($userType === 'rayon')
+                @if($userType === 'rayon')
                     Perbarui informasi Rayon Anda
                 @else
                     Perbarui nama dan alamat email akun Anda
@@ -56,20 +54,8 @@
                         @enderror
                     </div>
 
-                    {{-- Field khusus Korwil --}}
-                    @if($userType === 'korwil')
-                        <div>
-                            <label for="wilayah" class="block text-sm font-medium text-gray-700 mb-2">Wilayah</label>
-                            <input type="text" id="wilayah" name="wilayah" value="{{ old('wilayah', $user->wilayah) }}" required
-                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
-                            @error('wilayah')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    @endif
-
-                    {{-- Field khusus Korwil & Rayon --}}
-                    @if(in_array($userType, ['korwil', 'rayon']))
+                    {{-- Field khusus Rayon --}}
+                    @if($userType === 'rayon')
                         <div>
                             <label for="contact" class="block text-sm font-medium text-gray-700 mb-2">Kontak (No. HP/WA)</label>
                             <input type="text" id="contact" name="contact" value="{{ old('contact', $user->contact) }}"
@@ -79,30 +65,16 @@
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-
-                        <div>
-                            <label for="nomor_sk" class="block text-sm font-medium text-gray-700 mb-2">Nomor SK</label>
-                            <input type="text" id="nomor_sk" name="nomor_sk" value="{{ old('nomor_sk', $user->nomor_sk) }}"
-                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors bg-gray-50" readonly>
-                            <p class="mt-1 text-xs text-gray-500">Nomor SK tidak dapat diubah</p>
-                        </div>
-
-                        <div>
-                            <label for="tanggal_sk" class="block text-sm font-medium text-gray-700 mb-2">Tanggal SK</label>
-                            <input type="date" id="tanggal_sk" name="tanggal_sk" value="{{ old('tanggal_sk', $user->tanggal_sk?->format('Y-m-d')) }}"
-                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors bg-gray-50" readonly>
-                            <p class="mt-1 text-xs text-gray-500">Tanggal SK tidak dapat diubah</p>
-                        </div>
                     @endif
                 </div>
 
-                {{-- Deskripsi untuk Korwil & Rayon --}}
-                @if(in_array($userType, ['korwil', 'rayon']))
+                {{-- Deskripsi untuk Rayon --}}
+                @if($userType === 'rayon')
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
                         <textarea id="description" name="description" rows="4"
                             class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                            placeholder="Deskripsi singkat tentang {{ $userType === 'korwil' ? 'Korwil' : 'Rayon' }} Anda...">{{ old('description', $user->description) }}</textarea>
+                            placeholder="Deskripsi singkat tentang Rayon Anda...">{{ old('description', $user->description) }}</textarea>
                         @error('description')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -175,7 +147,7 @@
         </div>
     </div>
 
-    <!-- Danger Zone - Delete Account (Optional - hanya untuk admin biasa, bukan korwil/rayon) -->
+    <!-- Danger Zone - Delete Account (Optional - hanya untuk admin biasa, bukan rayon) -->
     @if(auth()->guard('web')->check())
     <div class="bg-white rounded-xl shadow-sm border border-red-200 overflow-hidden">
         <div class="px-6 py-4 border-b border-red-100 bg-red-50">

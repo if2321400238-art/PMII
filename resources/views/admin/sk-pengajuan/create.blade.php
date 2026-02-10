@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Ajukan SK - Admin ISKAB')
+@section('title', 'Ajukan SK - Admin PMII')
 @section('page_title', 'Ajukan SK Baru')
 
 @section('content')

@@ -25,7 +25,7 @@ class PostController extends Controller
         $userType = AuthHelper::userType();
 
         // Filter: non-admin hanya lihat postingan sendiri
-        if ($userType !== 'user' || $currentUser->role !== 'admin') {
+        if ($userType !== 'user' || $currentUser->role_slug !== 'admin') {
             $query->where('author_id', $currentUser->id)
                   ->where('author_type', get_class($currentUser));
         }
@@ -57,7 +57,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'type' => 'required|in:berita,pena_santri',
+            'type' => 'required|in:berita',
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
@@ -86,7 +86,7 @@ class PostController extends Controller
 
         // Set approval status: admin langsung approved, lainnya pending
         $userType = AuthHelper::userType();
-        $isAdmin = $userType === 'user' && $currentUser->role === 'admin';
+        $isAdmin = $userType === 'user' && $currentUser->role_slug === 'admin';
 
         if ($isAdmin) {
             $validated['approval_status'] = 'approved';
@@ -104,7 +104,7 @@ class PostController extends Controller
         Post::create($validated);
 
         $message = $validated['approval_status'] === 'pending'
-            ? 'Post berhasil dibuat dan menunggu persetujuan admin/PB'
+            ? 'Post berhasil dibuat dan menunggu persetujuan admin'
             : 'Post berhasil dibuat dan dipublikasikan';
 
         return redirect()->route('admin.posts.index')->with('success', $message);
@@ -147,7 +147,7 @@ class PostController extends Controller
         if ($post->approval_status === 'rejected') {
             $currentUser = AuthHelper::user();
             $userType = AuthHelper::userType();
-            $isAdmin = $userType === 'user' && $currentUser->role === 'admin';
+            $isAdmin = $userType === 'user' && $currentUser->role_slug === 'admin';
 
             if ($isAdmin) {
                 $validated['approval_status'] = 'approved';

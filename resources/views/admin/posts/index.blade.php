@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Posts - Admin ISKAB')
+@section('title', 'Posts - Admin PMII')
 
 @section('content')
 <div class="w-full">

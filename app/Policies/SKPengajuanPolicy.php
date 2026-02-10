@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Korwil;
 use App\Models\Rayon;
 use App\Models\SKPengajuan;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -31,7 +30,7 @@ class SKPengajuanPolicy
      */
     public function create(Authenticatable $user): bool
     {
-        return in_array($this->role($user), ['admin', 'korwil_admin', 'rayon_admin']);
+        return in_array($this->role($user), ['admin', 'rayon_admin']);
     }
 
     /**
@@ -72,11 +71,7 @@ class SKPengajuanPolicy
     private function role(Authenticatable $user): ?string
     {
         if ($user instanceof User) {
-            return $user->role === 'pb' ? 'admin' : $user->role;
-        }
-
-        if ($user instanceof Korwil) {
-            return 'korwil_admin';
+            return $user->role_slug;
         }
 
         if ($user instanceof Rayon) {

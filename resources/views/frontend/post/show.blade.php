@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', $post->title . ' - ISKAB')
+@section('title', $post->title . ' - PMII')
 
 @section('content')
 <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
     <!-- Breadcrumb -->
     <div class="mb-8">
-        <a href="{{ route('home') }}" class="text-green-600 hover:text-green-700">Beranda</a>
+        <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-700">Beranda</a>
         <span class="text-gray-500 mx-2">/</span>
         @if($post->type === 'berita')
-            <a href="{{ route('posts.berita') }}" class="text-green-600 hover:text-green-700">Berita</a>
+            <a href="{{ route('posts.berita') }}" class="text-blue-600 hover:text-blue-700">Berita</a>
         @else
-            <a href="{{ route('posts.pena-santri') }}" class="text-green-600 hover:text-green-700">Pena Santri</a>
+
         @endif
         <span class="text-gray-500 mx-2">/</span>
         <span class="text-gray-700">{{ $post->title }}</span>
@@ -20,7 +20,7 @@
     <!-- Header -->
     <header class="mb-8 pb-8 border-b">
         <div class="mb-4">
-            <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">{{ $post->category->name }}</span>
+            <span class="inline-block bg-emerald-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">{{ $post->category->name }}</span>
         </div>
         <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ $post->title }}</h1>
         <div class="flex flex-wrap items-center gap-4 text-gray-600">
@@ -56,10 +56,10 @@
                         @endif
                         <div class="p-4">
                             <h3 class="text-lg font-bold mb-2 line-clamp-2">
-                                <a href="{{ route('posts.show', $related->slug) }}" class="hover:text-green-600">{{ $related->title }}</a>
+                                <a href="{{ route('posts.show', $related->slug) }}" class="hover:text-blue-600">{{ $related->title }}</a>
                             </h3>
                             <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ strip_tags($related->content) }}</p>
-                            <a href="{{ route('posts.show', $related->slug) }}" class="text-green-600 hover:text-green-700 font-semibold">Baca →</a>
+                            <a href="{{ route('posts.show', $related->slug) }}" class="text-blue-600 hover:text-blue-700 font-semibold">Baca →</a>
                         </div>
                     </article>
                 @endforeach

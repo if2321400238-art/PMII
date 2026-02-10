@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Galeri - Admin ISKAB')
+@section('title', 'Galeri - Admin PMII')
 
 @section('content')
 @php
-    $role = auth()->user()->role
-        ?? (auth()->guard('korwil')->check() ? 'korwil_admin' : (auth()->guard('rayon')->check() ? 'rayon_admin' : null));
+    $role = auth()->user()->role_slug
+    ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
 @endphp
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto">
@@ -101,7 +101,7 @@
                         @endif
                     </div>
                     <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
-                        @if(in_array($role, ['admin', 'pb']) && $gallery->approval_status === 'pending')
+                        @if(in_array($role, ['admin']) && $gallery->approval_status === 'pending')
                             <form action="{{ route('admin.gallery.approve', $gallery) }}" method="POST" class="inline">
                                 @csrf
                                 <button type="submit" class="px-3 py-2 text-xs font-medium bg-green-600 text-white rounded-lg hover:bg-green-700">
@@ -141,7 +141,7 @@
                 </article>
 
                 <!-- Form Reject Modal (for mobile) -->
-                @if(in_array($role, ['admin', 'pb']) && $gallery->approval_status === 'pending')
+                @if(in_array($role, ['admin']) && $gallery->approval_status === 'pending')
                     <div id="reject-form-gallery-{{ $gallery->id }}" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                         <div class="bg-white p-4 md:p-6 rounded-lg max-w-md w-full shadow-xl">
                             <h3 class="font-bold text-lg mb-4 text-gray-900">Tolak Galeri</h3>
@@ -218,7 +218,7 @@
                                 <td class="px-6 py-4">
                                     <div class="flex flex-col gap-2">
                                         <!-- Tombol Approve/Reject untuk admin jika status pending -->
-                                        @if(in_array($role, ['admin', 'pb']) && $gallery->approval_status === 'pending')
+                                        @if(in_array($role, ['admin']) && $gallery->approval_status === 'pending')
                                             <form action="{{ route('admin.gallery.approve', $gallery) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" class="inline-flex items-center px-3 py-1.5 text-xs font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition">

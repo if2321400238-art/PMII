@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Korwil - Admin ISKAB')
+@section('title', 'Kelola Korwil - Admin PMII')
 
 @section('content')
 <div class="container mx-auto px-4 py-4 md:py-8">
@@ -43,9 +43,6 @@
                             {{ $korwil->rayons_count ?? $korwil->rayons->count() }} Rayon
                         </span>
                     </div>
-                    @if($korwil->nomor_sk)
-                        <p class="text-xs text-gray-500 font-mono mb-3">SK: {{ $korwil->nomor_sk }}</p>
-                    @endif
                     <div class="flex gap-2 pt-3 border-t border-gray-100">
                         <a href="{{ route('admin.korwil.edit', $korwil) }}"
                            class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
@@ -87,7 +84,6 @@
                         <tr>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Nama</th>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Wilayah</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">No. SK</th>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Rayons</th>
                             <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Aksi</th>
                         </tr>
@@ -97,7 +93,6 @@
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4 font-semibold text-gray-900">{{ $korwil->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-700">{{ $korwil->wilayah }}</td>
-                                <td class="px-6 py-4 text-sm font-mono text-gray-700">{{ $korwil->nomor_sk ?? '-' }}</td>
                                 <td class="px-6 py-4">
                                     <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 border border-blue-200">
                                         {{ $korwil->rayons_count ?? $korwil->rayons->count() }} Rayon

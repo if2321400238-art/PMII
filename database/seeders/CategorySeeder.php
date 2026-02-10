@@ -16,7 +16,7 @@ class CategorySeeder extends Seeder
             [
                 'name' => 'Organisasi',
                 'slug' => 'organisasi',
-                'description' => 'Berita seputar organisasi iskab',
+                'description' => 'Berita seputar organisasi PMII',
             ],
             [
                 'name' => 'Kegiatan',
@@ -31,7 +31,7 @@ class CategorySeeder extends Seeder
             [
                 'name' => 'Kajian Islam',
                 'slug' => 'kajian-islam',
-                'description' => 'Konten kajian islam untuk pena santri',
+
             ],
             [
                 'name' => 'Opini Santri',

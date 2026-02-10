@@ -16,7 +16,6 @@ class CheckRole
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         if (!\Illuminate\Support\Facades\Auth::guard('web')->check()
-            && !\Illuminate\Support\Facades\Auth::guard('korwil')->check()
             && !\Illuminate\Support\Facades\Auth::guard('rayon')->check()) {
             return redirect()->route('login');
         }
@@ -24,12 +23,7 @@ class CheckRole
         $userRole = null;
 
         if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
-            $userRole = \Illuminate\Support\Facades\Auth::guard('web')->user()->role;
-            if ($userRole === 'pb') {
-                $userRole = 'admin';
-            }
-        } elseif (\Illuminate\Support\Facades\Auth::guard('korwil')->check()) {
-            $userRole = 'korwil_admin';
+            $userRole = \Illuminate\Support\Facades\Auth::guard('web')->user()->role_slug;
         } elseif (\Illuminate\Support\Facades\Auth::guard('rayon')->check()) {
             $userRole = 'rayon_admin';
         }

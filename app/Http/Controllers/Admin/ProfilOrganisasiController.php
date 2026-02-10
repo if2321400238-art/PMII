@@ -15,7 +15,7 @@ class ProfilOrganisasiController extends Controller
 
         if (!$profil) {
             $profil = ProfilOrganisasi::create([
-                'nama_organisasi' => 'ISKAB',
+                'nama_organisasi' => 'PMII',
             ]);
         }
 

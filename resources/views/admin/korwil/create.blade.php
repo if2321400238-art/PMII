@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Korwil - Admin ISKAB')
+@section('title', 'Tambah Korwil - Admin PMII')
 
 @section('content')
 <div class="w-full">
@@ -65,7 +65,7 @@
                             <label for="email" class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2">Email <span class="text-red-500">*</span></label>
                             <input type="email" id="email" name="email" value="{{ old('email') }}"
                                 class="w-full px-3 md:px-4 py-2 md:py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition @error('email') border-red-500 @enderror"
-                                placeholder="Contoh: korwil@iskab.id" required>
+                                placeholder="Contoh: korwil@PMII.id" required>
                             @error('email')
                                 <p class="text-red-500 text-xs md:text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -105,28 +105,8 @@
                     </h2>
                 </div>
                 <div class="p-4 md:p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                        <div>
-                            <label for="nomor_sk" class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2">Nomor SK</label>
-                            <input type="text" id="nomor_sk" name="nomor_sk" value="{{ old('nomor_sk') }}"
-                                class="w-full px-3 md:px-4 py-2 md:py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition @error('nomor_sk') border-red-500 @enderror"
-                                placeholder="SK/BPH-PB/001/2025">
-                            @error('nomor_sk')
-                                <p class="text-red-500 text-xs md:text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="tanggal_sk" class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2">Tanggal SK</label>
-                            <input type="date" id="tanggal_sk" name="tanggal_sk" value="{{ old('tanggal_sk') }}"
-                                class="w-full px-3 md:px-4 py-2 md:py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition @error('tanggal_sk') border-red-500 @enderror">
-                            @error('tanggal_sk')
-                                <p class="text-red-500 text-xs md:text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <label for="contact" class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2">Kontak</label>
+                    <div>
+                        <label for="contact" class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2">Kontak</label>
                             <input type="text" id="contact" name="contact" value="{{ old('contact') }}"
                                 class="w-full px-3 md:px-4 py-2 md:py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition @error('contact') border-red-500 @enderror"
                                 placeholder="081234567890">

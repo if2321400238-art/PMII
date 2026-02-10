@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Galeri - Admin ISKAB')
+@section('title', 'Edit Galeri - Admin PMII')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">

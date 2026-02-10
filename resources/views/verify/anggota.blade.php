@@ -21,7 +21,7 @@
             <!-- Header -->
             <div class="bg-gradient-to-r from-blue-800 to-blue-900 px-6 py-4 text-center">
                 <h2 class="text-white font-bold text-lg">KARTU TANDA ANGGOTA</h2>
-                <p class="text-blue-100 text-sm">ISKAB - Ikatan Santri Kabupaten Probolinggo</p>
+                <p class="text-blue-100 text-sm">PMII Komisariat Universitas Nurul Jadid</p>
             </div>
 
             <!-- Photo & Info -->

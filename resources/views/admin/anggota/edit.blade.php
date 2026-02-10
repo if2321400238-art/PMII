@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Anggota - Admin ISKAB')
+@section('title', 'Edit Anggota - Admin PMII')
 @section('page_title', 'Edit Anggota')
 
 @section('content')
@@ -17,36 +17,13 @@
 
         <div class="mb-6">
             <label class="block text-sm font-semibold mb-2">Nomor Anggota</label>
-            <input type="text" name="nomor_anggota" value="{{ old('nomor_anggota', $anggota->nomor_anggota) }}" placeholder="Cth: ISKAB-2024-001" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('nomor_anggota') border-red-500 @enderror">
+            <input type="text" name="nomor_anggota" value="{{ old('nomor_anggota', $anggota->nomor_anggota) }}" placeholder="Cth: PMII-2024-001" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('nomor_anggota') border-red-500 @enderror">
             @error('nomor_anggota')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
 
         <div class="mb-6">
-            <label class="block text-sm font-semibold mb-2">Korwil</label>
-            @if(auth()->user()->role === 'korwil_admin')
-                <input type="hidden" name="korwil_id" value="{{ $anggota->korwil_id }}">
-                <div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                    {{ $anggota->korwil->name }}
-                </div>
-            @elseif(auth()->user()->role === 'rayon_admin')
-                <input type="hidden" name="korwil_id" value="{{ $anggota->korwil_id }}">
-                <div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                    {{ $anggota->korwil->name }}
-                </div>
-            @else
-                <select name="korwil_id" id="korwil_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg @error('korwil_id') border-red-500 @enderror">
-                    <option value="">Pilih Korwil</option>
-                    @foreach($korwils as $k)
-                        <option value="{{ $k->id }}" {{ old('korwil_id', $anggota->korwil_id) == $k->id ? 'selected' : '' }}>{{ $k->name }}</option>
-                    @endforeach
-                </select>
-            @endif
-            @error('korwil_id')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
-        </div>
-
-        <div class="mb-6">
             <label class="block text-sm font-semibold mb-2">Rayon</label>
-            @if(auth()->user()->role === 'rayon_admin')
+            @if($rayonCurrent)
                 <input type="hidden" name="rayon_id" value="{{ $anggota->rayon_id }}">
                 <div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
                     {{ $anggota->rayon->name }}
@@ -84,19 +61,6 @@
             <p class="text-gray-600 text-sm mt-1">Format: JPG, PNG (max 2MB)</p>
         </div>
 
-        <div class="mb-6">
-            <label class="block text-sm font-semibold mb-2">Template KTA</label>
-            <select name="kta_template_id" id="kta_template_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                <option value="">-- Gunakan Template Default --</option>
-                @foreach($ktaTemplates as $template)
-                    <option value="{{ $template->id }}" {{ old('kta_template_id', $anggota->kta_template_id) == $template->id ? 'selected' : '' }}>
-                        {{ $template->name }} {{ $template->is_active ? '(Aktif)' : '' }}
-                    </option>
-                @endforeach
-            </select>
-            <p class="text-gray-600 text-sm mt-1">Pilih template KTA yang akan digunakan untuk download KTA</p>
-        </div>
-
         <div class="flex gap-4">
             <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold">
                 Simpan Perubahan
@@ -108,39 +72,4 @@
     </form>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const korwilSelect = document.getElementById('korwil_id');
-    const rayonSelect = document.getElementById('rayon_id');
-
-    if (!korwilSelect) return;
-
-    const fetchRayons = (korwilId, selectedId = null) => {
-        if (!korwilId) {
-            rayonSelect.innerHTML = '<option value="">Pilih Rayon</option>';
-            return;
-        }
-        fetch(`/admin/rayon/by-korwil/${korwilId}`)
-            .then(response => response.json())
-            .then(data => {
-                rayonSelect.innerHTML = '<option value="">Pilih Rayon</option>';
-                data.forEach(rayon => {
-                    const isSelected = selectedId && Number(selectedId) === Number(rayon.id) ? 'selected' : '';
-                    rayonSelect.innerHTML += `<option value="${rayon.id}" ${isSelected}>${rayon.name}</option>`;
-                });
-            });
-    };
-
-    // initial load
-    const initialKorwil = korwilSelect.value;
-    const initialRayon = '{{ old('rayon_id', $anggota->rayon_id) }}';
-    if (initialKorwil) {
-        fetchRayons(initialKorwil, initialRayon);
-    }
-
-    korwilSelect.addEventListener('change', function() {
-        fetchRayons(this.value);
-    });
-});
-</script>
 @endsection

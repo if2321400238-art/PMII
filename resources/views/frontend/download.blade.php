@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Download - ISKAB')
+@section('title', 'Download - PMII')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
+<div class="">
     <h1 class="text-4xl font-bold mb-8">Download</h1>
 
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <table class="w-full">
-            <thead class="bg-green-600 text-white">
+            <thead class="bg-[#1e3a5f]/95 text-white">
                 <tr>
                     <th class="px-6 py-4 text-left font-semibold">Nama File</th>
                     <th class="px-6 py-4 text-left font-semibold">Kategori</th>
@@ -33,7 +33,7 @@
                         <td class="px-6 py-4 text-gray-600">{{ $download->deskripsi ?? '-' }}</td>
                         <td class="px-6 py-4 text-center">
                             @if($download->fileExists())
-                                <a href="{{ route('download.file', $download) }}" class="inline-block px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                                <a href="{{ route('download.file', $download) }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
                                     ⬇️ Download
                                 </a>
                             @else

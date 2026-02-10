@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Admin - Admin ISKAB')
+@section('title', 'Kelola Admin - Admin PMII')
 
 @section('content')
 <div class="mb-4 md:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
     <div>
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Kelola Admin</h1>
-        <p class="text-gray-600 text-sm md:text-base mt-1">Kelola admin dan staff sistem ISKAB</p>
+        <p class="text-gray-600 text-sm md:text-base mt-1">Kelola admin dan staff sistem PMII</p>
     </div>
     <a href="{{ route('admin.user.create') }}" class="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition font-medium shadow-lg shadow-green-500/30 flex items-center justify-center text-sm md:text-base w-full sm:w-auto">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -41,15 +41,10 @@
                     </div>
                 </div>
                 <span class="ml-2 inline-flex px-2.5 py-1 text-xs font-semibold rounded-full flex-shrink-0
-                    @if($user->role === 'admin') bg-purple-100 text-purple-700
-                    @elseif($user->role === 'pb') bg-blue-100 text-blue-700
+                    @if($user->role?->slug === 'admin') bg-purple-100 text-purple-700
                     @else bg-gray-100 text-gray-700
                     @endif">
-                    @if($user->role === 'pb')
-                        PB
-                    @else
-                        {{ $user->role }}
-                    @endif
+                    {{ $user->role?->name ?? 'Member' }}
                 </span>
             </div>
             <div class="flex gap-2 pt-3 border-t border-gray-100">
@@ -114,21 +109,13 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-700">{{ $user->email }}</td>
                     <td class="px-6 py-4">
-                        <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full @switch($user->role)
-                            @case('admin')
+                        <span class="inline-flex px-3 py-1 text-sm font-medium rounded-full
+                            @if($user->role?->slug === 'admin')
                                 bg-purple-100 text-purple-700
-                            @break
-                            @case('pb')
-                                bg-blue-100 text-blue-700
-                            @break
-                            @default
-                                bg-gray-100 text-gray-700
-                        @endswitch">
-                            @if($user->role === 'pb')
-                                PB
                             @else
-                                {{ $user->role }}
-                            @endif
+                                bg-gray-100 text-gray-700
+                            @endif">
+                            {{ $user->role?->name ?? 'Member' }}
                         </span>
                     </td>
                     <td class="px-6 py-4 text-center">

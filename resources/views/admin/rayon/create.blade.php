@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Rayon - Admin ISKAB')
+@section('title', 'Tambah Rayon - Admin PMII')
 @section('page_title', 'Tambah Rayon')
 
 @section('content')
@@ -8,7 +8,7 @@
     <!-- Header -->
     <div class="mb-6">
         <h1 class="text-3xl font-bold text-gray-900">Tambah Rayon Baru</h1>
-        <p class="text-gray-600 mt-1">Tambahkan rayon baru ke dalam sistem ISKAB</p>
+        <p class="text-gray-600 mt-1">Tambahkan rayon baru ke dalam sistem PMII</p>
     </div>
 
     <form action="{{ route('admin.rayon.store') }}" method="POST" class="space-y-6">
@@ -25,35 +25,12 @@
                 </h2>
             </div>
             <div class="p-6 space-y-6">
-                <!-- Korwil -->
-                <div>
-                    <label for="korwil_id" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Korwil <span class="text-red-500">*</span></label>
-                    @if($korwils->count() === 1)
-                        <input type="hidden" name="korwil_id" value="{{ $korwils->first()->id }}">
-                        <div class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                            {{ $korwils->first()->name }}
-                        </div>
-                    @else
-                        <select id="korwil_id" name="korwil_id"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('korwil_id') border-red-500 @enderror"
-                            required>
-                            <option value="">-- Pilih Korwil --</option>
-                            @foreach($korwils as $korwil)
-                                <option value="{{ $korwil->id }}" @selected(old('korwil_id') == $korwil->id)>{{ $korwil->name }}</option>
-                            @endforeach
-                        </select>
-                    @endif
-                    @error('korwil_id')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <!-- Nama -->
                 <div>
                     <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Rayon <span class="text-red-500">*</span></label>
                     <input type="text" id="name" name="name" value="{{ old('name') }}"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('name') border-red-500 @enderror"
-                        placeholder="contoh: Rayon Jakarta Pusat" required>
+                        placeholder="contoh: Rayon Ibnu Firnas" required>
                     @error('name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -65,7 +42,7 @@
                         <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
                         <input type="email" id="email" name="email" value="{{ old('email') }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('email') border-red-500 @enderror"
-                            placeholder="contoh: rayon@iskab.id" required>
+                            placeholder="contoh: rayon@PMII.id" required>
                         @error('email')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -102,33 +79,10 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    SK & Kontak
+                    Kontak
                 </h2>
             </div>
             <div class="p-6 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Nomor SK -->
-                    <div>
-                        <label for="nomor_sk" class="block text-sm font-semibold text-gray-700 mb-2">Nomor SK</label>
-                        <input type="text" id="nomor_sk" name="nomor_sk" value="{{ old('nomor_sk') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('nomor_sk') border-red-500 @enderror"
-                            placeholder="contoh: SK/BPH-PB/002/2025">
-                        @error('nomor_sk')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Tanggal SK -->
-                    <div>
-                        <label for="tanggal_sk" class="block text-sm font-semibold text-gray-700 mb-2">Tanggal SK</label>
-                        <input type="date" id="tanggal_sk" name="tanggal_sk" value="{{ old('tanggal_sk') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('tanggal_sk') border-red-500 @enderror">
-                        @error('tanggal_sk')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
                 <!-- Contact -->
                 <div>
                     <label for="contact" class="block text-sm font-semibold text-gray-700 mb-2">Kontak</label>

@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Custom password validation rule that supports all guards
         Validator::extend('current_password_any', function ($attribute, $value, $parameters, $validator) {
-            $user = Auth::user() ?? Auth::guard('korwil')->user() ?? Auth::guard('rayon')->user();
+            $user = Auth::user() ?? Auth::guard('rayon')->user();
 
             if (!$user) {
                 return false;

@@ -7,9 +7,9 @@ $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 use App\Models\User;
 
 $user = User::updateOrCreate(
-    ['email' => 'admin@iskab.id'],
+    ['email' => 'admin@PMII.id'],
     [
-        'name' => 'Admin ISKAB',
+        'name' => 'Admin PMII',
         'password' => bcrypt('password'),
         'role' => 'admin',
         'email_verified_at' => now(),
@@ -17,6 +17,6 @@ $user = User::updateOrCreate(
 );
 
 echo "✅ Admin user created successfully!\n";
-echo "📧 Email: admin@iskab.id\n";
+echo "📧 Email: admin@PMII.id\n";
 echo "🔑 Password: password\n";
 echo "\n🌐 Login at: http://localhost/login\n";

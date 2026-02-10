@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail SK Pengajuan - Admin ISKAB')
+@section('title', 'Detail SK Pengajuan - Admin PMII')
 @section('page_title', 'Detail SK Pengajuan')
 
 @section('content')
 @php
-    $role = auth()->user()->role ?? (auth()->guard('korwil')->check() ? 'korwil_admin' : (auth()->guard('rayon')->check() ? 'rayon_admin' : null));
-    $isAdmin = in_array($role, ['admin', 'pb']);
+    $role = auth()->user()->role_slug ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
+    $isAdmin = in_array($role, ['admin']);
 @endphp
 
 <div class="container mx-auto px-4 py-8">

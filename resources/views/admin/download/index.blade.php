@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manajemen File Download - Admin ISKAB')
+@section('title', 'Manajemen File Download - Admin PMII')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">

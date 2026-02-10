@@ -1,16 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Admin - ISKAB')
+@section('title', 'Dashboard Admin - PMII')
 @section('page_title', 'Dashboard')
 
 @section('content')
 @php
-    $role = auth()->user()->role
-        ?? (auth()->guard('korwil')->check() ? 'korwil_admin' : (auth()->guard('rayon')->check() ? 'rayon_admin' : null));
+    $role = auth()->user()->role_slug
+        ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
     $roleLabel = match ($role) {
         'admin' => 'Admin',
-        'pb' => 'PB',
-        'korwil_admin' => 'Korwil Admin',
         'rayon_admin' => 'Rayon Admin',
         default => 'User',
     };
@@ -30,13 +28,13 @@
         </article>
 
         <article class="bg-white rounded-lg shadow-md p-4 md:p-6 border-l-4 border-green-600">
-            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">Total Korwil</h3>
-            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="Total Korwil: {{ \App\Models\Korwil::count() }}">{{ \App\Models\Korwil::count() }}</p>
+            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">Total Rayon</h3>
+            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="Total Rayon: {{ \App\Models\Rayon::count() }}">{{ \App\Models\Rayon::count() }}</p>
         </article>
 
         <article class="bg-white rounded-lg shadow-md p-4 md:p-6 border-l-4 border-green-600">
-            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">SK Pending</h3>
-            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="SK Pending: {{ \App\Models\SKPengajuan::where('status', 'pending')->count() }}">{{ \App\Models\SKPengajuan::where('status', 'pending')->count() }}</p>
+            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">Total Gallery</h3>
+            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="Total Gallery: {{ \App\Models\Gallery::count() }}">{{ \App\Models\Gallery::count() }}</p>
         </article>
     </div>
 </section>
@@ -86,25 +84,5 @@
             @endforelse
         </ul>
     </article>
-
-    @if(in_array($role, ['admin', 'pb']))
-        <article class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg md:text-2xl font-bold mb-4">SK Pengajuan Pending</h3>
-            <ul class="space-y-4 list-none">
-                @forelse(\App\Models\SKPengajuan::where('status', 'pending')->latest()->take(5)->get() as $sk)
-                    <li class="border-b pb-4 last:border-b-0">
-                        <h4 class="font-semibold text-sm md:text-base text-gray-900">{{ $sk->nama }}</h4>
-                        <p class="text-xs md:text-sm text-gray-600">Tipe: {{ ucfirst($sk->tipe) }}</p>
-                        <time datetime="{{ $sk->created_at->toIso8601String() }}" class="text-xs text-gray-500">{{ $sk->created_at->format('d M Y H:i') }}</time>
-                        <a href="{{ route('admin.sk-pengajuan.show', $sk) }}" class="text-xs text-green-700 hover:text-green-800 focus:underline font-semibold mt-2 inline-block">
-                            Review →
-                        </a>
-                    </li>
-                @empty
-                    <li class="text-gray-500 text-sm">Tidak ada SK pending</li>
-                @endforelse
-            </ul>
-        </article>
-    @endif
 </section>
 @endsection

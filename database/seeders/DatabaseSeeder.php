@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,46 +19,19 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             CategorySeeder::class,
-            KorwilSeeder::class,
             RayonSeeder::class,
             ProfilOrganisasiSeeder::class,
         ]);
 
+        $roleIds = Role::whereIn('slug', ['admin', 'rayon'])
+            ->pluck('id', 'slug');
+
         // Create Admin User
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@iskab.com',
+            'email' => 'admin@PMII.com',
             'password' => bcrypt('password'),
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
-
-        // Create Editor User
-        User::create([
-            'name' => 'Editor',
-            'email' => 'editor@iskab.com',
-            'password' => bcrypt('password'),
-            'role' => 'pb',
-            'email_verified_at' => now(),
-        ]);
-
-        // Create BPH PB User
-        User::create([
-            'name' => 'BPH PB',
-            'email' => 'bphpb@iskab.com',
-            'password' => bcrypt('password'),
-            'role' => 'pb',
-            'email_verified_at' => now(),
-        ]);
-
-        // Create BPH Korwil User (assign ke Korwil pertama)
-        $firstKorwil = \App\Models\Korwil::first();
-        User::create([
-            'name' => 'BPH Korwil',
-            'email' => 'bphkorwil@iskab.com',
-            'password' => bcrypt('password'),
-            'role' => 'korwil_admin',
-            'korwil_id' => $firstKorwil?->id,
+            'role_id' => $roleIds->get('admin'),
             'email_verified_at' => now(),
         ]);
 
@@ -65,10 +39,9 @@ class DatabaseSeeder extends Seeder
         $firstRayon = \App\Models\Rayon::first();
         User::create([
             'name' => 'BPH Rayon',
-            'email' => 'bphrayon@iskab.com',
+            'email' => 'bphrayon@PMII.com',
             'password' => bcrypt('password'),
-            'role' => 'rayon_admin',
-            'rayon_id' => $firstRayon?->id,
+            'role_id' => $roleIds->get('rayon'),
             'email_verified_at' => now(),
         ]);
     }

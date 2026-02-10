@@ -8,9 +8,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
-use App\Http\Controllers\Admin\SKPengajuanController;
 use App\Http\Controllers\Admin\AnggotaController;
-use App\Http\Controllers\Admin\KorwilController;
 use App\Http\Controllers\Admin\RayonController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
@@ -24,13 +22,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Rubrik Routes
 Route::get('/rubrik/berita', [PostController::class, 'indexBerita'])->name('posts.berita');
-Route::get('/rubrik/pena-santri', [PostController::class, 'indexPenaSantri'])->name('posts.pena-santri');
+
 Route::get('/post/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 
 // Tentang Kami Routes
 Route::prefix('tentang-kami')->group(function () {
     Route::get('/profil', [AboutController::class, 'profil'])->name('about.profil');
-    Route::get('/korwil', [AboutController::class, 'korwil'])->name('about.korwil');
     Route::get('/rayon', [AboutController::class, 'rayon'])->name('about.rayon');
 });
 
@@ -47,7 +44,7 @@ Route::get('/data', [DataController::class, 'index'])->name('data.index');
 
 // KTA Verification Route (public - for QR code scanning)
 Route::get('/verify/anggota/{nomor_anggota}', function ($nomor_anggota) {
-    $anggota = \App\Models\Anggota::with(['rayon', 'korwil'])
+    $anggota = \App\Models\Anggota::with(['rayon'])
         ->where('nomor_anggota', $nomor_anggota)
         ->first();
 
@@ -119,7 +116,7 @@ Route::get('/debug-home-data', function () {
     ]);
 });
 
-// Profile Routes (Breeze) - Support all guards (admin, korwil, rayon)
+// Profile Routes (Breeze) - Support all guards (admin, rayon)
 Route::middleware('auth.any')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -138,47 +135,25 @@ Route::middleware(['auth.any'])->prefix('admin')->name('admin.')->group(function
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Posts Management (Admin, Korwil Admin, Rayon Admin)
-    Route::middleware('role:admin,korwil_admin,rayon_admin')->group(function () {
+    // Posts Management (Admin, Rayon Admin)
+    Route::middleware('role:admin,rayon_admin')->group(function () {
         Route::resource('posts', AdminPostController::class);
         Route::post('/posts/{post}/approve', [AdminPostController::class, 'approve'])->name('posts.approve');
         Route::post('/posts/{post}/reject', [AdminPostController::class, 'reject'])->name('posts.reject');
         Route::post('/posts/{post}/publish', [AdminPostController::class, 'publish'])->name('posts.publish');
     });
 
-    // SK Pengajuan Management
-    // Korwil Admin & Rayon Admin bisa create & view sendiri, Admin bisa approve/revise/reject semua
-    Route::middleware('role:korwil_admin,rayon_admin,admin')->group(function () {
-        Route::get('/sk-pengajuan', [SKPengajuanController::class, 'index'])->name('sk-pengajuan.index');
-        Route::get('/sk-pengajuan/create', [SKPengajuanController::class, 'create'])->name('sk-pengajuan.create');
-        Route::post('/sk-pengajuan', [SKPengajuanController::class, 'store'])->name('sk-pengajuan.store');
-        Route::get('/sk-pengajuan/{pengajuan}', [SKPengajuanController::class, 'show'])->name('sk-pengajuan.show');
-
-        // Only Admin can approve/revise/reject
-        Route::middleware('role:admin')->group(function () {
-            Route::post('/sk-pengajuan/{pengajuan}/approve', [SKPengajuanController::class, 'approve'])->name('sk-pengajuan.approve');
-            Route::post('/sk-pengajuan/{pengajuan}/revise', [SKPengajuanController::class, 'revise'])->name('sk-pengajuan.revise');
-            Route::post('/sk-pengajuan/{pengajuan}/reject', [SKPengajuanController::class, 'reject'])->name('sk-pengajuan.reject');
-        });
-    });
-
-    // Anggota Management (Admin, Korwil Admin, Rayon Admin)
-    Route::middleware('role:admin,korwil_admin,rayon_admin')->group(function () {
+    // Anggota Management (Admin, Rayon Admin)
+    Route::middleware('role:admin,rayon_admin')->group(function () {
         Route::resource('anggota', AnggotaController::class);
         Route::get('/anggota/{anggota}/download-kta', [AnggotaController::class, 'downloadKTA'])->name('anggota.download-kta');
     });
 
-    // Korwil Management (Admin only)
-    Route::middleware('role:admin')->resource('korwil', KorwilController::class);
+    // Rayon Management (Admin only)
+    Route::middleware('role:admin')->resource('rayon', RayonController::class);
 
-    // Rayon Management (Admin & Korwil Admin)
-    Route::middleware('role:admin,korwil_admin')->group(function () {
-        Route::resource('rayon', RayonController::class);
-        Route::get('/rayon/by-korwil/{korwil}', [RayonController::class, 'listByKorwil'])->name('rayon.by-korwil');
-    });
-
-    // Gallery Management (Admin, Korwil Admin, Rayon Admin)
-    Route::middleware('role:admin,korwil_admin,rayon_admin')->group(function () {
+    // Gallery Management (Admin, Rayon Admin)
+    Route::middleware('role:admin,rayon_admin')->group(function () {
         Route::resource('gallery', AdminGalleryController::class);
         Route::post('/gallery/{gallery}/approve', [AdminGalleryController::class, 'approve'])->name('gallery.approve');
         Route::post('/gallery/{gallery}/reject', [AdminGalleryController::class, 'reject'])->name('gallery.reject');

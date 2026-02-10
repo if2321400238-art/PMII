@@ -13,53 +13,53 @@ class RayonSeeder extends Seeder
     public function run(): void
     {
         $rayons = [
-            // Rayons untuk ISKAB Jabar
+            // Rayon di bawah Komisariat Universitas Nurul Jadid
             [
-                'name' => 'Rayon Bandung',
-                'korwil_id' => 1,
-                'nomor_sk' => 'SK/001/RY/2023',
-                'tanggal_sk' => '2023-04-05',
-                'description' => 'Rayon Bandung - Jawa Barat',
-                'contact' => '0815555555',
+                'name' => 'Rayon Nusantara',
+                'description' => 'Rayon Nusantara - PMII Komisariat Universitas Nurul Jadid',
+                'contact' => '085234567890',
+                'email' => 'nusantara@pmii-unuja.ac.id',
+                'password' => bcrypt('password'),
             ],
             [
-                'name' => 'Rayon Cirebon',
-                'korwil_id' => 1,
-                'nomor_sk' => 'SK/002/RY/2023',
-                'tanggal_sk' => '2023-04-06',
-                'description' => 'Rayon Cirebon - Jawa Barat',
-                'contact' => '0816666666',
-            ],
-            // Rayons untuk ISKAB Jatim
-            [
-                'name' => 'Rayon Surabaya',
-                'korwil_id' => 2,
-                'nomor_sk' => 'SK/003/RY/2023',
-                'tanggal_sk' => '2023-05-10',
-                'description' => 'Rayon Surabaya - Jawa Timur',
-                'contact' => '0817777777',
+                'name' => 'Rayon Ibnu Firnas',
+                'description' => 'Rayon Ibnu Firnas - PMII Komisariat Universitas Nurul Jadid',
+                'contact' => '085245678901',
+                'email' => 'ibnufirnas@pmii-unuja.ac.id',
+                'password' => bcrypt('password'),
             ],
             [
-                'name' => 'Rayon Malang',
-                'korwil_id' => 2,
-                'nomor_sk' => 'SK/004/RY/2023',
-                'tanggal_sk' => '2023-05-11',
-                'description' => 'Rayon Malang - Jawa Timur',
-                'contact' => '0818888888',
+                'name' => 'Rayon Asghar Ali Engineer',
+                'description' => 'Rayon Asghar Ali Engineer - PMII Komisariat Universitas Nurul Jadid',
+                'contact' => '085256789012',
+                'email' => 'asghar@pmii-unuja.ac.id',
+                'password' => bcrypt('password'),
             ],
-            // Rayons untuk ISKAB DIY
             [
-                'name' => 'Rayon Yogyakarta',
-                'korwil_id' => 3,
-                'nomor_sk' => 'SK/005/RY/2023',
-                'tanggal_sk' => '2023-06-01',
-                'description' => 'Rayon Yogyakarta - DIY',
-                'contact' => '0819999999',
+                'name' => 'Rayon Ibnu Khaldun',
+                'description' => 'Rayon Ibnu Khaldun - PMII Komisariat Universitas Nurul Jadid',
+                'contact' => '085267890123',
+                'email' => 'ibnukhaldun@pmii-unuja.ac.id',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Rayon Al-Wahid',
+                'description' => 'Rayon Al-Wahid - PMII Komisariat Universitas Nurul Jadid',
+                'contact' => '085278901234',
+                'email' => 'alwahid@pmii-unuja.ac.id',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Rayon Avicena',
+                'description' => 'Rayon Avicena - PMII Komisariat Universitas Nurul Jadid',
+                'contact' => '085289012345',
+                'email' => 'avicena@pmii-unuja.ac.id',
+                'password' => bcrypt('password'),
             ],
         ];
 
         foreach ($rayons as $rayon) {
-            Rayon::firstOrCreate(['name' => $rayon['name']], $rayon);
+            Rayon::create($rayon);
         }
     }
 }

@@ -15,10 +15,6 @@ class AuthHelper
             return Auth::guard('web')->user();
         }
 
-        if (Auth::guard('korwil')->check()) {
-            return Auth::guard('korwil')->user();
-        }
-
         if (Auth::guard('rayon')->check()) {
             return Auth::guard('rayon')->user();
         }
@@ -32,7 +28,6 @@ class AuthHelper
     public static function check(): bool
     {
         return Auth::guard('web')->check()
-            || Auth::guard('korwil')->check()
             || Auth::guard('rayon')->check();
     }
 
@@ -45,10 +40,6 @@ class AuthHelper
             return 'web';
         }
 
-        if (Auth::guard('korwil')->check()) {
-            return 'korwil';
-        }
-
         if (Auth::guard('rayon')->check()) {
             return 'rayon';
         }
@@ -57,16 +48,12 @@ class AuthHelper
     }
 
     /**
-     * Get user type: 'user', 'korwil', or 'rayon'
+     * Get user type: 'user' or 'rayon'
      */
     public static function userType(): ?string
     {
         if (Auth::guard('web')->check()) {
             return 'user';
-        }
-
-        if (Auth::guard('korwil')->check()) {
-            return 'korwil';
         }
 
         if (Auth::guard('rayon')->check()) {

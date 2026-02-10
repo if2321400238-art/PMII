@@ -8,7 +8,7 @@
         <!-- Header -->
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-900">Profil Organisasi</h1>
-            <p class="text-gray-600 mt-1">Kelola informasi dan tampilan profil organisasi ISKAB</p>
+            <p class="text-gray-600 mt-1">Kelola informasi dan tampilan profil organisasi PMII</p>
         </div>
 
         @if(session('success'))

@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Korwil;
 use App\Models\Rayon;
 use App\Models\Post;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -85,11 +84,7 @@ class PostPolicy
     private function role(Authenticatable $user): ?string
     {
         if ($user instanceof User) {
-            return $user->role === 'pb' ? 'admin' : $user->role;
-        }
-
-        if ($user instanceof Korwil) {
-            return 'korwil_admin';
+            return $user->role_slug;
         }
 
         if ($user instanceof Rayon) {

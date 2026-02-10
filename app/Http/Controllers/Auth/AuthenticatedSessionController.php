@@ -39,8 +39,6 @@ class AuthenticatedSessionController extends Controller
         // Logout from whichever guard is active
         if (Auth::guard('web')->check()) {
             Auth::guard('web')->logout();
-        } elseif (Auth::guard('korwil')->check()) {
-            Auth::guard('korwil')->logout();
         } elseif (Auth::guard('rayon')->check()) {
             Auth::guard('rayon')->logout();
         }

@@ -25,6 +25,12 @@ class DownloadController extends Controller
 
         $download->incrementDownloadCount();
 
-        return Storage::disk('public')->download($download->file_path, $download->nama_file);
+        // Extract extension from file_path and append to nama_file
+        $extension = pathinfo($download->file_path, PATHINFO_EXTENSION);
+        // Remove any path separators from nama_file to prevent security issues
+        $basename = pathinfo($download->nama_file, PATHINFO_BASENAME);
+        $filename = $basename . '.' . $extension;
+
+        return Storage::disk('public')->download($download->file_path, $filename);
     }
 }

@@ -26,8 +26,6 @@ class KorwilController extends Controller
             'wilayah' => 'required|string|max:255',
             'email' => 'required|email|unique:korwils,email',
             'password' => 'required|min:8',
-            'nomor_sk' => 'nullable|string',
-            'tanggal_sk' => 'nullable|date',
             'description' => 'nullable|string',
             'contact' => 'nullable|string',
         ]);
@@ -49,8 +47,6 @@ class KorwilController extends Controller
             'wilayah' => 'required|string|max:255',
             'email' => 'required|email|unique:korwils,email,' . $korwil->id,
             'password' => 'nullable|min:8',
-            'nomor_sk' => 'nullable|string',
-            'tanggal_sk' => 'nullable|date',
             'description' => 'nullable|string',
             'contact' => 'nullable|string',
         ]);

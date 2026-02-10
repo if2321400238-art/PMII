@@ -43,7 +43,7 @@
                 <div class="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-300">
                     <p class="text-yellow-900 text-sm">
                         <strong>Peringatan:</strong> Jika Anda menemukan KTA yang mencurigakan,
-                        silakan hubungi pengurus ISKAB untuk verifikasi lebih lanjut.
+                        silakan hubungi pengurus PMII untuk verifikasi lebih lanjut.
                     </p>
                 </div>
             </div>

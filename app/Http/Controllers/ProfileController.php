@@ -13,7 +13,7 @@ class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
-     * Supports all guards: web (admin), korwil, rayon
+     * Supports all guards: web (admin), rayon
      */
     public function edit(Request $request): View
     {
@@ -21,10 +21,7 @@ class ProfileController extends Controller
         $user = null;
         $userType = 'admin';
 
-        if (Auth::guard('korwil')->check()) {
-            $user = Auth::guard('korwil')->user();
-            $userType = 'korwil';
-        } elseif (Auth::guard('rayon')->check()) {
+        if (Auth::guard('rayon')->check()) {
             $user = Auth::guard('rayon')->user();
             $userType = 'rayon';
         } else {
@@ -46,9 +43,7 @@ class ProfileController extends Controller
         // Get user from any active guard
         $user = null;
 
-        if (Auth::guard('korwil')->check()) {
-            $user = Auth::guard('korwil')->user();
-        } elseif (Auth::guard('rayon')->check()) {
+        if (Auth::guard('rayon')->check()) {
             $user = Auth::guard('rayon')->user();
         } else {
             $user = $request->user();

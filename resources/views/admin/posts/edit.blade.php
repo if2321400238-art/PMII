@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Post - Admin ISKAB')
+@section('title', 'Edit Post - Admin PMII')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
@@ -91,7 +91,7 @@
                         </label>
                         <select name="type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition @error('type') border-red-500 @enderror">
                             <option value="berita" {{ $post->type === 'berita' ? 'selected' : '' }}>Berita</option>
-                            <option value="pena_santri" {{ $post->type === 'pena_santri' ? 'selected' : '' }}>Pena Santri</option>
+
                         </select>
                         @error('type')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
                     </div>

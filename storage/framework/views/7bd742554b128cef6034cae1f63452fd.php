@@ -1,14 +1,12 @@
-<?php $__env->startSection('title', 'Dashboard Admin - ISKAB'); ?>
+<?php $__env->startSection('title', 'Dashboard Admin - PMII'); ?>
 <?php $__env->startSection('page_title', 'Dashboard'); ?>
 
 <?php $__env->startSection('content'); ?>
 <?php
-    $role = auth()->user()->role
-        ?? (auth()->guard('korwil')->check() ? 'korwil_admin' : (auth()->guard('rayon')->check() ? 'rayon_admin' : null));
+    $role = auth()->user()->role_slug
+        ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
     $roleLabel = match ($role) {
         'admin' => 'Admin',
-        'pb' => 'PB',
-        'korwil_admin' => 'Korwil Admin',
         'rayon_admin' => 'Rayon Admin',
         default => 'User',
     };
@@ -28,13 +26,13 @@
         </article>
 
         <article class="bg-white rounded-lg shadow-md p-4 md:p-6 border-l-4 border-green-600">
-            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">Total Korwil</h3>
-            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="Total Korwil: <?php echo e(\App\Models\Korwil::count()); ?>"><?php echo e(\App\Models\Korwil::count()); ?></p>
+            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">Total Rayon</h3>
+            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="Total Rayon: <?php echo e(\App\Models\Rayon::count()); ?>"><?php echo e(\App\Models\Rayon::count()); ?></p>
         </article>
 
         <article class="bg-white rounded-lg shadow-md p-4 md:p-6 border-l-4 border-green-600">
-            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">SK Pending</h3>
-            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="SK Pending: <?php echo e(\App\Models\SKPengajuan::where('status', 'pending')->count()); ?>"><?php echo e(\App\Models\SKPengajuan::where('status', 'pending')->count()); ?></p>
+            <h3 class="text-gray-600 text-xs md:text-sm font-semibold">Total Gallery</h3>
+            <p class="text-xl md:text-3xl font-bold text-green-600 mt-2" aria-label="Total Gallery: <?php echo e(\App\Models\Gallery::count()); ?>"><?php echo e(\App\Models\Gallery::count()); ?></p>
         </article>
     </div>
 </section>
@@ -84,26 +82,6 @@
             <?php endif; ?>
         </ul>
     </article>
-
-    <?php if(in_array($role, ['admin', 'pb'])): ?>
-        <article class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg md:text-2xl font-bold mb-4">SK Pengajuan Pending</h3>
-            <ul class="space-y-4 list-none">
-                <?php $__empty_1 = true; $__currentLoopData = \App\Models\SKPengajuan::where('status', 'pending')->latest()->take(5)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <li class="border-b pb-4 last:border-b-0">
-                        <h4 class="font-semibold text-sm md:text-base text-gray-900"><?php echo e($sk->nama); ?></h4>
-                        <p class="text-xs md:text-sm text-gray-600">Tipe: <?php echo e(ucfirst($sk->tipe)); ?></p>
-                        <time datetime="<?php echo e($sk->created_at->toIso8601String()); ?>" class="text-xs text-gray-500"><?php echo e($sk->created_at->format('d M Y H:i')); ?></time>
-                        <a href="<?php echo e(route('admin.sk-pengajuan.show', $sk)); ?>" class="text-xs text-green-700 hover:text-green-800 focus:underline font-semibold mt-2 inline-block">
-                            Review →
-                        </a>
-                    </li>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <li class="text-gray-500 text-sm">Tidak ada SK pending</li>
-                <?php endif; ?>
-            </ul>
-        </article>
-    <?php endif; ?>
 </section>
 <?php $__env->stopSection(); ?>
 

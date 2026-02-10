@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola User - Admin ISKAB')
+@section('title', 'Kelola User - Admin PMII')
 
 @section('page_title', 'Kelola User')
 
@@ -34,14 +34,10 @@
                     <p class="text-sm text-gray-600 mt-1 truncate">{{ $user->email }}</p>
                 </div>
                 <span class="ml-2 inline-flex px-2.5 py-1 text-xs font-semibold rounded-full flex-shrink-0
-                    @if($user->role === 'admin') bg-purple-100 text-purple-800
-                    @elseif($user->role === 'pb') bg-blue-100 text-blue-800
+                    @if($user->role?->slug === 'admin') bg-purple-100 text-purple-800
                     @else bg-gray-100 text-gray-800
                     @endif">
-                    @if($user->role === 'admin') Admin
-                    @elseif($user->role === 'pb') PB
-                    @else {{ $user->role }}
-                    @endif
+                    {{ $user->role?->name ?? 'Member' }}
                 </span>
             </div>
             <p class="text-xs text-gray-500 mb-3">
@@ -107,14 +103,10 @@
                     <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->email }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="inline-flex px-2.5 py-1 text-xs font-semibold rounded-full
-                            @if($user->role === 'admin') bg-purple-100 text-purple-800
-                            @elseif($user->role === 'pb') bg-blue-100 text-blue-800
+                            @if($user->role?->slug === 'admin') bg-purple-100 text-purple-800
                             @else bg-gray-100 text-gray-800
                             @endif">
-                            @if($user->role === 'admin') Admin
-                            @elseif($user->role === 'pb') PB
-                            @else {{ $user->role }}
-                            @endif
+                            {{ $user->role?->name ?? 'Member' }}
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

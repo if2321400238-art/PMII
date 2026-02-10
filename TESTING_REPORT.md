@@ -1,4 +1,4 @@
-# 🧪 LAPORAN TESTING ISKAB
+# 🧪 LAPORAN TESTING PMII
 
 **Tanggal Testing:** 22 Januari 2026  
 **Status:** ✅ Database & Routes Ready for Testing
@@ -39,9 +39,9 @@ Semua seeders berjalan tanpa error:
 
 | Email | Password | Role | Deskripsi |
 |-------|----------|------|-----------|
-| `admin@iskab.com` | `password` | Admin | Full access semua fitur |
-| `editor@iskab.com` | `password` | Editor | Manage posts & gallery |
-| `bphpb@iskab.com` | `password` | BPH PB | Manage SK pengajuan |
+| `admin@PMII.com` | `password` | Admin | Full access semua fitur |
+| `editor@PMII.com` | `password` | Editor | Manage posts & gallery |
+| `bphpb@PMII.com` | `password` | BPH PB | Manage SK pengajuan |
 
 ### Sample Data di Database:
 - 5 Roles dengan slug yang tepat
@@ -175,9 +175,9 @@ Semua seeders berjalan tanpa error:
 ## 5️⃣ TESTING CHECKLIST
 
 ### Authentication Testing
-- [ ] Login dengan admin@iskab.com berhasil
-- [ ] Login dengan editor@iskab.com berhasil
-- [ ] Login dengan bphpb@iskab.com berhasil
+- [ ] Login dengan admin@PMII.com berhasil
+- [ ] Login dengan editor@PMII.com berhasil
+- [ ] Login dengan bphpb@PMII.com berhasil
 - [ ] Logout bekerja dengan baik
 - [ ] Password yang salah ditolak
 - [ ] User tidak terdaftar tidak bisa login
@@ -307,7 +307,7 @@ Sistem siap untuk:
 
 ### Development Server
 ```bash
-cd d:\laragon\www\iskab
+cd d:\laragon\www\PMII
 php artisan serve
 ```
 Akses di: `http://localhost:8000`

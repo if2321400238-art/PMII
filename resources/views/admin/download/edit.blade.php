@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit File Download - Admin ISKAB')
+@section('title', 'Edit File Download - Admin PMII')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
@@ -46,7 +46,7 @@
                             Nama File <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="nama_file" value="{{ old('nama_file', $download->nama_file) }}"
-                               placeholder="Contoh: Logo ISKAB 2024"
+                               placeholder="Contoh: Logo PMII 2024"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" required>
                     </div>
 

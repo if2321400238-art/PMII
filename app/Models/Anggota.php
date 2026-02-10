@@ -15,10 +15,8 @@ class Anggota extends Model
         'alamat',
         'pondok',
         'rayon_id',
-        'korwil_id',
         'foto',
         'kta_path',
-        'kta_template_id',
     ];
 
     public function rayon(): BelongsTo
@@ -26,13 +24,5 @@ class Anggota extends Model
         return $this->belongsTo(Rayon::class);
     }
 
-    public function korwil(): BelongsTo
-    {
-        return $this->belongsTo(Korwil::class);
-    }
 
-    public function ktaTemplate(): BelongsTo
-    {
-        return $this->belongsTo(KTATemplate::class, 'kta_template_id');
-    }
 }

@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
-@section('title', 'Rayon - Admin ISKAB')
+@section('title', 'Rayon - Admin PMII')
 @section('page_title', 'Kelola Rayon')
 
 @section('content')
 <div class="mb-6 flex justify-between items-center">
     <div>
         <h1 class="text-3xl font-bold text-gray-900">Kelola Rayon</h1>
-        <p class="text-gray-600 mt-1">Kelola data rayon yang tergabung dalam ISKAB</p>
+        <p class="text-gray-600 mt-1">Kelola data rayon yang tergabung dalam PMII</p>
     </div>
     <a href="{{ route('admin.rayon.create') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold rounded-lg hover:from-green-700 hover:to-green-800 transition shadow-lg">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +38,6 @@
                     </svg>
                     <div class="min-w-0">
                         <h3 class="font-semibold text-gray-900 text-base truncate">{{ $rayon->name }}</h3>
-                        <p class="text-sm text-gray-600 mt-1">{{ $rayon->korwil->name }}</p>
                     </div>
                 </div>
                 <span class="ml-2 px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 border border-blue-200 flex-shrink-0 flex items-center gap-1">
@@ -48,9 +47,6 @@
                     {{ $rayon->anggota_count ?? $rayon->anggota->count() }}
                 </span>
             </div>
-            @if($rayon->nomor_sk)
-                <p class="text-xs text-gray-500 font-mono mb-3">SK: {{ $rayon->nomor_sk }}</p>
-            @endif
             <div class="flex gap-2 pt-3 border-t border-gray-100">
                 <a href="{{ route('admin.rayon.edit', $rayon) }}"
                    class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
@@ -97,8 +93,6 @@
                         Nama Rayon
                     </div>
                 </th>
-                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Korwil</th>
-                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. SK</th>
                 <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Jumlah Anggota</th>
                 <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Aksi</th>
             </tr>
@@ -114,8 +108,6 @@
                             <span class="font-semibold text-gray-900">{{ $rayon->name }}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ $rayon->korwil->name }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-600 font-mono">{{ $rayon->nomor_sk ?? '-' }}</td>
                     <td class="px-6 py-4">
                         <span class="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

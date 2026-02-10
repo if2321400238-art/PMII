@@ -105,7 +105,7 @@ class KTAGeneratorService
         }
 
         // Organization name
-        $orgName = $profil?->nama_organisasi ?? 'ISKAB';
+        $orgName = $profil?->nama_organisasi ?? 'PMII';
         $titleY = 245;
 
         $this->drawCenteredText($image, $centerX, $titleY, 'IKATAN SANTRI', $colors['white'], 16);
@@ -113,7 +113,7 @@ class KTAGeneratorService
         $this->drawCenteredText($image, $centerX, $titleY + 70, 'Kabupaten Probolinggo', $colors['gold'], 13);
 
         // Social media
-        $this->drawCenteredText($image, $centerX, 375, '@iskab.official', $colors['white'], 11);
+        $this->drawCenteredText($image, $centerX, 375, '@PMII.official', $colors['white'], 11);
 
         // QR Code
         $this->addQRCode($image, $anggota, $centerX);
@@ -125,7 +125,7 @@ class KTAGeneratorService
         $this->drawCenteredText($image, $centerX, $instructY + 30, 'di server kami.', $colors['white'], 9);
 
         // Website
-        $this->drawCenteredText($image, $centerX, 685, 'www.iskab.or.id', $colors['white'], 14);
+        $this->drawCenteredText($image, $centerX, 685, 'www.PMII.or.id', $colors['white'], 14);
     }
 
     /**
@@ -187,11 +187,6 @@ class KTAGeneratorService
         if ($anggota->rayon) {
             $this->drawCenteredText($image, $centerRight, $nextY, 'Rayon ' . $anggota->rayon->name, $colors['gray'], 12);
             $nextY += 22;
-        }
-
-        // Korwil
-        if ($anggota->korwil) {
-            $this->drawCenteredText($image, $centerRight, $nextY, $anggota->korwil->name, $colors['gray'], 12);
         }
     }
 

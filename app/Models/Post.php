@@ -41,7 +41,7 @@ class Post extends Model
     }
 
     /**
-     * Get the author (polymorphic: User, Korwil, or Rayon)
+     * Get the author (polymorphic: User or Rayon)
      */
     public function author(): MorphTo
     {
@@ -66,10 +66,7 @@ class Post extends Model
         return $query->where('type', 'berita');
     }
 
-    public function scopePenaSantri($query)
-    {
-        return $query->where('type', 'pena_santri');
-    }
+
 
     public function scopePublished($query)
     {

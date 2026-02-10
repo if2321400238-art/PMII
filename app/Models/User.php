@@ -23,7 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role_id',
     ];
 
     /**
@@ -54,6 +54,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'author_id');
     }
 
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function skPengajuan(): HasMany
     {
         return $this->hasMany(SKPengajuan::class, 'submitted_by');
@@ -69,10 +74,21 @@ class User extends Authenticatable
      */
     public function hasRole(string ...$roles): bool
     {
-        if (!$this->role) {
+        if (!$this->role_slug) {
             return false;
         }
 
-        return in_array($this->role, $roles);
+        return in_array($this->role_slug, $roles);
+    }
+
+    public function getRoleSlugAttribute(): ?string
+    {
+        $slug = $this->role?->slug;
+
+        if ($slug === 'pb') {
+            return 'admin';
+        }
+
+        return $slug;
     }
 }

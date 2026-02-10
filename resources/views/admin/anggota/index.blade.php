@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Anggota - Admin ISKAB')
+@section('title', 'Anggota - Admin PMII')
 @section('page_title', 'Kelola Anggota')
 
 @section('content')
@@ -15,16 +15,7 @@
 </div>
 
 <div class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4 md:mb-6">
-    <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-        <div>
-            <label for="filter-korwil" class="sr-only">Filter berdasarkan Korwil</label>
-            <select id="filter-korwil" name="korwil" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                <option value="">Semua Korwil</option>
-                @foreach($korwils as $k)
-                    <option value="{{ $k->id }}" {{ request('korwil') == $k->id ? 'selected' : '' }}>{{ $k->name }}</option>
-                @endforeach
-            </select>
-        </div>
+    <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
         <div>
             <label for="search-anggota" class="sr-only">Cari nama atau nomor anggota</label>
             <input type="text" id="search-anggota" name="search" placeholder="Cari nama atau nomor anggota" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500" value="{{ request('search') }}">
@@ -49,7 +40,6 @@
             <div class="flex flex-wrap gap-2 text-xs mb-3">
                 <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded font-mono">{{ $a->nomor_anggota }}</span>
                 <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded">{{ $a->rayon->name }}</span>
-                <span class="px-2 py-1 bg-green-50 text-green-700 rounded">{{ $a->korwil->name }}</span>
             </div>
             <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
                 <a href="{{ route('admin.anggota.edit', $a) }}"
@@ -97,7 +87,6 @@
                 <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
                 <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. Anggota</th>
                 <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Rayon</th>
-                <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Korwil</th>
                 <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Aksi</th>
             </tr>
         </thead>
@@ -112,7 +101,6 @@
                     </td>
                     <td class="px-6 py-4 font-mono text-sm">{{ $a->nomor_anggota }}</td>
                     <td class="px-6 py-4 text-sm">{{ $a->rayon->name }}</td>
-                    <td class="px-6 py-4 text-sm">{{ $a->korwil->name }}</td>
                     <td class="px-6 py-4 text-center">
                         <div class="flex items-center justify-center gap-2">
                             <a href="{{ route('admin.anggota.edit', $a) }}" class="inline-flex items-center px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
@@ -142,7 +130,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                    <td colspan="4" class="px-6 py-12 text-center text-gray-500">
                         <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>

@@ -34,7 +34,7 @@ class Gallery extends Model
     }
 
     /**
-     * Get the uploader (polymorphic: User, Korwil, or Rayon)
+     * Get the uploader (polymorphic: User or Rayon)
      */
     public function uploadedBy(): MorphTo
     {

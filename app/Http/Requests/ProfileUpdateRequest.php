@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use App\Models\Korwil;
 use App\Models\Rayon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -21,14 +20,9 @@ class ProfileUpdateRequest extends FormRequest
         // Determine which guard is active and get corresponding user/table
         $user = $this->user();
         $table = 'users';
-        $isKorwil = false;
         $isRayon = false;
 
-        if (Auth::guard('korwil')->check()) {
-            $user = Auth::guard('korwil')->user();
-            $table = 'korwils';
-            $isKorwil = true;
-        } elseif (Auth::guard('rayon')->check()) {
+        if (Auth::guard('rayon')->check()) {
             $user = Auth::guard('rayon')->user();
             $table = 'rayons';
             $isRayon = true;
@@ -46,13 +40,6 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique($table)->ignore($user->id),
             ],
         ];
-
-        // Additional rules for Korwil
-        if ($isKorwil) {
-            $rules['wilayah'] = ['required', 'string', 'max:255'];
-            $rules['contact'] = ['nullable', 'string', 'max:50'];
-            $rules['description'] = ['nullable', 'string', 'max:1000'];
-        }
 
         // Additional rules for Rayon
         if ($isRayon) {
@@ -73,7 +60,6 @@ class ProfileUpdateRequest extends FormRequest
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah digunakan.',
-            'wilayah.required' => 'Wilayah wajib diisi untuk Korwil.',
             'contact.max' => 'Kontak maksimal 50 karakter.',
             'description.max' => 'Deskripsi maksimal 1000 karakter.',
         ];

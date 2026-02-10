@@ -1,45 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Galeri - ISKAB')
+@section('title', 'Galeri - PMII')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
+<div class="">
     <h1 class="text-4xl font-bold mb-8">Galeri</h1>
-
-    <!-- Filter -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-                <label class="block text-sm font-semibold mb-2">Tipe</label>
-                <select name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    <option value="">Semua</option>
-                    <option value="photo" {{ request('type') == 'photo' ? 'selected' : '' }}>Foto</option>
-                    <option value="video" {{ request('type') == 'video' ? 'selected' : '' }}>Video</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-semibold mb-2">Kegiatan</label>
-                <select name="kegiatan" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    <option value="">Semua Kegiatan</option>
-                    @foreach($kegiatan as $k)
-                        <option value="{{ $k }}" {{ request('kegiatan') == $k ? 'selected' : '' }}>{{ $k }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-semibold mb-2">Tahun</label>
-                <select name="tahun" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                    <option value="">Semua Tahun</option>
-                    @foreach($tahun as $t)
-                        <option value="{{ $t }}" {{ request('tahun') == $t ? 'selected' : '' }}>{{ $t }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="flex items-end">
-                <button type="submit" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Filter</button>
-            </div>
-        </form>
-    </div>
 
     <!-- Gallery Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

@@ -16,7 +16,7 @@ class AuthenticateAny
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        $guards = $guards ?: ['web', 'korwil', 'rayon'];
+        $guards = $guards ?: ['web', 'rayon'];
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {

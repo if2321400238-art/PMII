@@ -13,12 +13,12 @@ class PasswordController extends Controller
 {
     /**
      * Update the user's password.
-     * Supports all guards: web (admin), korwil, rayon
+     * Supports all guards: web (admin), rayon
      */
     public function update(Request $request): RedirectResponse
     {
         // Get user from any active guard
-        $user = $request->user() ?? Auth::guard('korwil')->user() ?? Auth::guard('rayon')->user();
+        $user = $request->user() ?? Auth::guard('rayon')->user();
 
         $validated = $request->validateWithBag('updatePassword', [
             'current_password' => ['required', 'current_password_any'],

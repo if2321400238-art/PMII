@@ -35,5 +35,5 @@ docker compose exec app chown -R www-data:www-data storage bootstrap/cache publi
 docker compose exec app chmod -R 775 storage bootstrap/cache
 docker compose exec app chmod -R 755 public/fonts
 
-echo "✅ Deployment selesai! Website ISKAB sudah update."
+echo "✅ Deployment selesai! Website PMII sudah update."
 echo "🌐 Akses website di: http://$(hostname -I | awk '{print $1}')"

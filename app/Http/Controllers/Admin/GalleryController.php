@@ -19,7 +19,7 @@ class GalleryController extends Controller
         $userType = AuthHelper::userType();
 
         // Filter: non-admin hanya lihat galeri sendiri
-        if ($userType !== 'user' || $currentUser->role !== 'admin') {
+        if ($userType !== 'user' || $currentUser->role_slug !== 'admin') {
             $query->where('uploaded_by', $currentUser->id)
                   ->where('uploader_type', get_class($currentUser));
         }
@@ -67,7 +67,7 @@ class GalleryController extends Controller
 
         // Set approval status: admin langsung approved, lainnya pending
         $userType = AuthHelper::userType();
-        $isAdmin = $userType === 'user' && $currentUser->role === 'admin';
+        $isAdmin = $userType === 'user' && $currentUser->role_slug === 'admin';
 
         if ($isAdmin) {
             $validated['approval_status'] = 'approved';
@@ -80,7 +80,7 @@ class GalleryController extends Controller
         Gallery::create($validated);
 
         $message = $validated['approval_status'] === 'pending'
-            ? 'Galeri berhasil dibuat dan menunggu persetujuan admin/PB'
+            ? 'Galeri berhasil dibuat dan menunggu persetujuan admin'
             : 'Galeri berhasil dibuat';
 
         return redirect()->route('admin.gallery.index')->with('success', $message);

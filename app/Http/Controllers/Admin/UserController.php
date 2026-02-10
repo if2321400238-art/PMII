@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
@@ -15,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->get();
+        $users = User::with('role')->latest()->get();
         return view('admin.user.index', compact('users'));
     }
 
@@ -24,7 +26,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.create');
+        $roles = Role::where('slug', 'admin')->get();
+        return view('admin.user.create', compact('roles'));
     }
 
     /**
@@ -36,7 +39,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', Password::min(8)],
-            'role' => 'required|in:admin,pb',
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where('slug', 'admin'),
+            ],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -61,7 +67,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.user.edit', compact('user'));
+        $roles = Role::where('slug', 'admin')->get();
+        return view('admin.user.edit', compact('user', 'roles'));
     }
 
     /**
@@ -73,7 +80,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => ['nullable', Password::min(8)],
-            'role' => 'required|in:admin,pb',
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where('slug', 'admin'),
+            ],
         ]);
 
         if ($request->filled('password')) {

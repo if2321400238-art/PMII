@@ -3,35 +3,39 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        container_name: iskab-app
+        container_name: PMII-app
         restart: unless-stopped
         ports:
             - '${APP_PORT:-80}:80'
         volumes:
             - './storage:/var/www/storage'
             - './.env.docker:/var/www/.env'
+            - './resources/views:/var/www/resources/views'
+            - './app:/var/www/app'
+            - './routes:/var/www/routes'
+            - './public/images:/var/www/public/images'
         environment:
             - APP_ENV=${APP_ENV:-production}
-            - APP_DEBUG=${APP_DEBUG:-false}
+            - APP_DEBUG=${APP_DEBUG:-true}
         depends_on:
             - mysql
         networks:
-            - iskab-network
+            - PMII-network
     mysql:
         image: 'mysql:8.0'
-        container_name: iskab-db
+        container_name: PMII-db
         restart: unless-stopped
         environment:
-            MYSQL_DATABASE: ${DB_DATABASE:-iskab}
-            MYSQL_USER: ${DB_USERNAME:-iskab_user}
+            MYSQL_DATABASE: ${DB_DATABASE:-PMII}
+            MYSQL_USER: ${DB_USERNAME:-PMII_user}
             MYSQL_PASSWORD: ${DB_PASSWORD:-passwordku}
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password_rahasia}
         volumes:
             - 'mysql_data:/var/lib/mysql'
         networks:
-            - iskab-network
+            - PMII-network
 networks:
-    iskab-network:
+    PMII-network:
         driver: bridge
 volumes:
     mysql_data: null

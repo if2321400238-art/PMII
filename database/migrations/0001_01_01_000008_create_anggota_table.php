@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('alamat')->nullable();
             $table->string('pondok')->nullable();
             $table->foreignId('rayon_id')->constrained('rayons')->onDelete('cascade');
-            $table->foreignId('korwil_id')->constrained('korwils')->onDelete('cascade');
             $table->string('foto')->nullable();
             $table->string('kta_path')->nullable();
             $table->timestamps();

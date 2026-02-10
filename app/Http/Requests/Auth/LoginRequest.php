@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
 
     /**
      * Attempt to authenticate the request's credentials.
-        * Try all guards: user, korwil, rayon
+      * Try all guards: user, rayon
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -51,14 +51,8 @@ class LoginRequest extends FormRequest
             return;
         }
 
-        // Try Korwil guard
-        if (Auth::guard('korwil')->attempt($credentials, $remember)) {
-            RateLimiter::clear($this->throttleKey());
-            return;
-        }
-
         // Try Rayon guard
-        if (Auth::guard('rayon')->attempt($credentials, $remember)) {
+        if (Auth::guard('rayon')->attempt($credentials, false)) {
             RateLimiter::clear($this->throttleKey());
             return;
         }

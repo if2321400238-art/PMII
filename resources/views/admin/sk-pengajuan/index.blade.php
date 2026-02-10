@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'SK Pengajuan - Admin ISKAB')
+@section('title', 'SK Pengajuan - Admin PMII')
 @section('page_title', 'SK Pengajuan')
 
 @section('content')
 @php
-    $role = auth()->user()->role
-        ?? (auth()->guard('korwil')->check() ? 'korwil_admin' : (auth()->guard('rayon')->check() ? 'rayon_admin' : null));
+    $role = auth()->user()->role_slug
+        ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
 @endphp
 <div class="container mx-auto px-4 py-4 md:py-8">
     <div class="max-w-7xl mx-auto">
@@ -14,7 +14,7 @@
         <div class="mb-4 md:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
-                    @if(in_array($role, ['admin', 'pb']))
+                    @if(in_array($role, ['admin']))
                         Kelola Pengajuan SK
                     @else
                         SK Saya
