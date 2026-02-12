@@ -26,3 +26,6 @@ Thumbs.db
 .docker/
 docker-compose.override.yml
 database/database.sqlite
+
+# Ignore runtime cache/views
+storage/framework/
