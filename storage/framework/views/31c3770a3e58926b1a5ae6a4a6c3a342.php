@@ -26,7 +26,14 @@
         <!-- Logo -->
         <div class="flex-shrink-0">
             <a href="<?php echo e(route('home')); ?>" class="flex items-center gap-3">
-                <img src="<?php echo e(asset('images/logo-pmii.png')); ?>" alt="Logo PMII" class="w-10 h-10 rounded-full object-cover animate-pulse-glow">
+                <div class="relative w-12 h-12 flex items-center justify-center">
+                    <svg class="absolute inset-0 w-12 h-12 -rotate-90" viewBox="0 0 48 48" aria-hidden="true">
+                        <circle cx="24" cy="24" r="21" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="2"></circle>
+                        <circle id="logoScrollProgress" cx="24" cy="24" r="21" fill="none" stroke="#facc15" stroke-width="2.8" stroke-linecap="round"
+                            style="stroke-dasharray:131.95;stroke-dashoffset:131.95;transition:stroke-dashoffset 120ms linear;filter:drop-shadow(0 0 4px rgba(250,204,21,0.7));"></circle>
+                    </svg>
+                    <img src="<?php echo e(asset('images/logo-pmii.png')); ?>" alt="Logo PMII" class="relative z-10 w-10 h-10 rounded-full object-cover animate-pulse-glow">
+                </div>
                 <p class="hidden lg:block font-bold text-lg animate-pulse-glow-text">PMII UNUJA</p>
             </a>
         </div>
@@ -118,7 +125,6 @@
             <?php endif; ?>
         </div>
     </nav>
-
 
     <!-- Mobile Menu -->
     <div id="mobileMenuPanel" x-show="open"
@@ -219,16 +225,30 @@
     const navbar = document.getElementById('mainNavbar');
     const navbarWrapper = document.getElementById('navbarWrapper');
     const placeholder = document.getElementById('navbarPlaceholder');
+    const logoScrollProgress = document.getElementById('logoScrollProgress');
+    const logoRingCircumference = 131.95;
     let isSticky = false;
+
+    const updateLogoScrollProgress = () => {
+        if (!logoScrollProgress) return;
+        const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+        const progress = Math.min(Math.max((window.pageYOffset || document.documentElement.scrollTop) / maxScroll, 0), 1);
+        const dashOffset = logoRingCircumference * (1 - progress);
+        logoScrollProgress.style.strokeDashoffset = dashOffset.toFixed(2);
+    };
 
     // Set initial navbar height for placeholder
     window.addEventListener('load', function() {
         const wrapperHeight = navbarWrapper.offsetHeight;
         placeholder.style.height = wrapperHeight + 'px';
+        updateLogoScrollProgress();
     });
+
+    window.addEventListener('resize', updateLogoScrollProgress, { passive: true });
 
     window.addEventListener('scroll', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        updateLogoScrollProgress();
 
         if (scrollTop > 50 && !isSticky) {
             // Make navbar sticky

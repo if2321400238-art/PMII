@@ -87,27 +87,32 @@
 </style>
 
 <?php
-    $heroImages = array_filter([
+    $heroImages = collect([
         $profil->hero_image ?? null,
         $profil->hero_image_2 ?? null,
         $profil->hero_image_3 ?? null,
-    ]);
+    ])->filter(function ($image) {
+        return filled($image) && \Illuminate\Support\Facades\Storage::disk('public')->exists($image);
+    })->values()->all();
 ?>
 
 <section class="bg-slate-100 overflow-hidden hero-shell">
     <div class="hero-inner h-full p-3 sm:p-4 md:p-6">
-        <div class="hero-surface h-full rounded-3xl bg-[#1e3a5f] shadow-2xl shadow-[#0f172a]/40 border border-white/10 overflow-hidden flex flex-col">
+        <div class="hero-surface h-full rounded-3xl bg-[#1e3a5f] shadow-[#0f172a]/40 border border-white/10 overflow-hidden flex flex-col">
             <?php echo $__env->make('layouts.navigation', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
             <div class="hero-content-wrap relative flex-1 min-h-0 px-3 sm:px-4 md:px-6 pb-3 md:pb-3 hero-noise">
+                <div class="premium-orb premium-orb-a hidden lg:block"></div>
+                <div class="premium-orb premium-orb-b hidden lg:block"></div>
+
                 <!-- Mobile -->
                 <div class="hero-mobile-layout h-full flex-col gap-3">
-                    <div class="hero-mobile-contrast relative flex-1 min-h-0 hero-mobile-media rounded-3xl border border-white/20 overflow-hidden shadow-xl shadow-black/30">
+                    <div data-hero-slider-card class="hero-mobile-contrast relative flex-1 min-h-0 hero-mobile-media rounded-3xl border border-white/20 overflow-hidden shadow-xl shadow-black/30 mt-4">
                         <?php if(count($heroImages) > 0): ?>
                             <div class="hero-slider absolute inset-0">
                                 <?php $__currentLoopData = $heroImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $heroImage): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="hero-slide absolute inset-0 transition-opacity duration-1000 <?php echo e($index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'); ?>" data-index="<?php echo e($index); ?>">
-                                        <img src="<?php echo e(asset('storage/' . $heroImage)); ?>" alt="Hero PMII <?php echo e($index + 1); ?>" class="w-full h-full object-cover">
+                                        <img src="<?php echo e(asset('storage/' . $heroImage)); ?>" alt="Hero PMII <?php echo e($index + 1); ?>" class="w-full h-full object-cover" onerror="this.style.opacity='0'; this.parentElement.classList.add('bg-gradient-to-br','from-blue-800','to-blue-900');">
                                         <div class="absolute inset-0 bg-gradient-to-b from-[#0f172a]/35 via-[#1e3a5f]/45 to-[#0f172a]/80"></div>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -132,10 +137,11 @@
                                     Wadah kaderisasi intelektual dan kepemimpinan mahasiswa Islam di Universitas Nurul Jadid.
                                 </p>
                                 <div class="flex gap-2">
-                                    <a href="<?php echo e(route('posts.berita')); ?>" class="inline-flex min-h-11 items-center justify-center rounded-full bg-yellow-400 px-4 text-sm font-bold text-[#0f172a] hover:bg-yellow-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 transition">
-                                        Baca Berita
+                                    <a href="<?php echo e(route('posts.berita')); ?>" data-magnetic class="magnetic-hover relative overflow-hidden inline-flex min-h-11 items-center justify-center rounded-full bg-yellow-400 px-4 text-sm font-bold text-[#0f172a] hover:bg-yellow-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 transition">
+                                        <span class="cta-shimmer absolute inset-0 pointer-events-none"></span>
+                                        <span class="relative z-10">Baca Berita</span>
                                     </a>
-                                    <a href="<?php echo e(route('about.profil')); ?>" class="inline-flex min-h-11 items-center justify-center rounded-full border border-white/60 bg-white/15 px-4 text-sm font-semibold text-white hover:bg-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition">
+                                    <a href="<?php echo e(route('about.profil')); ?>" data-magnetic class="magnetic-hover inline-flex min-h-11 items-center justify-center rounded-full border border-white/60 bg-white/15 px-4 text-sm font-semibold text-white hover:bg-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition">
                                         Tentang PMII
                                     </a>
                                 </div>
@@ -186,14 +192,14 @@
                 </div>
 
                 <!-- Desktop -->
-                <div class="hero-desktop-layout grid-cols-1 lg:grid-cols-12 gap-4 mt-4">
-                    <div class="hero-desktop-col lg:col-span-5 flex flex-col gap-2">
-                        <div class="relative rounded-2xl overflow-hidden border border-white/20 flex-1 min-h-0 shadow-xl shadow-black/30">
+                <div data-premium-root class="hero-desktop-layout grid-cols-1 lg:grid-cols-12 gap-4 mt-4">
+                    <div class="hero-desktop-col lg:col-span-5 flex flex-col gap-2 premium-parallax" data-premium-layer="12">
+                        <div data-hero-slider-card class="premium-tilt relative rounded-2xl overflow-hidden border border-white/20 flex-1 min-h-0 shadow-xl shadow-black/30" data-premium-tilt>
                             <?php if(count($heroImages) > 0): ?>
                                 <div class="hero-slider absolute inset-0">
                                     <?php $__currentLoopData = $heroImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $heroImage): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="hero-slide absolute inset-0 transition-opacity duration-1000 <?php echo e($index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'); ?>" data-index="<?php echo e($index); ?>">
-                                            <img src="<?php echo e(asset('storage/' . $heroImage)); ?>" alt="Hero PMII <?php echo e($index + 1); ?>" class="w-full h-full object-cover">
+                                            <img src="<?php echo e(asset('storage/' . $heroImage)); ?>" alt="Hero PMII <?php echo e($index + 1); ?>" class="w-full h-full object-cover" onerror="this.style.opacity='0'; this.parentElement.classList.add('bg-gradient-to-br','from-blue-800','to-blue-900');">
                                             <div class="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-[#1e3a5f]/35 to-[#1e3a5f]/55"></div>
                                         </div>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -208,8 +214,9 @@
                                 </div>
                                 <div>
                                     <h2 class="text-3xl font-bold text-white leading-tight mb-4">PERGERAKAN<br>MAHASISWA<br>ISLAM INDONESIA</h2>
-                                    <a href="<?php echo e(route('posts.berita')); ?>" class="px-4 py-2 bg-yellow-500 border border-yellow-400 rounded-full text-[#0f172a] text-sm font-bold hover:bg-yellow-400 transition-all duration-300">
-                                        Baca Berita
+                                    <a href="<?php echo e(route('posts.berita')); ?>" data-magnetic class="magnetic-hover relative overflow-hidden px-4 py-2 bg-yellow-500 border border-yellow-400 rounded-full text-[#0f172a] text-sm font-bold hover:bg-yellow-400 transition-all duration-300">
+                                        <span class="cta-shimmer absolute inset-0 pointer-events-none"></span>
+                                        <span class="relative z-10">Baca Berita</span>
                                     </a>
                                 </div>
                             </div>
@@ -229,7 +236,7 @@
                         </div>
                     </div>
 
-                    <div class="hero-desktop-col lg:col-span-7 flex flex-col gap-2">
+                    <div class="hero-desktop-col lg:col-span-7 flex flex-col gap-2 premium-parallax" data-premium-layer="8">
                         <div class="flex items-center gap-4">
                             <div class="flex-1 relative">
                                 <input type="text" id="searchInput" placeholder="Search........" class="w-full bg-[#0f172a] border border-white/20 rounded-full px-4 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:border-yellow-500 transition" />
@@ -290,24 +297,4 @@
         </div>
     </div>
 </section>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const showDataKaderMessage = function (event) {
-            event.preventDefault();
-            alert('Fitur ini akan segera tersedia');
-        };
-
-        const dataKaderMobile = document.getElementById('dataKader');
-        const dataKaderDesktop = document.getElementById('dataKaderDesktop');
-
-        if (dataKaderMobile) {
-            dataKaderMobile.addEventListener('click', showDataKaderMessage);
-        }
-
-        if (dataKaderDesktop) {
-            dataKaderDesktop.addEventListener('click', showDataKaderMessage);
-        }
-    });
-</script>
 <?php /**PATH /var/www/resources/views/components/home/hero-section.blade.php ENDPATH**/ ?>

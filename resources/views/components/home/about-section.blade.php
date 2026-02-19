@@ -1,6 +1,6 @@
-<section class="bg-white py-10 md:py-16 md:pt-12" id="tentang-pmii">
+<section class="bg-white py-10 md:py-16 md:pt-12 section-reveal cinematic-section" id="tentang-pmii" data-reveal data-cinematic>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6 md:mb-8">
+        <h2 class="parallax-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6 md:mb-8" data-parallax-title>
             <a href="{{ route('about.profil') }}">Tentang PMII UNUJA</a>
         </h2>
         <div class="max-w-5xl mx-auto rounded-2xl border border-blue-100 bg-gradient-to-b from-white to-blue-50/30 px-4 py-5 sm:p-6">

@@ -1,6 +1,6 @@
-<section class="bg-[#1e3a5f] py-10 md:py-12 overflow-hidden">
+<section class="bg-[#1e3a5f] py-10 md:py-12 overflow-hidden section-reveal cinematic-section" data-reveal data-cinematic>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-6 md:mb-8">Berita Terkini</h2>
+        <h2 class="parallax-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-6 md:mb-8" data-parallax-title>Berita Terkini</h2>
 
         <div class="relative">
             <button id="prevBerita" aria-label="Berita sebelumnya" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 text-blue-700 rounded-full p-2 md:p-3 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300">
@@ -19,7 +19,7 @@
                 <div id="beritaCarousel">
                     <div id="beritaContainer" class="flex gap-4 lg:gap-6 py-2">
                         @forelse($beritaTerkini as $post)
-                            <article class="flex-none w-full lg:w-[calc(33.333%-1rem)] bg-white rounded-2xl overflow-hidden transition transform hover:-translate-y-1 relative h-72 md:h-64 cursor-pointer shadow-xl shadow-black/15" onclick="window.location.href='{{ route('posts.show', $post->slug) }}'">
+                            <article class="card-reveal subtle-hover flex-none w-full lg:w-[calc(33.333%-1rem)] bg-white rounded-2xl overflow-hidden transition transform hover:-translate-y-1 relative h-72 md:h-64 cursor-pointer shadow-xl shadow-black/15" style="--reveal-delay: {{ $loop->index * 80 }}ms;" data-reveal-card onclick="window.location.href='{{ route('posts.show', $post->slug) }}'">
                                 @if ($post->thumbnail)
                                     <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                                 @else

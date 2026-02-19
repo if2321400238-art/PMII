@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ad;
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -40,10 +40,22 @@ class PostController extends Controller
             $query->latest('published_at');
         }
 
-        $posts = $query->paginate(12);
+        $posts = $query->paginate(12)->withQueryString();
         $categories = \App\Models\Category::whereHas('posts', function ($q) {
             $q->berita()->published();
         })->get();
+        $popularPosts = Post::berita()
+            ->published()
+            ->with(['author', 'category'])
+            ->orderByDesc('view_count')
+            ->orderByDesc('published_at')
+            ->take(6)
+            ->get();
+        $leftAd = Ad::active()
+            ->where('position', 'berita_left')
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->first();
 
         // Get unique authors from published berita posts (supports polymorphic)
         $authors = Post::berita()->published()
@@ -64,7 +76,7 @@ class PostController extends Controller
             ->unique('name')
             ->values();
 
-        return view('frontend.rubrik.berita', compact('posts', 'categories', 'authors'));
+        return view('frontend.rubrik.berita', compact('posts', 'categories', 'authors', 'popularPosts', 'leftAd'));
     }
 
 

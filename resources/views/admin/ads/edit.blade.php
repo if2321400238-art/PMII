@@ -28,7 +28,9 @@
 
             <div>
                 <p class="block text-sm font-semibold text-gray-700 mb-1">Banner Saat Ini</p>
-                <img src="{{ asset('storage/' . $ad->image_path) }}" alt="{{ $ad->title }}" class="h-32 rounded-lg border border-gray-200 object-cover">
+                <div class="w-full max-w-xl overflow-hidden rounded-lg border border-gray-200" style="aspect-ratio: 10 / 3;">
+                    <img src="{{ asset('storage/' . $ad->image_path) }}" alt="{{ $ad->title }}" class="h-full w-full object-cover">
+                </div>
             </div>
 
             <div>
@@ -36,6 +38,7 @@
                 <input id="image_path" name="image_path" type="file" accept=".jpg,.jpeg,.png,.webp"
                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                 <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG, WEBP. Maksimal 5MB.</p>
+                <p class="mt-1 text-xs text-blue-700 font-medium">Ukuran disarankan: 1200x360 px (rasio 10:3). Alternatif: 1000x300 px. Minimum: 800x240 px.</p>
             </div>
 
             <div>

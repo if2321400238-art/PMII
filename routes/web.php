@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\RayonController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
+use App\Http\Controllers\Admin\AdController as AdminAdController;
 use App\Http\Controllers\Admin\ProfilOrganisasiController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -37,7 +38,8 @@ Route::get('/galeri/{gallery}', [GalleryController::class, 'show'])->name('galle
 
 // Download Routes
 Route::get('/download', [DownloadController::class, 'index'])->name('download.index');
-Route::get('/download/{download}', [DownloadController::class, 'download'])->name('download.file');
+Route::get('/download/{download}', [DownloadController::class, 'show'])->name('download.show');
+Route::post('/download/{download}/file', [DownloadController::class, 'download'])->name('download.file');
 
 // Data Routes
 Route::get('/data', [DataController::class, 'index'])->name('data.index');
@@ -160,7 +162,10 @@ Route::middleware(['auth.any'])->prefix('admin')->name('admin.')->group(function
     });
 
     // Download Management (Admin only)
-    Route::middleware('role:admin')->resource('download', AdminDownloadController::class);
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('download', AdminDownloadController::class);
+        Route::resource('ads', AdminAdController::class)->except(['show']);
+    });
 
     // Profil Organisasi (Admin only)
     Route::middleware('role:admin')->group(function () {

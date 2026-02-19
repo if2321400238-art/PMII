@@ -53,6 +53,11 @@
             <a href="{{ route('admin.gallery.create') }}" class="block px-4 py-2 md:py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-center font-semibold text-sm md:text-base">
                 Upload Galeri
             </a>
+            @if($role === 'admin')
+            <a href="{{ route('admin.ads.index') }}" class="block px-4 py-2 md:py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-center font-semibold text-sm md:text-base">
+                Kelola Iklan
+            </a>
+            @endif
         </nav>
     </div>
 

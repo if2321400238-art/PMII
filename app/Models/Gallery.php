@@ -88,4 +88,61 @@ class Gallery extends Model
     {
         return $query->where('tahun', $tahun);
     }
+
+    public function getEmbedPlayerUrlAttribute(): ?string
+    {
+        if (!$this->embed_url) {
+            return null;
+        }
+
+        $url = trim($this->embed_url);
+        $host = parse_url($url, PHP_URL_HOST) ?? '';
+        $path = parse_url($url, PHP_URL_PATH) ?? '';
+
+        if (str_contains($host, 'youtube.com') || str_contains($host, 'youtu.be')) {
+            $videoId = $this->extractYoutubeId($url);
+            return $videoId ? "https://www.youtube.com/embed/{$videoId}" : $url;
+        }
+
+        if (str_contains($host, 'vimeo.com') && !str_contains($host, 'player.vimeo.com')) {
+            $videoId = trim($path, '/');
+            return $videoId ? "https://player.vimeo.com/video/{$videoId}" : $url;
+        }
+
+        return $url;
+    }
+
+    public function getVideoThumbnailUrlAttribute(): ?string
+    {
+        if (!$this->embed_url) {
+            return null;
+        }
+
+        $videoId = $this->extractYoutubeId($this->embed_url);
+        if ($videoId) {
+            return "https://i.ytimg.com/vi/{$videoId}/hqdefault.jpg";
+        }
+
+        return null;
+    }
+
+    private function extractYoutubeId(string $url): ?string
+    {
+        $parsedHost = parse_url($url, PHP_URL_HOST) ?? '';
+        $parsedPath = parse_url($url, PHP_URL_PATH) ?? '';
+        $query = parse_url($url, PHP_URL_QUERY) ?? '';
+
+        if (str_contains($parsedHost, 'youtu.be')) {
+            $id = trim($parsedPath, '/');
+            return $id !== '' ? $id : null;
+        }
+
+        if (str_contains($parsedPath, '/embed/')) {
+            $parts = explode('/embed/', $parsedPath);
+            return isset($parts[1]) && $parts[1] !== '' ? explode('/', $parts[1])[0] : null;
+        }
+
+        parse_str($query, $params);
+        return $params['v'] ?? null;
+    }
 }

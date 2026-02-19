@@ -171,40 +171,40 @@
         }
 
         // ==================== Hero Image Slider ====================
-        const heroSlides = document.querySelectorAll('.hero-slide');
-        const heroDots = document.querySelectorAll('.hero-dot');
+        document.querySelectorAll('[data-hero-slider-card]').forEach((card) => {
+            const heroSlides = Array.from(card.querySelectorAll('.hero-slide'));
+            const heroDots = Array.from(card.querySelectorAll('.hero-dot'));
+            if (heroSlides.length <= 1) return;
 
-        if (heroSlides.length > 1) {
-            let currentHeroSlide = 0;
+            let currentHeroSlide = heroSlides.findIndex((slide) => slide.classList.contains('opacity-100'));
+            if (currentHeroSlide < 0) currentHeroSlide = 0;
 
-            function showHeroSlide(index) {
+            const showHeroSlide = (index) => {
                 heroSlides.forEach((slide, i) => {
-                    if (i === index) {
-                        slide.classList.remove('opacity-0', 'z-0');
-                        slide.classList.add('opacity-100', 'z-10');
-                    } else {
-                        slide.classList.remove('opacity-100', 'z-10');
-                        slide.classList.add('opacity-0', 'z-0');
-                    }
+                    const isActive = i === index;
+                    slide.classList.toggle('hero-slide-active', isActive);
+                    slide.classList.toggle('opacity-100', isActive);
+                    slide.classList.toggle('z-10', isActive);
+                    slide.classList.toggle('opacity-0', !isActive);
+                    slide.classList.toggle('z-0', !isActive);
                 });
 
                 heroDots.forEach((dot, i) => {
-                    if (i === index) {
-                        dot.classList.remove('bg-white/50');
-                        dot.classList.add('bg-white');
-                    } else {
-                        dot.classList.remove('bg-white');
-                        dot.classList.add('bg-white/50');
-                    }
+                    const isActive = i === index;
+                    dot.classList.toggle('bg-white', isActive);
+                    dot.classList.toggle('bg-white/40', !isActive);
                 });
-            }
+            };
 
-            function nextHeroSlide() {
+            const isVisible = () => card.offsetParent !== null;
+            const nextHeroSlide = () => {
+                if (!isVisible()) return;
                 currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
                 showHeroSlide(currentHeroSlide);
-            }
+            };
 
-            setInterval(nextHeroSlide, 5000);
+            showHeroSlide(currentHeroSlide);
+            const intervalId = setInterval(nextHeroSlide, 5000);
 
             heroDots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
@@ -212,7 +212,9 @@
                     showHeroSlide(currentHeroSlide);
                 });
             });
-        }
+
+            void intervalId;
+        });
 
         // ==================== Search Functionality ====================
         const searchInput = document.getElementById('searchInput');
@@ -271,6 +273,168 @@
             cameraBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 alert('Fitur kamera akan segera tersedia');
+            });
+        }
+
+        // ==================== Data Kader Placeholder ====================
+        ['dataKader', 'dataKaderDesktop'].forEach((id) => {
+            const element = document.getElementById(id);
+            if (!element) return;
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Fitur ini akan segera tersedia');
+            });
+        });
+
+        // ==================== Reveal Animations ====================
+        const revealTargets = [
+            ...document.querySelectorAll('[data-reveal]'),
+            ...document.querySelectorAll('[data-reveal-card]')
+        ];
+
+        if (revealTargets.length > 0) {
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -8% 0px',
+            });
+
+            revealTargets.forEach((el) => revealObserver.observe(el));
+        }
+
+        // ==================== Cinematic Section Enter ====================
+        const cinematicTargets = document.querySelectorAll('[data-cinematic]');
+        if (cinematicTargets.length > 0) {
+            const cinematicObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-cinematic-visible');
+                    observer.unobserve(entry.target);
+                });
+            }, {
+                threshold: 0.16,
+                rootMargin: '0px 0px -10% 0px',
+            });
+
+            cinematicTargets.forEach((el) => cinematicObserver.observe(el));
+        }
+
+        // ==================== Scroll Progress + Title Parallax ====================
+        const parallaxTitles = Array.from(document.querySelectorAll('[data-parallax-title]'));
+        const reduceMotionPref = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!reduceMotionPref && parallaxTitles.length > 0) {
+            let ticking = false;
+
+            const updateMotion = () => {
+                parallaxTitles.forEach((title) => {
+                    const rect = title.getBoundingClientRect();
+                    const viewportCenter = window.innerHeight * 0.5;
+                    const delta = (rect.top + (rect.height * 0.5)) - viewportCenter;
+                    const offset = Math.max(Math.min(delta * -0.035, 14), -14);
+                    title.style.setProperty('--parallax-y', `${offset.toFixed(2)}px`);
+                });
+
+                ticking = false;
+            };
+
+            window.addEventListener('scroll', () => {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(updateMotion);
+            }, { passive: true });
+
+            window.addEventListener('resize', () => {
+                requestAnimationFrame(updateMotion);
+            }, { passive: true });
+
+            updateMotion();
+        }
+
+        // ==================== Premium Motion (Desktop Only) ====================
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const desktopFinePointer = window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches;
+
+        if (!reduceMotion && desktopFinePointer) {
+            const premiumRoot = document.querySelector('[data-premium-root]');
+            if (premiumRoot) {
+                const layers = Array.from(premiumRoot.querySelectorAll('[data-premium-layer]'));
+                const tilts = Array.from(premiumRoot.querySelectorAll('[data-premium-tilt]'));
+                let rafId = null;
+                let targetX = 0;
+                let targetY = 0;
+
+                const render = () => {
+                    layers.forEach((layer) => {
+                        const depth = Number(layer.getAttribute('data-premium-layer') || 0);
+                        const x = (targetX * depth).toFixed(2);
+                        const y = (targetY * depth).toFixed(2);
+                        layer.style.setProperty('--px', `${x}px`);
+                        layer.style.setProperty('--py', `${y}px`);
+                    });
+
+                    tilts.forEach((card) => {
+                        const rx = (-targetY * 1.9).toFixed(2);
+                        const ry = (targetX * 2.2).toFixed(2);
+                        card.style.setProperty('--rx', `${rx}deg`);
+                        card.style.setProperty('--ry', `${ry}deg`);
+                    });
+
+                    rafId = null;
+                };
+
+                premiumRoot.addEventListener('mousemove', (event) => {
+                    const rect = premiumRoot.getBoundingClientRect();
+                    const normalizedX = ((event.clientX - rect.left) / rect.width) - 0.5;
+                    const normalizedY = ((event.clientY - rect.top) / rect.height) - 0.5;
+                    targetX = normalizedX * 1.2;
+                    targetY = normalizedY * 1.2;
+
+                    if (!rafId) {
+                        rafId = requestAnimationFrame(render);
+                    }
+                }, { passive: true });
+
+                premiumRoot.addEventListener('mouseleave', () => {
+                    targetX = 0;
+                    targetY = 0;
+                    if (!rafId) {
+                        rafId = requestAnimationFrame(render);
+                    }
+                }, { passive: true });
+            }
+
+            // Magnetic hover for key CTA buttons
+            document.querySelectorAll('[data-magnetic]').forEach((el) => {
+                let raf = null;
+                let mx = 0;
+                let my = 0;
+
+                const render = () => {
+                    el.style.setProperty('--mx', `${mx.toFixed(2)}px`);
+                    el.style.setProperty('--my', `${my.toFixed(2)}px`);
+                    raf = null;
+                };
+
+                el.addEventListener('mousemove', (event) => {
+                    const rect = el.getBoundingClientRect();
+                    const relX = ((event.clientX - rect.left) / rect.width) - 0.5;
+                    const relY = ((event.clientY - rect.top) / rect.height) - 0.5;
+                    mx = relX * 7;
+                    my = relY * 5;
+                    if (!raf) raf = requestAnimationFrame(render);
+                }, { passive: true });
+
+                el.addEventListener('mouseleave', () => {
+                    mx = 0;
+                    my = 0;
+                    if (!raf) raf = requestAnimationFrame(render);
+                }, { passive: true });
             });
         }
     });

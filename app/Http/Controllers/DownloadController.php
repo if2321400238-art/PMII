@@ -16,6 +16,19 @@ class DownloadController extends Controller
         return view('frontend.download', compact('downloads', 'kategoris'));
     }
 
+    public function show(Download $download)
+    {
+        if (!$download->fileExists()) {
+            return redirect()->route('download.index')->with('error', 'File tidak ditemukan.');
+        }
+
+        $extension = pathinfo($download->file_path, PATHINFO_EXTENSION);
+        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']);
+        $isPdf = strtolower($extension) === 'pdf';
+
+        return view('frontend.download-show', compact('download', 'extension', 'isImage', 'isPdf'));
+    }
+
     public function download(Download $download)
     {
         // Use public disk to match storage:link path

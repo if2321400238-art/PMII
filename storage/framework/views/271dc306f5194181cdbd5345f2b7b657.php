@@ -1,6 +1,6 @@
-<section class="bg-white py-10 md:py-12">
+<section class="bg-white py-10 md:py-12 section-reveal cinematic-section" data-reveal data-cinematic>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6 md:mb-8">Galeri</h2>
+        <h2 class="parallax-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6 md:mb-8" data-parallax-title>Galeri</h2>
 
         
         <div class="lg:hidden relative">
@@ -19,7 +19,7 @@
             <div id="galleryCarousel" class="overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide mx-8">
                 <div class="flex gap-4 py-2">
                     <?php $__empty_1 = true; $__currentLoopData = $galleryHighlight; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <article class="flex-none w-full bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-80 cursor-pointer" onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
+                        <article class="card-reveal subtle-hover flex-none w-full bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-80 cursor-pointer" style="--reveal-delay: <?php echo e($loop->index * 80); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
                             <?php if($gallery->file_path): ?>
                                 <img src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover">
                             <?php else: ?>
@@ -49,7 +49,7 @@
         <div class="hidden lg:grid grid-cols-3 gap-6">
             <?php $__empty_1 = true; $__currentLoopData = $galleryHighlight; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <?php if($index === 0): ?>
-                    <article class="col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative min-h-[320px] cursor-pointer" onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
+                    <article class="card-reveal subtle-hover col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative min-h-[320px] cursor-pointer" style="--reveal-delay: <?php echo e($index * 70); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
                         <?php if($gallery->file_path): ?>
                             <img src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover">
                         <?php else: ?>
@@ -65,7 +65,7 @@
                         </div>
                     </article>
                 <?php else: ?>
-                    <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-48 cursor-pointer" onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
+                    <article class="card-reveal subtle-hover bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-48 cursor-pointer" style="--reveal-delay: <?php echo e($index * 70); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
                         <?php if($gallery->file_path): ?>
                             <img src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover">
                         <?php else: ?>

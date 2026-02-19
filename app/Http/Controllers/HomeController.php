@@ -37,7 +37,8 @@ class HomeController extends Controller
             ->with(['author', 'category'])
             ->get();
 
-        $galleryHighlight = Gallery::latest()
+        $galleryHighlight = Gallery::approved()
+            ->latest()
             ->take(5)
             ->get();
 

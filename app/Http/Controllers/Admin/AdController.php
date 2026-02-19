@@ -27,12 +27,14 @@ class AdController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'position' => ['required', Rule::in(['berita_left'])],
-            'image_path' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'image_path' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:ratio=10/3,min_width=800,min_height=240'],
             'target_url' => ['nullable', 'url', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
             'start_at' => ['nullable', 'date'],
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
+        ], [
+            'image_path.dimensions' => 'Rasio gambar harus 10:3 (contoh 1200x360 atau 1000x300), minimal 800x240.',
         ]);
 
         $validated['image_path'] = $request->file('image_path')->store('ads', 'public');
@@ -54,12 +56,14 @@ class AdController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'position' => ['required', Rule::in(['berita_left'])],
-            'image_path' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'image_path' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:ratio=10/3,min_width=800,min_height=240'],
             'target_url' => ['nullable', 'url', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
             'start_at' => ['nullable', 'date'],
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
+        ], [
+            'image_path.dimensions' => 'Rasio gambar harus 10:3 (contoh 1200x360 atau 1000x300), minimal 800x240.',
         ]);
 
         if ($request->hasFile('image_path')) {

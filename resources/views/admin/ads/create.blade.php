@@ -30,6 +30,7 @@
                 <input id="image_path" name="image_path" type="file" accept=".jpg,.jpeg,.png,.webp" required
                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                 <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG, WEBP. Maksimal 5MB.</p>
+                <p class="mt-1 text-xs text-blue-700 font-medium">Ukuran disarankan: 1200x360 px (rasio 10:3). Alternatif: 1000x300 px. Minimum: 800x240 px.</p>
             </div>
 
             <div>
