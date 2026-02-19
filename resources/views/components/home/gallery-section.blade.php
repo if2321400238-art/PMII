@@ -1,16 +1,16 @@
-<section class="bg-white py-12">
+<section class="bg-white py-10 md:py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-blue-700 mb-8">Galeri</h2>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6 md:mb-8">Galeri</h2>
 
         {{-- Mobile: Carousel --}}
         <div class="lg:hidden relative">
-            <button id="prevGallery" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110">
+            <button id="prevGallery" aria-label="Galeri sebelumnya" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </button>
 
-            <button id="nextGallery" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110">
+            <button id="nextGallery" aria-label="Galeri berikutnya" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
                 </svg>
@@ -19,7 +19,7 @@
             <div id="galleryCarousel" class="overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide mx-8">
                 <div class="flex gap-4 py-2">
                     @forelse($galleryHighlight as $gallery)
-                        <article class="flex-none w-full bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-72 cursor-pointer" onclick="window.location.href='{{ route('gallery.show', $gallery->id) }}'">
+                        <article class="flex-none w-full bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-80 cursor-pointer" onclick="window.location.href='{{ route('gallery.show', $gallery->id) }}'">
                             @if ($gallery->file_path)
                                 <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
                             @else
@@ -27,7 +27,7 @@
                             @endif
                             <div class="absolute inset-0 bg-gradient-to-t from-blue-900 via-transparent to-transparent"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
-                                <div class="inline-block bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Galeri</div>
+                                <div class="inline-block bg-gradient-to-r from-yellow-500 to-yellow-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Galeri</div>
                                 <h3 class="text-lg font-bold mb-2 line-clamp-2">
                                     <a href="{{ route('gallery.show', $gallery->id) }}" class="hover:text-yellow-400">{{ $gallery->title }}</a>
                                 </h3>

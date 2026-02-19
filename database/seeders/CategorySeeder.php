@@ -14,6 +14,11 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
+                'name' => 'Berita',
+                'slug' => 'berita',
+                'description' => 'Kategori berita otomatis',
+            ],
+            [
                 'name' => 'Organisasi',
                 'slug' => 'organisasi',
                 'description' => 'Berita seputar organisasi PMII',

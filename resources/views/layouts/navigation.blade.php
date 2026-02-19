@@ -84,7 +84,7 @@
         <!-- Mobile Menu Button + User Info -->
         <div class="flex items-center gap-4 ml-auto">
             <!-- Mobile Menu Button (Only Mobile) -->
-            <button @click="open = !open" class="md:hidden p-2 hover:bg-blue-800 rounded-lg transition">
+            <button @click="open = !open" :aria-expanded="open.toString()" aria-controls="mobileMenuPanel" aria-label="Buka menu navigasi" class="md:hidden min-w-11 min-h-11 p-2 hover:bg-blue-800 rounded-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -120,7 +120,7 @@
 
 
     <!-- Mobile Menu -->
-    <div x-show="open"
+    <div id="mobileMenuPanel" x-show="open"
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 -translate-y-2"
          x-transition:enter-end="opacity-100 translate-y-0"

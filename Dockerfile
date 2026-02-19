@@ -26,6 +26,9 @@ RUN apk add --no-cache \
     imagemagick \
     imagemagick-dev
 
+# Install Node.js & npm
+RUN apk add --no-cache nodejs npm
+
 # Install imagick from PECL
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && pecl install imagick \

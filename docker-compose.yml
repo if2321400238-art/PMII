@@ -10,10 +10,14 @@ services:
         volumes:
             - './storage:/var/www/storage'
             - './.env.docker:/var/www/.env'
+            - './database:/var/www/database'
             - './resources/views:/var/www/resources/views'
             - './app:/var/www/app'
             - './routes:/var/www/routes'
             - './public/images:/var/www/public/images'
+            - './public/build:/var/www/public/build'
+            - './resources/css:/var/www/resources/css'
+            - './resources/js:/var/www/resources/js'
         environment:
             - APP_ENV=${APP_ENV:-production}
             - APP_DEBUG=${APP_DEBUG:-true}

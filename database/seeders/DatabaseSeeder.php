@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             RayonSeeder::class,
             ProfilOrganisasiSeeder::class,
+            BeritaDanGallerySeeder::class,
         ]);
 
         $roleIds = Role::whereIn('slug', ['admin', 'rayon'])

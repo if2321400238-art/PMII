@@ -1,77 +1,115 @@
-<div class="bg-white h-screen overflow-hidden">
-    <div class="p-4 md:p-6 h-full">
-        <div class="bg-[#1e3a5f] rounded-3xl overflow-hidden h-full flex flex-col relative">
+<style>
+    .hero-mobile-card {
+        height: clamp(240px, 44vh, 380px);
+    }
+
+    @media (min-width: 768px) {
+        .hero-mobile-card {
+            height: auto;
+            flex: 1 1 0%;
+            min-height: 0;
+        }
+    }
+</style>
+
+<div class="bg-slate-50 overflow-hidden" style="height: calc(var(--app-vh, 1vh) * 100);">
+    <div class="p-3 sm:p-4 md:p-6 h-full">
+        <div class="bg-[#1e3a5f] rounded-3xl overflow-hidden h-full flex flex-col relative shadow-2xl shadow-[#0f172a]/40">
             <?php echo $__env->make('layouts.navigation', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
             <?php
                 $heroImages = array_filter([
                     $profil->hero_image ?? null,
                     $profil->hero_image_2 ?? null,
-                   $profil->hero_image_3 ?? null,
+                    $profil->hero_image_3 ?? null,
                 ]);
             ?>
 
-            <div class="relative z-10 px-4 md:px-6 pb-4 flex-1 flex flex-col overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-4 mt-6 flex-1 min-h-0">
-
-                    
-                    <div class="lg:col-span-5 flex flex-col gap-2 opacity-0-start animate-fade-in-left">
-                        <div class="relative rounded-2xl overflow-hidden border border-white/20 flex-1 min-h-0 h-[360px] sm:h-[420px] md:h-auto">
+            <div class="relative z-10 px-3 sm:px-4 md:px-6 pb-3 md:pb-4 flex-1 flex flex-col overflow-visible md:overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-4 mt-2 md:mt-6 flex-1 min-h-0">
+                    <div class="lg:col-span-5 flex flex-col gap-3 md:gap-2 opacity-0-start animate-fade-in-left">
+                        <div class="hero-mobile-card relative rounded-3xl overflow-hidden border border-white/20 shadow-xl shadow-black/30">
                             <?php if(count($heroImages) > 0): ?>
                                 <div class="hero-slider absolute inset-0">
                                     <?php $__currentLoopData = $heroImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $heroImage): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="hero-slide absolute inset-0 transition-opacity duration-1000 <?php echo e($index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'); ?>" data-index="<?php echo e($index); ?>">
-                                            <img src="<?php echo e(asset('storage/' . $heroImage)); ?>" alt="Hero Background <?php echo e($index + 1); ?>" class="w-full h-full object-cover">
-                                            <div class="absolute inset-0 bg-black/40"></div>
-                                            <div class="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-[#1e3a5f]/30 to-[#1e3a5f]/50"></div>
+                                            <img src="<?php echo e(asset('storage/' . $heroImage)); ?>" alt="Hero PMII <?php echo e($index + 1); ?>" class="w-full h-full object-cover">
+                                            <div class="absolute inset-0 bg-black/50"></div>
+                                            <div class="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-[#1e3a5f]/35 to-[#1e3a5f]/55"></div>
                                         </div>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             <?php else: ?>
-                                <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800"></div>
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-700 to-blue-900"></div>
                             <?php endif; ?>
 
                             <div class="absolute inset-0 flex flex-col justify-between p-4 md:p-6 z-20">
-                                <div class="text-xs md:text-sm uppercase tracking-wider text-white drop-shadow-lg" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                                    PMII KOMISARIAT UNIVERSITAS NURUL JADID
+                                <div class="flex items-center justify-between gap-3">
+                                    <span class="inline-flex items-center rounded-full bg-white/15 border border-white/30 px-3 py-1 text-[11px] sm:text-xs uppercase tracking-wider text-white/95 backdrop-blur-sm">
+                                        PMII UNUJA
+                                    </span>
+                                    <span class="inline-flex items-center rounded-full bg-yellow-400/90 px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-[#0f172a]">
+                                        Organisasi Mahasiswa
+                                    </span>
                                 </div>
+
                                 <div>
-                                    <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-white leading-tight mb-4 drop-shadow-lg" style="text-shadow: 0 2px 8px rgba(0,0,0,0.5);">
-                                        PERGERAKAN<br>MAHASISWA<br>ISLAM INDONESIA
-                                    </h2>
-                                    <a href="<?php echo e(route('posts.berita')); ?>" class="px-4 py-2 bg-yellow-500 border border-yellow-400 rounded-full text-[#0f172a] text-xs md:text-sm font-bold hover:bg-yellow-400 hover:scale-105 transition-all duration-300 shadow-lg animate-pulse-glow">
-                                        Baca Berita
-                                    </a>
+                                    <h1 class="text-2xl sm:text-3xl md:text-2xl lg:text-3xl font-bold text-white leading-tight mb-2 drop-shadow-lg">
+                                        Bergerak, Kritis, dan Berdaya
+                                    </h1>
+                                    <p class="text-sm text-white/85 leading-relaxed mb-4 max-w-sm">
+                                        Wadah kaderisasi intelektual dan kepemimpinan mahasiswa Islam di Universitas Nurul Jadid.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2.5">
+                                        <a href="<?php echo e(route('posts.berita')); ?>" class="inline-flex min-h-11 items-center justify-center rounded-full bg-yellow-400 px-4 py-2 text-sm font-bold text-[#0f172a] hover:bg-yellow-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e3a5f] transition">
+                                            Baca Berita
+                                        </a>
+                                        <a href="<?php echo e(route('about.profil')); ?>" class="inline-flex min-h-11 items-center justify-center rounded-full border border-white/50 bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e3a5f] transition">
+                                            Tentang PMII
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
                             <?php if(count($heroImages) > 1): ?>
-                                <div class="absolute bottom-4 right-4 z-20 flex gap-2">
+                                <div class="absolute bottom-4 right-4 z-20 flex gap-2" role="tablist" aria-label="Slide hero">
                                     <?php $__currentLoopData = $heroImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $heroImage): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <button class="hero-dot w-2 h-2 rounded-full <?php echo e($index === 0 ? 'bg-white' : 'bg-white/40'); ?> transition-all duration-300" data-slide="<?php echo e($index); ?>"></button>
+                                        <button
+                                            class="hero-dot h-2.5 rounded-full <?php echo e($index === 0 ? 'w-6 bg-white' : 'w-2.5 bg-white/40'); ?> transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                            data-slide="<?php echo e($index); ?>"
+                                            aria-label="Tampilkan slide <?php echo e($index + 1); ?>"
+                                        ></button>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             <?php endif; ?>
                         </div>
 
-                        <div class="mt-3 grid grid-cols-2 gap-2 md:hidden">
-                            <div class="rounded-xl bg-[#0f172a] border border-yellow-500/30 px-3 py-2 text-center">
-                                <div class="text-sm font-bold text-yellow-400"><?php echo e($stats['rayon']); ?></div>
-                                <div class="text-[10px] uppercase text-white/70">Rayon</div>
+                        <div class="grid grid-cols-2 gap-2 md:hidden">
+                            <div class="rounded-2xl bg-[#0f172a] border border-yellow-500/30 px-3 py-3 text-center shadow-lg">
+                                <div class="text-lg font-bold text-yellow-300"><?php echo e($stats['rayon']); ?></div>
+                                <div class="text-[11px] uppercase tracking-wide text-white/75">Rayon Aktif</div>
                             </div>
-                            <div class="rounded-xl bg-[#0f172a] border border-yellow-500/30 px-3 py-2 text-center">
-                                <div class="text-sm font-bold text-yellow-400"><?php echo e($stats['anggota']); ?></div>
-                                <div class="text-[10px] uppercase text-white/70">Kader</div>
+                            <div class="rounded-2xl bg-[#0f172a] border border-yellow-500/30 px-3 py-3 text-center shadow-lg">
+                                <div class="text-lg font-bold text-yellow-300"><?php echo e($stats['anggota']); ?></div>
+                                <div class="text-[11px] uppercase tracking-wide text-white/75">Kader</div>
                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 md:hidden">
+                            <a href="<?php echo e(route('gallery.index')); ?>" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 bg-[#0f172a] px-3 py-2 text-sm font-semibold text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition">
+                                Galeri
+                            </a>
+                            <a href="#" id="dataKader" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 bg-[#0f172a] px-3 py-2 text-sm font-semibold text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition">
+                                Data Kader
+                            </a>
                         </div>
 
                         <div class="hidden md:flex gap-2 opacity-0-start animate-fade-in-up delay-300">
                             <a href="<?php echo e(route('gallery.index')); ?>" class="flex-1 py-2 bg-[#0f172a] border border-white/20 rounded-full text-white text-center text-sm font-medium hover:bg-blue-700 hover:scale-105 transition-all duration-300">GALERI</a>
-                            <a href="#" id="dataKader" class="flex-1 py-2 bg-[#0f172a] border border-white/20 rounded-full text-white text-center text-sm font-medium hover:bg-blue-700 hover:scale-105 transition-all duration-300">DATA KADER</a>
+                            <a href="#" id="dataKaderDesktop" class="flex-1 py-2 bg-[#0f172a] border border-white/20 rounded-full text-white text-center text-sm font-medium hover:bg-blue-700 hover:scale-105 transition-all duration-300">DATA KADER</a>
                         </div>
                     </div>
 
-                    
                     <div class="hidden md:flex lg:col-span-7 flex-col gap-2 opacity-0-start animate-fade-in-right delay-200">
                         <div class="flex items-center gap-4">
                             <div class="flex-1 relative">
@@ -91,7 +129,7 @@
                         </div>
 
                         <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 md:p-5 flex-1 min-h-0 flex flex-col opacity-0-start animate-scale-in delay-300">
-                            <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3">Apa itu PMII?</h1>
+                            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3">Apa itu PMII?</h2>
                             <p class="text-white/80 text-sm leading-relaxed mb-4">
                                 PMII adalah organisasi kemahasiswaan yang berafiliasi dengan Nahdlatul Ulama (NU). Didirikan pada 17 April 1960, PMII berkomitmen membentuk kader intelektual yang religius, kritis, dan aktif dalam pembangunan masyarakat Indonesia.
                             </p>
@@ -133,13 +171,24 @@
         </div>
     </div>
 </div>
-<script>
-if (dataKader) {
-            dataKader.addEventListener('click', (e) => {
-                e.preventDefault();
-                alert('Fitur ini akan segera tersedia');
-            });
-        }
-</script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const showDataKaderMessage = function (event) {
+            event.preventDefault();
+            alert('Fitur ini akan segera tersedia');
+        };
+
+        const dataKaderMobile = document.getElementById('dataKader');
+        const dataKaderDesktop = document.getElementById('dataKaderDesktop');
+
+        if (dataKaderMobile) {
+            dataKaderMobile.addEventListener('click', showDataKaderMessage);
+        }
+
+        if (dataKaderDesktop) {
+            dataKaderDesktop.addEventListener('click', showDataKaderMessage);
+        }
+    });
+</script>
 <?php /**PATH /var/www/resources/views/components/home/hero-section.blade.php ENDPATH**/ ?>

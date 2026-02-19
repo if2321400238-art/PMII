@@ -133,6 +133,15 @@
                         @error('thumbnail')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Caption Gambar</label>
+                        <textarea name="thumbnail_caption" rows="2"
+                                  placeholder="Contoh: Dokumentasi kegiatan PMII UNUJA"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition @error('thumbnail_caption') border-red-500 @enderror">{{ old('thumbnail_caption') }}</textarea>
+                        <p class="text-xs text-gray-500 mt-2">Opsional. Caption akan tampil di bawah gambar pada halaman berita.</p>
+                        @error('thumbnail_caption')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
+                    </div>
+
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tanggal Publikasi</label>

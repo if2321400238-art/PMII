@@ -62,6 +62,7 @@ class PostController extends Controller
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail_caption' => 'nullable|string|max:500',
             'is_popular' => 'boolean',
             'published_at' => 'nullable|date',
         ]);
@@ -124,6 +125,7 @@ class PostController extends Controller
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail_caption' => 'nullable|string|max:500',
             'is_popular' => 'boolean',
             'published_at' => 'nullable|date',
         ]);

@@ -5,9 +5,9 @@
         <?php if($profil): ?>
             <!-- Logo & Nama -->
             <div class="text-center mb-12">
-                <div>
+                <div class="flex justify-center items-center mb-8">
                     <img src="<?php echo e(asset('images/logo-pmii.png')); ?>" alt="Logo PMII"
-                        style="width: 80px; height: 80px; border-radius: 9999px; object-fit: cover; border: 4px solid #facc15; box-shadow: 0 0 30px rgba(234, 179, 8, 0.6), inset 0 0 20px rgba(234, 179, 8, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                        style="width: 100px; height: 100px; border-radius: 9999px; object-fit: cover; border: 4px solid #facc15; box-shadow: 0 0 30px rgba(234, 179, 8, 0.6), inset 0 0 20px rgba(234, 179, 8, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.25);" class="mx-auto">
                 </div>
                 <h1 class="text-4xl font-bold"><?php echo e($profil->nama_organisasi); ?></h1>
             </div>

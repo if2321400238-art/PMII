@@ -146,7 +146,7 @@
                 <?php if(request()->routeIs('home')): ?>
                     <?php echo $__env->yieldContent('home-section'); ?>
                 <?php else: ?>
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
                 <?php echo $__env->yieldContent('content'); ?>
                 </div>
                 <?php endif; ?>
@@ -158,6 +158,16 @@
         </div>
 
         <script>
+            // Mobile viewport height fix (avoids 100vh issues with browser UI bars)
+            function setAppViewportHeight() {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--app-vh', `${vh}px`);
+            }
+
+            setAppViewportHeight();
+            window.addEventListener('resize', setAppViewportHeight);
+            window.addEventListener('orientationchange', setAppViewportHeight);
+
             // Only run loading screen script if it exists (homepage only)
             const loadingScreen = document.getElementById('loadingScreen');
 

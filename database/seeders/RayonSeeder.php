@@ -59,7 +59,10 @@ class RayonSeeder extends Seeder
         ];
 
         foreach ($rayons as $rayon) {
-            Rayon::create($rayon);
+            Rayon::updateOrCreate(
+                ['email' => $rayon['email']],
+                $rayon
+            );
         }
     }
 }

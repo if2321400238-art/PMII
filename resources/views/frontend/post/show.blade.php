@@ -3,7 +3,7 @@
 @section('title', $post->title . ' - PMII')
 
 @section('content')
-<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 md:pt-32">
+<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-4 md:pt-8">
     <!-- Breadcrumb -->
     <div class="mb-8">
         <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-700">Beranda</a>
@@ -17,6 +17,16 @@
         <span class="text-gray-700">{{ $post->title }}</span>
     </div>
 
+    <!-- Featured Image -->
+    @if($post->thumbnail)
+        <div class="mb-8">
+            <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full rounded-lg shadow-lg">
+            @if($post->thumbnail_caption)
+                <p class="mt-3 text-sm text-gray-500 italic">{{ $post->thumbnail_caption }}</p>
+            @endif
+        </div>
+    @endif
+
     <!-- Header -->
     <header class="mb-8 pb-8 border-b">
         <div class="mb-4">
@@ -26,16 +36,9 @@
         <div class="flex flex-wrap items-center gap-4 text-gray-600">
             <span>Oleh <strong>{{ $post->author?->name ?? 'Unknown' }}</strong></span>
             <span>{{ $post->published_at?->format('d F Y') }}</span>
-            <span>👁️ {{ $post->view_count }} views</span>
+            <span>{{ $post->view_count }} views</span>
         </div>
     </header>
-
-    <!-- Featured Image -->
-    @if($post->thumbnail)
-        <div class="mb-8">
-            <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full rounded-lg shadow-lg">
-        </div>
-    @endif
 
     <!-- Content -->
     <div class="prose prose-lg max-w-none mb-12">
@@ -59,7 +62,7 @@
                                 <a href="{{ route('posts.show', $related->slug) }}" class="hover:text-blue-600">{{ $related->title }}</a>
                             </h3>
                             <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ strip_tags($related->content) }}</p>
-                            <a href="{{ route('posts.show', $related->slug) }}" class="text-blue-600 hover:text-blue-700 font-semibold">Baca →</a>
+                            <a href="{{ route('posts.show', $related->slug) }}" class="text-blue-600 hover:text-blue-700 font-semibold">Baca -></a>
                         </div>
                     </article>
                 @endforeach
