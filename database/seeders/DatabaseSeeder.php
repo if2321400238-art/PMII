@@ -28,22 +28,26 @@ class DatabaseSeeder extends Seeder
             ->pluck('id', 'slug');
 
         // Create Admin User
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@PMII.com',
-            'password' => bcrypt('password'),
-            'role_id' => $roleIds->get('admin'),
-            'email_verified_at' => now(),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@PMII.com'],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt('password'),
+                'role_id' => $roleIds->get('admin'),
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Create BPH Rayon User (assign ke Rayon pertama)
         $firstRayon = \App\Models\Rayon::first();
-        User::create([
-            'name' => 'BPH Rayon',
-            'email' => 'bphrayon@PMII.com',
-            'password' => bcrypt('password'),
-            'role_id' => $roleIds->get('rayon'),
-            'email_verified_at' => now(),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'bphrayon@PMII.com'],
+            [
+                'name' => 'BPH Rayon',
+                'password' => bcrypt('password'),
+                'role_id' => $roleIds->get('rayon'),
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
