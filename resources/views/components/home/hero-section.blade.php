@@ -12,9 +12,9 @@
     }
 </style>
 
-<div class="bg-slate-50 overflow-hidden" style="height: calc(var(--app-vh, 1vh) * 100);">
-    <div class="p-3 sm:p-4 md:p-6 h-full">
-        <div class="bg-[#1e3a5f] rounded-3xl overflow-hidden h-full flex flex-col relative shadow-2xl shadow-[#0f172a]/40">
+<div class="bg-slate-50 overflow-hidden" style="min-height: calc(var(--app-vh, 1vh) * 100);">
+    <div class="p-3 sm:p-4 md:p-6 h-auto md:h-full">
+        <div class="bg-[#1e3a5f] rounded-3xl overflow-hidden h-auto md:h-full flex flex-col relative shadow-2xl shadow-[#0f172a]/40">
             @include('layouts.navigation')
 
             @php
