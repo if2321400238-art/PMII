@@ -32,7 +32,12 @@ class GalleryController extends Controller
 
     public function show(Gallery $gallery)
     {
-        $related = Gallery::where('kegiatan', $gallery->kegiatan)
+        if ($gallery->approval_status !== 'approved') {
+            abort(404);
+        }
+
+        $related = Gallery::approved()
+            ->where('kegiatan', $gallery->kegiatan)
             ->where('id', '!=', $gallery->id)
             ->latest()
             ->take(3)

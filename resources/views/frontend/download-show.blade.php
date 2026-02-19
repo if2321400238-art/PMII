@@ -20,16 +20,16 @@
                 <div class="aspect-video bg-gray-100 flex items-center justify-center p-4">
                     @if($isPdf)
                         <!-- PDF Preview -->
-                        <iframe 
-                            src="{{ asset('storage/' . $download->file_path) }}#toolbar=0&navpanes=0&scrollbar=0" 
+                        <iframe
+                            src="{{ asset('storage/' . $download->file_path) }}#toolbar=0&navpanes=0&scrollbar=0"
                             class="w-full h-full rounded"
                             title="PDF Preview">
                         </iframe>
                     @elseif($isImage)
                         <!-- Image Preview -->
-                        <img 
-                            src="{{ asset('storage/' . $download->file_path) }}" 
-                            alt="{{ $download->nama_file }}" 
+                        <img
+                            src="{{ asset('storage/' . $download->file_path) }}"
+                            alt="{{ $download->nama_file }}"
                             class="max-w-full max-h-full object-contain rounded"
                         >
                     @else
@@ -47,7 +47,7 @@
                 <!-- File Info -->
                 <div class="border-t p-6">
                     <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $download->nama_file }}</h1>
-                    
+
                     <div class="flex flex-wrap items-center gap-4 mb-6">
                         <span class="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
                             {{ str_replace('_', ' ', ucfirst($download->kategori)) }}
@@ -85,8 +85,8 @@
                 <!-- Download Button -->
                 <form action="{{ route('download.file', $download) }}" method="POST" class="w-full">
                     @csrf
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition shadow-md"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,8 +97,8 @@
                 </form>
 
                 <!-- Back Button -->
-                <a 
-                    href="{{ route('download.index') }}" 
+                <a
+                    href="{{ route('download.index') }}"
                     class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

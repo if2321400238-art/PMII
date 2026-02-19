@@ -20,12 +20,31 @@
                 <div class="flex gap-4 py-2">
                     @forelse($galleryHighlight as $gallery)
                         <article class="card-reveal subtle-hover flex-none w-full bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-80 cursor-pointer" style="--reveal-delay: {{ $loop->index * 80 }}ms;" data-reveal-card onclick="window.location.href='{{ route('gallery.show', $gallery->id) }}'">
-                            @if ($gallery->file_path)
-                                <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                            @if ($gallery->type === 'video')
+                                @if($gallery->file_path)
+                                    <video class="w-full h-full object-cover" muted playsinline preload="metadata">
+                                        <source src="{{ asset('storage/' . $gallery->file_path) }}" type="video/mp4">
+                                    </video>
+                                @elseif($gallery->video_thumbnail_url)
+                                    <img src="{{ $gallery->video_thumbnail_url }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center">
+                                        <svg class="w-14 h-14 text-white/85" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </div>
+                                @endif
                             @else
-                                <div class="w-full h-full bg-gradient-to-br from-yellow-500 to-blue-600"></div>
+                                @if ($gallery->file_path)
+                                    <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-yellow-500 to-blue-600"></div>
+                                @endif
                             @endif
                             <div class="absolute inset-0 bg-gradient-to-t from-blue-900 via-transparent to-transparent"></div>
+                            @if($gallery->type === 'video')
+                                <div class="absolute top-4 right-4 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-semibold text-white">Video</div>
+                            @endif
                             <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
                                 <div class="inline-block bg-gradient-to-r from-yellow-500 to-yellow-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Galeri</div>
                                 <h3 class="text-lg font-bold mb-2 line-clamp-2">
@@ -50,12 +69,31 @@
             @forelse($galleryHighlight as $index => $gallery)
                 @if ($index === 0)
                     <article class="card-reveal subtle-hover col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative min-h-[320px] cursor-pointer" style="--reveal-delay: {{ $index * 70 }}ms;" data-reveal-card onclick="window.location.href='{{ route('gallery.show', $gallery->id) }}'">
-                        @if ($gallery->file_path)
-                            <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                        @if ($gallery->type === 'video')
+                            @if($gallery->file_path)
+                                <video class="w-full h-full object-cover" muted playsinline preload="metadata">
+                                    <source src="{{ asset('storage/' . $gallery->file_path) }}" type="video/mp4">
+                                </video>
+                            @elseif($gallery->video_thumbnail_url)
+                                <img src="{{ $gallery->video_thumbnail_url }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-white/85" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            @endif
                         @else
-                            <div class="w-full h-full bg-gradient-to-br from-yellow-500 to-blue-600"></div>
+                            @if ($gallery->file_path)
+                                <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-yellow-500 to-blue-600"></div>
+                            @endif
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-blue-900 via-transparent to-transparent"></div>
+                        @if($gallery->type === 'video')
+                            <div class="absolute top-4 right-4 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-semibold text-white">Video</div>
+                        @endif
                         <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
                             <div class="inline-block bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Galeri</div>
                             <h3 class="text-2xl font-bold mb-2">
@@ -66,12 +104,31 @@
                     </article>
                 @else
                     <article class="card-reveal subtle-hover bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-48 cursor-pointer" style="--reveal-delay: {{ $index * 70 }}ms;" data-reveal-card onclick="window.location.href='{{ route('gallery.show', $gallery->id) }}'">
-                        @if ($gallery->file_path)
-                            <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                        @if ($gallery->type === 'video')
+                            @if($gallery->file_path)
+                                <video class="w-full h-full object-cover" muted playsinline preload="metadata">
+                                    <source src="{{ asset('storage/' . $gallery->file_path) }}" type="video/mp4">
+                                </video>
+                            @elseif($gallery->video_thumbnail_url)
+                                <img src="{{ $gallery->video_thumbnail_url }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center">
+                                    <svg class="w-12 h-12 text-white/85" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            @endif
                         @else
-                            <div class="w-full h-full bg-gradient-to-br from-yellow-500 to-blue-600"></div>
+                            @if ($gallery->file_path)
+                                <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-yellow-500 to-blue-600"></div>
+                            @endif
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-blue-900 via-transparent to-transparent"></div>
+                        @if($gallery->type === 'video')
+                            <div class="absolute top-3 right-3 rounded-full bg-black/45 px-2 py-1 text-[10px] font-semibold text-white">Video</div>
+                        @endif
                         <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
                             <div class="inline-block bg-gradient-to-l from-blue-500 to-blue-700 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">Galeri</div>
                             <h3 class="text-base font-bold line-clamp-2">

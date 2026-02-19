@@ -1,26 +1,35 @@
 <?php $__env->startSection('title', 'Galeri - PMII'); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="">
+<div>
     <h1 class="text-4xl font-bold mb-8">Galeri</h1>
 
-    <!-- Gallery Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <?php $__empty_1 = true; $__currentLoopData = $galleries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <a href="<?php echo e(route('gallery.show', $gallery)); ?>" class="relative group overflow-hidden rounded-lg shadow-md h-48">
                 <?php if($gallery->type === 'photo' && $gallery->file_path): ?>
                     <img src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                 <?php elseif($gallery->type === 'video'): ?>
-                    <div class="w-full h-full bg-gray-800 flex items-center justify-center">
-                        <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </div>
+                    <?php if($gallery->file_path): ?>
+                        <video class="w-full h-full object-cover" muted playsinline preload="metadata">
+                            <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" type="video/mp4">
+                        </video>
+                    <?php elseif($gallery->video_thumbnail_url): ?>
+                        <img src="<?php echo e($gallery->video_thumbnail_url); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    <?php else: ?>
+                        <div class="w-full h-full bg-gray-800 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                    <?php endif; ?>
+                    <div class="absolute top-3 right-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white">Video</div>
                 <?php else: ?>
                     <div class="w-full h-full bg-gray-300 flex items-center justify-center">
-                        <span class="text-4xl">📷</span>
+                        <span class="text-gray-600 text-sm">Media</span>
                     </div>
                 <?php endif; ?>
+
                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
                     <div class="text-white opacity-0 group-hover:opacity-100 transition-opacity text-center px-4">
                         <p class="font-bold line-clamp-2"><?php echo e($gallery->title); ?></p>
@@ -37,7 +46,6 @@
         <?php endif; ?>
     </div>
 
-    <!-- Pagination -->
     <div class="flex justify-center">
         <?php echo e($galleries->links()); ?>
 
