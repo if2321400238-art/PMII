@@ -14,7 +14,7 @@
                 @elseif($gallery->type === 'video')
                     @if($gallery->file_path)
                         <video class="w-full h-full object-cover" muted playsinline preload="metadata">
-                            <source src="{{ asset('storage/' . $gallery->file_path) }}" type="video/mp4">
+                            <source src="{{ asset('storage/' . $gallery->file_path) }}">
                         </video>
                     @elseif($gallery->video_thumbnail_url)
                         <img src="{{ $gallery->video_thumbnail_url }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">

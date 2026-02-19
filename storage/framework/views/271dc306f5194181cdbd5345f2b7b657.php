@@ -23,7 +23,7 @@
                             <?php if($gallery->type === 'video'): ?>
                                 <?php if($gallery->file_path): ?>
                                     <video class="w-full h-full object-cover" muted playsinline preload="metadata">
-                                        <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" type="video/mp4">
+                                        <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>">
                                     </video>
                                 <?php elseif($gallery->video_thumbnail_url): ?>
                                     <img src="<?php echo e($gallery->video_thumbnail_url); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover">
@@ -72,7 +72,7 @@
                         <?php if($gallery->type === 'video'): ?>
                             <?php if($gallery->file_path): ?>
                                 <video class="w-full h-full object-cover" muted playsinline preload="metadata">
-                                    <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" type="video/mp4">
+                                    <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>">
                                 </video>
                             <?php elseif($gallery->video_thumbnail_url): ?>
                                 <img src="<?php echo e($gallery->video_thumbnail_url); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover">
@@ -107,7 +107,7 @@
                         <?php if($gallery->type === 'video'): ?>
                             <?php if($gallery->file_path): ?>
                                 <video class="w-full h-full object-cover" muted playsinline preload="metadata">
-                                    <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" type="video/mp4">
+                                    <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>">
                                 </video>
                             <?php elseif($gallery->video_thumbnail_url): ?>
                                 <img src="<?php echo e($gallery->video_thumbnail_url); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover">

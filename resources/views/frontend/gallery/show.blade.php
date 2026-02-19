@@ -21,7 +21,7 @@
                     <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-auto max-h-[560px] object-cover">
                 @elseif($gallery->file_path)
                     <video controls preload="metadata" class="w-full h-auto max-h-[560px] bg-black">
-                        <source src="{{ asset('storage/' . $gallery->file_path) }}" type="video/mp4">
+                        <source src="{{ asset('storage/' . $gallery->file_path) }}">
                         Browser Anda tidak mendukung pemutaran video.
                     </video>
                 @elseif($gallery->embed_player_url)
@@ -74,7 +74,7 @@
                                     @elseif($item->file_path)
                                         <div class="h-32 overflow-hidden bg-black relative">
                                             <video class="w-full h-full object-cover" muted playsinline preload="metadata">
-                                                <source src="{{ asset('storage/' . $item->file_path) }}" type="video/mp4">
+                                                <source src="{{ asset('storage/' . $item->file_path) }}">
                                             </video>
                                             <span class="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-semibold text-white">Video</span>
                                         </div>

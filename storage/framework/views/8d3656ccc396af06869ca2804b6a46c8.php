@@ -27,8 +27,8 @@
 
                     <div class="mt-4">
                         <?php if($download->fileExists()): ?>
-                            <a href="<?php echo e(route('download.file', $download)); ?>" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                Download
+                            <a href="<?php echo e(route('download.show', $download)); ?>" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                Lihat Detail & Download
                             </a>
                         <?php else: ?>
                             <button type="button" disabled class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-500 rounded-lg text-sm cursor-not-allowed">
@@ -74,8 +74,8 @@
                             <td class="px-6 py-4 text-gray-600"><?php echo e($download->deskripsi ?? '-'); ?></td>
                             <td class="px-6 py-4 text-center">
                                 <?php if($download->fileExists()): ?>
-                                    <a href="<?php echo e(route('download.file', $download)); ?>" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-                                        Download
+                                    <a href="<?php echo e(route('download.show', $download)); ?>" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                        Lihat Detail & Download
                                     </a>
                                 <?php else: ?>
                                     <button type="button" disabled class="inline-block px-4 py-2 bg-gray-300 text-gray-500 rounded-lg text-sm cursor-not-allowed">
