@@ -1,6 +1,7 @@
 <style>
     .hero-shell {
         height: calc(var(--app-vh, 1vh) * 100);
+        overflow: hidden;
     }
 
     .hero-mobile-media {
@@ -11,6 +12,77 @@
         background-image:
             radial-gradient(circle at 20% 20%, rgba(250, 204, 21, 0.18), transparent 35%),
             radial-gradient(circle at 80% 85%, rgba(59, 130, 246, 0.28), transparent 45%);
+    }
+
+    .hero-mobile-contrast::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(6, 16, 34, 0.26) 0%,
+            rgba(6, 16, 34, 0.46) 38%,
+            rgba(6, 16, 34, 0.68) 100%
+        );
+        pointer-events: none;
+        z-index: 15;
+    }
+
+    .hero-mobile-content {
+        position: relative;
+        z-index: 20;
+    }
+
+    .hero-mobile-layout {
+        display: flex;
+    }
+
+    .hero-desktop-layout {
+        display: none;
+    }
+
+    @media (min-width: 768px) {
+        .hero-shell {
+            height: calc(var(--app-vh, 1vh) * 100);
+            overflow: hidden;
+        }
+
+        .hero-inner {
+            height: 100%;
+        }
+
+        .hero-surface {
+            height: 100%;
+        }
+
+        .hero-content-wrap {
+            height: 100%;
+            min-height: 0;
+            padding-bottom: 16px;
+        }
+
+        .hero-mobile-layout {
+            display: none;
+        }
+
+        .hero-desktop-layout {
+            display: grid;
+            height: 100%;
+            min-height: 0;
+            padding-bottom: 6px;
+        }
+
+        .hero-desktop-col {
+            min-height: 0;
+        }
+    }
+
+    .hero-mobile-title {
+        text-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+    }
+
+    .hero-mobile-desc {
+        text-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
     }
 </style>
 
@@ -23,14 +95,14 @@
 @endphp
 
 <section class="bg-slate-100 overflow-hidden hero-shell">
-    <div class="h-full p-3 sm:p-4 md:p-6">
-        <div class="h-full rounded-3xl bg-[#1e3a5f] shadow-2xl shadow-[#0f172a]/40 border border-white/10 overflow-hidden flex flex-col">
+    <div class="hero-inner h-full p-3 sm:p-4 md:p-6">
+        <div class="hero-surface h-full rounded-3xl bg-[#1e3a5f] shadow-2xl shadow-[#0f172a]/40 border border-white/10 overflow-hidden flex flex-col">
             @include('layouts.navigation')
 
-            <div class="relative flex-1 min-h-0 px-3 sm:px-4 md:px-6 pb-3 md:pb-4 hero-noise">
+            <div class="hero-content-wrap relative flex-1 min-h-0 px-3 sm:px-4 md:px-6 pb-3 md:pb-3 hero-noise">
                 <!-- Mobile -->
-                <div class="md:hidden h-full flex flex-col gap-3">
-                    <div class="relative flex-1 min-h-0 hero-mobile-media rounded-3xl border border-white/20 overflow-hidden shadow-xl shadow-black/30">
+                <div class="hero-mobile-layout h-full flex-col gap-3">
+                    <div class="hero-mobile-contrast relative flex-1 min-h-0 hero-mobile-media rounded-3xl border border-white/20 overflow-hidden shadow-xl shadow-black/30">
                         @if (count($heroImages) > 0)
                             <div class="hero-slider absolute inset-0">
                                 @foreach ($heroImages as $index => $heroImage)
@@ -54,16 +126,16 @@
                                 </span>
                             </div>
 
-                            <div>
-                                <h1 class="text-4xl leading-tight font-bold text-white mb-2 tracking-tight">Bergerak, Kritis, dan Berdaya</h1>
-                                <p class="text-sm text-white/90 leading-relaxed mb-4">
+                            <div class="hero-mobile-content p-4 rounded-2xl bg-gradient-to-t from-[#071a35]/55 via-[#071a35]/28 to-transparent">
+                                <h1 class="hero-mobile-title text-4xl leading-tight font-bold text-white mb-2 tracking-tight">Bergerak, Kritis, dan Berdaya</h1>
+                                <p class="hero-mobile-desc text-base text-white leading-relaxed mb-4">
                                     Wadah kaderisasi intelektual dan kepemimpinan mahasiswa Islam di Universitas Nurul Jadid.
                                 </p>
                                 <div class="flex gap-2">
                                     <a href="{{ route('posts.berita') }}" class="inline-flex min-h-11 items-center justify-center rounded-full bg-yellow-400 px-4 text-sm font-bold text-[#0f172a] hover:bg-yellow-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 transition">
                                         Baca Berita
                                     </a>
-                                    <a href="{{ route('about.profil') }}" class="inline-flex min-h-11 items-center justify-center rounded-full border border-white/50 bg-white/15 px-4 text-sm font-semibold text-white hover:bg-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition">
+                                    <a href="{{ route('about.profil') }}" class="inline-flex min-h-11 items-center justify-center rounded-full border border-white/60 bg-white/15 px-4 text-sm font-semibold text-white hover:bg-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition">
                                         Tentang PMII
                                     </a>
                                 </div>
@@ -114,8 +186,8 @@
                 </div>
 
                 <!-- Desktop -->
-                <div class="hidden md:grid grid-cols-1 lg:grid-cols-12 gap-4 mt-6 h-full min-h-0">
-                    <div class="lg:col-span-5 flex flex-col gap-2 opacity-0-start animate-fade-in-left min-h-0">
+                <div class="hero-desktop-layout grid-cols-1 lg:grid-cols-12 gap-4 mt-4">
+                    <div class="hero-desktop-col lg:col-span-5 flex flex-col gap-2">
                         <div class="relative rounded-2xl overflow-hidden border border-white/20 flex-1 min-h-0 shadow-xl shadow-black/30">
                             @if (count($heroImages) > 0)
                                 <div class="hero-slider absolute inset-0">
@@ -151,13 +223,13 @@
                             @endif
                         </div>
 
-                        <div class="flex gap-2 opacity-0-start animate-fade-in-up delay-300">
+                        <div class="flex gap-2">
                             <a href="{{ route('gallery.index') }}" class="flex-1 py-2 bg-[#0f172a] border border-white/20 rounded-full text-white text-center text-sm font-medium hover:bg-blue-700 transition-all duration-300">GALERI</a>
                             <a href="#" id="dataKaderDesktop" class="flex-1 py-2 bg-[#0f172a] border border-white/20 rounded-full text-white text-center text-sm font-medium hover:bg-blue-700 transition-all duration-300">DATA KADER</a>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-7 flex flex-col gap-2 opacity-0-start animate-fade-in-right delay-200">
+                    <div class="hero-desktop-col lg:col-span-7 flex flex-col gap-2">
                         <div class="flex items-center gap-4">
                             <div class="flex-1 relative">
                                 <input type="text" id="searchInput" placeholder="Search........" class="w-full bg-[#0f172a] border border-white/20 rounded-full px-4 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:border-yellow-500 transition" />
@@ -175,7 +247,7 @@
                             </button>
                         </div>
 
-                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 md:p-5 flex-1 min-h-0 flex flex-col opacity-0-start animate-scale-in delay-300">
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 md:p-4 flex-1 min-h-0 flex flex-col">
                             <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3">Apa itu PMII?</h2>
                             <p class="text-white/80 text-sm leading-relaxed mb-4">
                                 PMII adalah organisasi kemahasiswaan yang berafiliasi dengan Nahdlatul Ulama (NU). Didirikan pada 17 April 1960, PMII berkomitmen membentuk kader intelektual yang religius, kritis, dan aktif dalam pembangunan masyarakat Indonesia.
@@ -201,7 +273,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-2 opacity-0-start animate-fade-in-up delay-400">
+                        <div class="flex items-center gap-2">
                             <a href="{{ route('about.rayon') }}" class="flex-1 py-2 bg-[#0f172a] border border-white/20 rounded-xl text-white text-center text-sm font-medium hover:bg-blue-700 transition-all duration-300">RAYON</a>
                             <div class="flex-1 flex justify-center">
                                 <a href="#tentang-pmii" class="px-4 py-2 bg-white/5 border border-white/30 rounded-full text-white text-xs font-medium hover:bg-white/10 transition-all duration-300 flex items-center gap-2">
