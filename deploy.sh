@@ -33,9 +33,24 @@ if [[ ! -f docker-compose.yml ]]; then
 fi
 
 log "🔍 Cek perubahan lokal repository"
-if [[ -n "$(git status --porcelain)" ]]; then
+
+# Jika force reset, bersihkan cache views dan stash changes terlebih dahulu
+if [[ -n "$(git status --porcelain)" ]] || [[ -n "$(git status --porcelain --untracked)" ]]; then
 	if [[ "$FORCE_RESET" == true ]]; then
-		log "⚠️ Repository kotor, menjalankan hard reset karena --force-reset"
+		log "⚠️ Repository kotor, membersihkan sebelum reset..."
+		
+		# Bersihkan storage/framework/views yang mungkin locked
+		if [[ -d storage/framework/views ]]; then
+			log "🧹 Bersihkan cached views..."
+			rm -rf storage/framework/views/*.php 2>/dev/null || true
+		fi
+		
+		# Stash local changes
+		log "📦 Stash perubahan lokal..."
+		git stash --include-untracked || true
+		
+		# Reset hard ke origin/main
+		log "🔄 Hard reset ke origin/main..."
 		git fetch origin
 		git reset --hard origin/main
 		git clean -fd
@@ -63,12 +78,13 @@ for _ in {1..20}; do
 	sleep 2
 done
 
+log "🔒 Perbaiki permission storage, cache dan views"
+run_dc exec -T -u root app sh -lc "chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public/build && chmod -R ug+rwX /var/www/storage /var/www/bootstrap/cache /var/www/public/build"
+run_dc exec -T -u root app sh -lc "rm -rf /var/www/storage/framework/views/*.php 2>/dev/null || true"
+
 log "🧩 Install dependency Node + build assets (di dalam container app)"
 run_dc exec -T app npm ci
 run_dc exec -T app npm run build
-
-log "🔒 Perbaiki permission storage dan cache"
-run_dc exec -T -u root app sh -lc "chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public/build && chmod -R ug+rwX /var/www/storage /var/www/bootstrap/cache /var/www/public/build"
 
 log "🗄️ Jalankan migrasi"
 run_dc exec -T app php artisan migrate --force
