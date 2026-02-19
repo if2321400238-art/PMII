@@ -12,9 +12,9 @@
     }
 </style>
 
-<div class="bg-slate-50 overflow-hidden" style="min-height: calc(var(--app-vh, 1vh) * 100);">
-    <div class="p-3 sm:p-4 md:p-6 h-auto md:h-full">
-        <div class="bg-[#1e3a5f] rounded-3xl overflow-hidden h-auto md:h-full flex flex-col relative shadow-2xl shadow-[#0f172a]/40">
+<div class="bg-slate-50 overflow-hidden" style="height: calc(var(--app-vh, 1vh) * 100);">
+    <div class="p-3 sm:p-4 md:p-6 h-full">
+        <div class="bg-[#1e3a5f] rounded-3xl overflow-hidden h-full flex flex-col relative shadow-2xl shadow-[#0f172a]/40">
             @include('layouts.navigation')
 
             @php
@@ -27,7 +27,7 @@
 
             <div class="relative z-10 px-3 sm:px-4 md:px-6 pb-3 md:pb-4 flex-1 flex flex-col overflow-visible md:overflow-hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-4 mt-2 md:mt-6 flex-1 min-h-0">
-                    <div class="lg:col-span-5 flex flex-col gap-3 md:gap-2 opacity-0-start animate-fade-in-left">
+                    <div class="lg:col-span-5 flex flex-col gap-3 md:gap-2 opacity-0-start animate-fade-in-left h-full">
                         <div class="hero-mobile-card relative rounded-3xl overflow-hidden border border-white/20 shadow-xl shadow-black/30">
                             @if (count($heroImages) > 0)
                                 <div class="hero-slider absolute inset-0">
@@ -103,6 +103,13 @@
                                 Data Kader
                             </a>
                         </div>
+
+                        <a href="#tentang-pmii" class="mt-auto md:hidden inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white/90 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition">
+                            <span>Lanjut ke Tentang PMII</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </a>
 
                         <div class="hidden md:flex gap-2 opacity-0-start animate-fade-in-up delay-300">
                             <a href="{{ route('gallery.index') }}" class="flex-1 py-2 bg-[#0f172a] border border-white/20 rounded-full text-white text-center text-sm font-medium hover:bg-blue-700 hover:scale-105 transition-all duration-300">GALERI</a>
