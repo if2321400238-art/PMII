@@ -2,17 +2,17 @@
 
 <?php $__env->startSection('content'); ?>
 <div>
-    <h1 class="text-4xl font-bold mb-8">Galeri</h1>
+    <h1 class="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-blue-900">Galeri</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 mb-10 md:mb-12">
         <?php $__empty_1 = true; $__currentLoopData = $galleries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <a href="<?php echo e(route('gallery.show', $gallery)); ?>" class="relative group overflow-hidden rounded-lg shadow-md h-48">
+            <a href="<?php echo e(route('gallery.show', $gallery)); ?>" class="relative group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 h-56 md:h-52 bg-slate-100">
                 <?php if($gallery->type === 'photo' && $gallery->file_path): ?>
                     <img src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                 <?php elseif($gallery->type === 'video'): ?>
                     <?php if($gallery->file_path): ?>
                         <video class="w-full h-full object-cover" muted playsinline preload="metadata">
-                            <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>" type="video/mp4">
+                            <source src="<?php echo e(asset('storage/' . $gallery->file_path)); ?>">
                         </video>
                     <?php elseif($gallery->video_thumbnail_url): ?>
                         <img src="<?php echo e($gallery->video_thumbnail_url); ?>" alt="<?php echo e($gallery->title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
@@ -30,13 +30,12 @@
                     </div>
                 <?php endif; ?>
 
-                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
-                    <div class="text-white opacity-0 group-hover:opacity-100 transition-opacity text-center px-4">
-                        <p class="font-bold line-clamp-2"><?php echo e($gallery->title); ?></p>
-                        <?php if($gallery->kegiatan): ?>
-                            <p class="text-sm text-gray-300"><?php echo e($gallery->kegiatan); ?></p>
+                <div class="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-blue-900/40 to-transparent"></div>
+                <div class="absolute bottom-0 inset-x-0 p-4 text-white">
+                    <p class="font-bold leading-snug line-clamp-2 break-words"><?php echo e($gallery->title); ?></p>
+                    <?php if($gallery->kegiatan): ?>
+                            <p class="text-sm text-gray-200 mt-1 line-clamp-1 break-words"><?php echo e($gallery->kegiatan); ?></p>
                         <?php endif; ?>
-                    </div>
                 </div>
             </a>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

@@ -1,16 +1,16 @@
-<section class="bg-white py-10 md:py-12 section-reveal cinematic-section" data-reveal data-cinematic>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
-        <h2 class="parallax-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6 md:mb-8" data-parallax-title>Galeri</h2>
+<section class="bg-white py-12 md:py-14 section-reveal cinematic-section premium-section" data-reveal data-cinematic>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <h2 class="parallax-title premium-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-700 mb-7 md:mb-9" data-parallax-title>Galeri</h2>
 
         
         <div class="lg:hidden relative">
-            <button id="prevGallery" aria-label="Galeri sebelumnya" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+            <button id="prevGallery" aria-label="Galeri sebelumnya" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-lg transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </button>
 
-            <button id="nextGallery" aria-label="Galeri berikutnya" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+            <button id="nextGallery" aria-label="Galeri berikutnya" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-blue-700 hover:bg-blue-800 text-white rounded-full p-2 shadow-lg transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
                 </svg>
@@ -19,7 +19,7 @@
             <div id="galleryCarousel" class="overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide mx-8">
                 <div class="flex gap-4 py-2">
                     <?php $__empty_1 = true; $__currentLoopData = $galleryHighlight; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <article class="card-reveal subtle-hover flex-none w-full bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-80 cursor-pointer" style="--reveal-delay: <?php echo e($loop->index * 80); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
+                        <article class="card-reveal subtle-hover flex-none w-full bg-white rounded-3xl shadow-lg overflow-hidden transition transform hover:-translate-y-1 relative h-80 cursor-pointer border border-slate-200/70 premium-elevated" style="--reveal-delay: <?php echo e($loop->index * 80); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
                             <?php if($gallery->type === 'video'): ?>
                                 <?php if($gallery->file_path): ?>
                                     <video class="w-full h-full object-cover" muted playsinline preload="metadata">
@@ -45,12 +45,12 @@
                             <?php if($gallery->type === 'video'): ?>
                                 <div class="absolute top-4 right-4 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-semibold text-white">Video</div>
                             <?php endif; ?>
-                            <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
-                                <div class="inline-block bg-gradient-to-r from-yellow-500 to-yellow-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Galeri</div>
-                                <h3 class="text-lg font-bold mb-2 line-clamp-2">
+                            <div class="absolute bottom-0 left-0 right-0 p-5 text-white min-h-[124px] flex flex-col justify-end">
+                                <div class="inline-block bg-gradient-to-r from-yellow-500 to-yellow-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 w-fit">Galeri</div>
+                                <h3 class="text-lg font-bold mb-2 line-clamp-2 leading-snug break-words">
                                     <a href="<?php echo e(route('gallery.show', $gallery->id)); ?>" class="hover:text-yellow-400"><?php echo e($gallery->title); ?></a>
                                 </h3>
-                                <p class="text-gray-200 text-sm line-clamp-2"><?php echo e(strip_tags($gallery->description)); ?></p>
+                                <p class="text-gray-200 text-sm line-clamp-2 break-words"><?php echo e(strip_tags($gallery->description)); ?></p>
                             </div>
                         </article>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
@@ -68,7 +68,7 @@
         <div class="hidden lg:grid grid-cols-3 gap-6">
             <?php $__empty_1 = true; $__currentLoopData = $galleryHighlight; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <?php if($index === 0): ?>
-                    <article class="card-reveal subtle-hover col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative min-h-[320px] cursor-pointer" style="--reveal-delay: <?php echo e($index * 70); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
+                    <article class="card-reveal subtle-hover col-span-1 row-span-2 bg-white rounded-3xl shadow-lg overflow-hidden transition transform hover:-translate-y-1 relative min-h-[320px] cursor-pointer border border-slate-200/70 premium-elevated" style="--reveal-delay: <?php echo e($index * 70); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
                         <?php if($gallery->type === 'video'): ?>
                             <?php if($gallery->file_path): ?>
                                 <video class="w-full h-full object-cover" muted playsinline preload="metadata">
@@ -94,16 +94,16 @@
                         <?php if($gallery->type === 'video'): ?>
                             <div class="absolute top-4 right-4 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-semibold text-white">Video</div>
                         <?php endif; ?>
-                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                            <div class="inline-block bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">Galeri</div>
-                            <h3 class="text-2xl font-bold mb-2">
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white min-h-[140px] flex flex-col justify-end">
+                            <div class="inline-block bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 w-fit">Galeri</div>
+                            <h3 class="text-2xl font-bold mb-2 line-clamp-2 leading-snug break-words">
                                 <a href="<?php echo e(route('gallery.show', $gallery->id)); ?>" class="hover:text-yellow-400"><?php echo e($gallery->title); ?></a>
                             </h3>
-                            <p class="text-gray-200 text-sm line-clamp-2"><?php echo e(strip_tags($gallery->description)); ?></p>
+                            <p class="text-gray-200 text-sm line-clamp-2 break-words"><?php echo e(strip_tags($gallery->description)); ?></p>
                         </div>
                     </article>
                 <?php else: ?>
-                    <article class="card-reveal subtle-hover bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-1 relative h-48 cursor-pointer" style="--reveal-delay: <?php echo e($index * 70); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
+                    <article class="card-reveal subtle-hover bg-white rounded-3xl shadow-lg overflow-hidden transition transform hover:-translate-y-1 relative h-48 cursor-pointer border border-slate-200/70 premium-elevated" style="--reveal-delay: <?php echo e($index * 70); ?>ms;" data-reveal-card onclick="window.location.href='<?php echo e(route('gallery.show', $gallery->id)); ?>'">
                         <?php if($gallery->type === 'video'): ?>
                             <?php if($gallery->file_path): ?>
                                 <video class="w-full h-full object-cover" muted playsinline preload="metadata">

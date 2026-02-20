@@ -154,8 +154,8 @@
             nextBtnId: 'nextBerita',
             dotsId: 'beritaDots',
             getCardsPerPage: () => window.innerWidth >= 1024 ? 3 : 1,
-            dotActiveClass: 'w-8 h-2.5 rounded-full bg-white transition-all duration-300',
-            dotInactiveClass: 'w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300'
+            dotActiveClass: 'w-9 h-2.5 rounded-full bg-white shadow-lg shadow-white/35 transition-all duration-300',
+            dotInactiveClass: 'w-2.5 h-2.5 rounded-full bg-white/35 hover:bg-white/60 transition-all duration-300'
         });
 
         if (window.innerWidth < 1024) {
@@ -165,7 +165,7 @@
                 nextBtnId: 'nextGallery',
                 dotsId: 'galleryDots',
                 getCardsPerPage: () => 1,
-                dotActiveClass: 'w-8 h-2.5 rounded-full bg-blue-700 transition-all duration-300',
+                dotActiveClass: 'w-9 h-2.5 rounded-full bg-blue-700 shadow-lg shadow-blue-400/40 transition-all duration-300',
                 dotInactiveClass: 'w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300'
             });
         }
