@@ -1,4 +1,4 @@
-<section class="news-pinboard-section py-12 md:py-14 overflow-hidden section-reveal cinematic-section premium-section" data-reveal data-cinematic>
+<section class="news-pinboard-section py-14 md:py-18 overflow-hidden section-reveal cinematic-section premium-section" data-reveal data-cinematic>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <h2 class="parallax-title premium-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#1d4ed8] mb-7 md:mb-9" data-parallax-title>Berita Terkini</h2>
 

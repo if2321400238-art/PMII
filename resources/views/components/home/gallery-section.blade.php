@@ -68,7 +68,7 @@
         <div class="hidden lg:grid grid-cols-3 gap-6">
             @forelse($galleryHighlight as $index => $gallery)
                 @if ($index === 0)
-                    <article class="card-reveal subtle-hover col-span-1 row-span-2 bg-white rounded-3xl shadow-lg overflow-hidden transition transform hover:-translate-y-1 relative min-h-[320px] cursor-pointer border border-slate-200/70 premium-elevated" style="--reveal-delay: {{ $index * 70 }}ms;" data-reveal-card onclick="window.location.href='{{ route('gallery.show', $gallery->id) }}'">
+                    <article class="card-reveal subtle-hover col-span-1 row-span-2 bg-white rounded-3xl shadow-lg overflow-hidden transition transform hover:-translate-y-1 relative h-[420px] cursor-pointer border border-slate-200/70 premium-elevated" style="--reveal-delay: {{ $index * 70 }}ms;" data-reveal-card onclick="window.location.href='{{ route('gallery.show', $gallery->id) }}'">
                         @if ($gallery->type === 'video')
                             @if($gallery->file_path)
                                 <video class="w-full h-full object-cover" muted playsinline preload="metadata">
@@ -147,7 +147,7 @@
             @if ($galleryHighlight->count() < 5)
                 @for ($i = $galleryHighlight->count(); $i < 5; $i++)
                     @if ($i === 0)
-                        <article class="col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden relative min-h-[320px]">
+                        <article class="col-span-1 row-span-2 bg-white rounded-2xl shadow-xl overflow-hidden relative h-[420px]">
                             <div class="w-full h-full bg-gradient-to-br from-yellow-400 to-yellow-500"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-blue-900 via-transparent to-transparent"></div>
                             <div class="absolute bottom-0 left-0 right-0 p-6 text-white">

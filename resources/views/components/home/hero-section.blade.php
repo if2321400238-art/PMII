@@ -96,7 +96,7 @@
     })->values()->all();
 @endphp
 
-<section class="bg-slate-100 overflow-hidden hero-shell">
+<section class="bg-slate-50 overflow-hidden hero-shell">
     <div class="hero-inner h-full p-3 sm:p-4 md:p-6">
         <div class="hero-surface h-full rounded-3xl bg-[#1e3a5f] shadow-[#0f172a]/40 border border-white/10 overflow-hidden flex flex-col">
             @include('layouts.navigation')
@@ -126,9 +126,7 @@
                                 <span class="inline-flex rounded-full border border-white/40 bg-white/10 px-3 py-1 text-[11px] font-medium tracking-wide uppercase text-white backdrop-blur-sm">
                                     PMII UNUJA
                                 </span>
-                                <span class="inline-flex rounded-full bg-yellow-400 px-3 py-1 text-[11px] font-semibold text-[#0f172a]">
-                                    Organisasi Mahasiswa
-                                </span>
+                                
                             </div>
 
                             <div class="hero-mobile-content p-4 rounded-2xl bg-gradient-to-t from-[#071a35]/55 via-[#071a35]/28 to-transparent">

@@ -190,17 +190,7 @@
         }
 
         .news-pinboard-section {
-            background:
-                radial-gradient(circle at 14% 14%, rgba(59, 130, 246, 0.2), transparent 42%),
-                radial-gradient(circle at 84% 80%, rgba(245, 158, 11, 0.2), transparent 40%),
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(15, 23, 42, 0.04) 0,
-                    rgba(15, 23, 42, 0.04) 1px,
-                    transparent 1px,
-                    transparent 58px
-                ),
-                #f5f6fa;
+            background: #ffffff;
         }
 
         .news-pinboard-section.premium-section::before {
@@ -223,7 +213,18 @@
             inset: 10px;
             border-radius: 30px;
             border: 1px solid rgba(148, 163, 184, 0.18);
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.12));
+            background:
+                radial-gradient(circle at 14% 14%, rgba(59, 130, 246, 0.2), transparent 42%),
+                radial-gradient(circle at 84% 80%, rgba(245, 158, 11, 0.2), transparent 40%),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(15, 23, 42, 0.04) 0,
+                    rgba(15, 23, 42, 0.04) 1px,
+                    transparent 1px,
+                    transparent 58px
+                ),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.12)),
+                #f5f6fa;
             z-index: 0;
             pointer-events: none;
         }
@@ -243,7 +244,7 @@
             cursor: pointer;
             z-index: 4;
             transition: transform 220ms ease, box-shadow 220ms ease;
-            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.22);
+            box-shadow: none;
         }
 
         .news-pinboard-card:hover {
@@ -281,6 +282,7 @@
             border-radius: 18px;
             border: 1px solid rgba(203, 213, 225, 0.75);
             overflow: hidden;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.22);
         }
 
         .news-card-sheet::after {
