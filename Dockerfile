@@ -92,6 +92,8 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["/usr/local/bin/entrypoint.sh"]
