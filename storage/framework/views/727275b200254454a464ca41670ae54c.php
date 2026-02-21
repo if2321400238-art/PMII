@@ -356,6 +356,48 @@
             updateMotion();
         }
 
+        // ==================== Pinboard Swing On Scroll ====================
+        const pinboardCards = Array.from(document.querySelectorAll('.news-pinboard-card'));
+
+        if (!reduceMotionPref && pinboardCards.length > 0) {
+            let swingVelocity = 0;
+            let swingAngle = 0;
+            let lastScrollY = window.scrollY;
+            let swingFrame = null;
+
+            const renderSwing = () => {
+                swingVelocity *= 0.9;
+                swingAngle += swingVelocity;
+                swingAngle *= 0.86;
+
+                pinboardCards.forEach((card, index) => {
+                    const direction = index % 2 === 0 ? 1 : -1;
+                    const factor = 1 - (index * 0.08);
+                    const angle = Math.max(Math.min(swingAngle * direction * factor, 5.5), -5.5);
+                    card.style.setProperty('--scroll-swing', `${angle.toFixed(2)}deg`);
+                });
+
+                if (Math.abs(swingVelocity) > 0.02 || Math.abs(swingAngle) > 0.02) {
+                    swingFrame = requestAnimationFrame(renderSwing);
+                } else {
+                    pinboardCards.forEach((card) => card.style.setProperty('--scroll-swing', '0deg'));
+                    swingFrame = null;
+                }
+            };
+
+            window.addEventListener('scroll', () => {
+                const currentY = window.scrollY;
+                const deltaY = currentY - lastScrollY;
+                lastScrollY = currentY;
+
+                swingVelocity += Math.max(Math.min(deltaY * 0.018, 0.65), -0.65);
+
+                if (!swingFrame) {
+                    swingFrame = requestAnimationFrame(renderSwing);
+                }
+            }, { passive: true });
+        }
+
         // ==================== Premium Motion (Desktop Only) ====================
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const desktopFinePointer = window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches;

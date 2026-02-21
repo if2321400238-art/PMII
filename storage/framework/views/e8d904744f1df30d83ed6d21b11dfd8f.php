@@ -239,15 +239,18 @@
 
         .news-pinboard-card {
             position: absolute;
-            transform-origin: top center;
+            --tilt: 0deg;
+            --scroll-swing: 0deg;
+            transform-origin: 50% -10px;
+            transform: rotate(calc(var(--tilt) + var(--scroll-swing)));
             cursor: pointer;
             z-index: 4;
-            transition: transform 220ms ease, box-shadow 220ms ease;
+            transition: transform 140ms ease-out, box-shadow 220ms ease;
             box-shadow: none;
         }
 
         .news-pinboard-card:hover {
-            transform: translateY(-4px) rotate(var(--tilt, 0deg));
+            transform: translateY(-4px) rotate(calc(var(--tilt) + var(--scroll-swing)));
         }
 
         .news-card-pin {
@@ -332,28 +335,24 @@
                 top: 164px;
                 left: 10px;
                 --tilt: -8deg;
-                transform: rotate(-8deg);
             }
 
             .news-pinboard-card.pin-b {
                 top: 94px;
                 right: 10px;
                 --tilt: 8deg;
-                transform: rotate(8deg);
             }
 
             .news-pinboard-card.pin-c {
                 top: 374px;
                 right: 22px;
                 --tilt: -7deg;
-                transform: rotate(-7deg);
             }
 
             .news-pinboard-card.pin-d {
                 top: 560px;
                 left: 12px;
                 --tilt: 7deg;
-                transform: rotate(7deg);
             }
 
             .news-card-media {
@@ -395,28 +394,24 @@
                 top: 140px;
                 left: 8%;
                 --tilt: -10deg;
-                transform: rotate(-10deg);
             }
 
             .news-pinboard-card.pin-b {
                 top: 34px;
                 right: 9%;
                 --tilt: 9deg;
-                transform: rotate(9deg);
             }
 
             .news-pinboard-card.pin-c {
                 top: 320px;
                 right: 14%;
                 --tilt: -8deg;
-                transform: rotate(-8deg);
             }
 
             .news-pinboard-card.pin-d {
                 top: 440px;
                 left: 8%;
                 --tilt: 8deg;
-                transform: rotate(8deg);
             }
 
             .news-card-pin {
@@ -593,6 +588,7 @@
             .cta-shimmer,
             .magnetic-hover,
             .parallax-title,
+            .news-pinboard-card,
             .cinematic-section {
                 animation: none !important;
                 transform: none !important;
