@@ -7,6 +7,7 @@ use App\Helpers\AuthHelper;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
+use App\Services\MediaCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class PostController extends Controller
 {
     use AuthorizesRequests;
+
+    public function __construct(private readonly MediaCompressionService $mediaCompressionService)
+    {
+    }
 
     public function index(Request $request)
     {
@@ -68,7 +73,10 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');
+            $validated['thumbnail'] = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('thumbnail'),
+                'posts'
+            );
         }
 
         // Generate unique slug
@@ -113,12 +121,16 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
+
         $categories = Category::all();
         return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     public function update(Request $request, Post $post)
     {
+        $this->authorize('update', $post);
+
         $validated = $request->validate([
             'type' => 'required|in:berita,pena_santri',
             'title' => 'required|string|max:255',
@@ -131,7 +143,10 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');
+            $validated['thumbnail'] = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('thumbnail'),
+                'posts'
+            );
         }
 
         // Generate unique slug only if title changed
@@ -170,6 +185,8 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
+
         $post->delete();
         return redirect()->route('admin.posts.index')->with('success', 'Post berhasil dihapus');
     }
@@ -207,6 +224,13 @@ class PostController extends Controller
 
     public function publish(Request $request, Post $post)
     {
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+
+        if ($userType !== 'user' || $currentUser->role_slug !== 'admin') {
+            abort(403, 'Unauthorized access');
+        }
+
         $validated = $request->validate([
             'published_at' => 'required|date',
         ]);

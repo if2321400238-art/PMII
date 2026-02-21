@@ -30,7 +30,7 @@ class AnggotaPolicy
      */
     public function create(Authenticatable $user): bool
     {
-        return in_array($this->role($user), ['admin', 'rayon_admin']);
+        return in_array($this->role($user), ['admin', 'rayon']);
     }
 
     /**
@@ -38,7 +38,7 @@ class AnggotaPolicy
      */
     public function update(Authenticatable $user, Anggota $anggota): bool
     {
-        return in_array($this->role($user), ['admin', 'rayon_admin']);
+        return in_array($this->role($user), ['admin', 'rayon']);
     }
 
     /**
@@ -56,7 +56,7 @@ class AnggotaPolicy
         }
 
         if ($user instanceof Rayon) {
-            return 'rayon_admin';
+            return 'rayon';
         }
 
         return null;

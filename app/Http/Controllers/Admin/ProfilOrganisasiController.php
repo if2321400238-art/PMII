@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProfilOrganisasi;
+use App\Services\MediaCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProfilOrganisasiController extends Controller
 {
+    public function __construct(private readonly MediaCompressionService $mediaCompressionService)
+    {
+    }
+
     public function edit()
     {
         $profil = ProfilOrganisasi::first();
@@ -53,7 +58,10 @@ class ProfilOrganisasiController extends Controller
             if ($profil->logo_path && Storage::disk('public')->exists($profil->logo_path)) {
                 Storage::disk('public')->delete($profil->logo_path);
             }
-            $profil->logo_path = $request->file('logo_path')->store('profil', 'public');
+            $profil->logo_path = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('logo_path'),
+                'profil'
+            );
         }
 
         // Handle hero image upload
@@ -61,7 +69,10 @@ class ProfilOrganisasiController extends Controller
             if ($profil->hero_image && Storage::disk('public')->exists($profil->hero_image)) {
                 Storage::disk('public')->delete($profil->hero_image);
             }
-            $profil->hero_image = $request->file('hero_image')->store('profil/hero', 'public');
+            $profil->hero_image = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('hero_image'),
+                'profil/hero'
+            );
         }
 
         // Handle hero image 2 upload
@@ -69,7 +80,10 @@ class ProfilOrganisasiController extends Controller
             if ($profil->hero_image_2 && Storage::disk('public')->exists($profil->hero_image_2)) {
                 Storage::disk('public')->delete($profil->hero_image_2);
             }
-            $profil->hero_image_2 = $request->file('hero_image_2')->store('profil/hero', 'public');
+            $profil->hero_image_2 = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('hero_image_2'),
+                'profil/hero'
+            );
         }
 
         // Handle hero image 3 upload
@@ -77,7 +91,10 @@ class ProfilOrganisasiController extends Controller
             if ($profil->hero_image_3 && Storage::disk('public')->exists($profil->hero_image_3)) {
                 Storage::disk('public')->delete($profil->hero_image_3);
             }
-            $profil->hero_image_3 = $request->file('hero_image_3')->store('profil/hero', 'public');
+            $profil->hero_image_3 = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('hero_image_3'),
+                'profil/hero'
+            );
         }
 
         $profil->save();

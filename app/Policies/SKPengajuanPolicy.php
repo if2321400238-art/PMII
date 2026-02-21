@@ -30,7 +30,7 @@ class SKPengajuanPolicy
      */
     public function create(Authenticatable $user): bool
     {
-        return in_array($this->role($user), ['admin', 'rayon_admin']);
+        return $this->role($user) === 'admin';
     }
 
     /**
@@ -75,7 +75,7 @@ class SKPengajuanPolicy
         }
 
         if ($user instanceof Rayon) {
-            return 'rayon_admin';
+            return 'rayon';
         }
 
         return null;

@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Helpers\AuthHelper;
 use App\Models\Gallery;
+use App\Services\MediaCompressionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class GalleryController extends Controller
 {
+    public function __construct(private readonly MediaCompressionService $mediaCompressionService)
+    {
+    }
+
     public function index(Request $request)
     {
         $query = Gallery::with('uploadedBy', 'approvedBy');
@@ -55,9 +59,15 @@ class GalleryController extends Controller
         ]);
 
         if ($validated['type'] === 'photo' && $request->hasFile('file_path')) {
-            $validated['file_path'] = $request->file('file_path')->store('galleries/photos', 'public');
+            $validated['file_path'] = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('file_path'),
+                'galleries/photos'
+            );
         } elseif ($validated['type'] === 'video' && $request->hasFile('file_path')) {
-            $validated['file_path'] = $request->file('file_path')->store('galleries/videos', 'public');
+            $validated['file_path'] = $this->mediaCompressionService->storeCompressedVideo(
+                $request->file('file_path'),
+                'galleries/videos'
+            );
         }
 
         // Set uploader dengan polymorphic relation
@@ -88,11 +98,27 @@ class GalleryController extends Controller
 
     public function edit(Gallery $gallery)
     {
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+        $isAdmin = $userType === 'user' && $currentUser->role_slug === 'admin';
+
+        if (!$isAdmin && !($gallery->uploaded_by === $currentUser->id && $gallery->uploader_type === get_class($currentUser))) {
+            abort(403, 'Unauthorized access');
+        }
+
         return view('admin.gallery.edit', compact('gallery'));
     }
 
     public function update(Request $request, Gallery $gallery)
     {
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+        $isAdmin = $userType === 'user' && $currentUser->role_slug === 'admin';
+
+        if (!$isAdmin && !($gallery->uploaded_by === $currentUser->id && $gallery->uploader_type === get_class($currentUser))) {
+            abort(403, 'Unauthorized access');
+        }
+
         $validated = $request->validate([
             'type' => 'required|in:photo,video',
             'title' => 'required|string|max:255',
@@ -104,7 +130,17 @@ class GalleryController extends Controller
         ]);
 
         if ($request->hasFile('file_path')) {
-            $validated['file_path'] = $request->file('file_path')->store('galleries/' . $validated['type'] . 's', 'public');
+            if ($validated['type'] === 'photo') {
+                $validated['file_path'] = $this->mediaCompressionService->storeCompressedImage(
+                    $request->file('file_path'),
+                    'galleries/photos'
+                );
+            } else {
+                $validated['file_path'] = $this->mediaCompressionService->storeCompressedVideo(
+                    $request->file('file_path'),
+                    'galleries/videos'
+                );
+            }
         }
 
         $gallery->update($validated);
@@ -114,12 +150,27 @@ class GalleryController extends Controller
 
     public function destroy(Gallery $gallery)
     {
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+        $isAdmin = $userType === 'user' && $currentUser->role_slug === 'admin';
+
+        if (!$isAdmin && !($gallery->uploaded_by === $currentUser->id && $gallery->uploader_type === get_class($currentUser))) {
+            abort(403, 'Unauthorized access');
+        }
+
         $gallery->delete();
         return redirect()->route('admin.gallery.index')->with('success', 'Galeri berhasil dihapus');
     }
 
     public function approve(Gallery $gallery)
     {
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+
+        if ($userType !== 'user' || $currentUser->role_slug !== 'admin') {
+            abort(403, 'Unauthorized access');
+        }
+
         $gallery->update([
             'approval_status' => 'approved',
             'approved_by' => auth()->id(),
@@ -132,6 +183,13 @@ class GalleryController extends Controller
 
     public function reject(Request $request, Gallery $gallery)
     {
+        $currentUser = AuthHelper::user();
+        $userType = AuthHelper::userType();
+
+        if ($userType !== 'user' || $currentUser->role_slug !== 'admin') {
+            abort(403, 'Unauthorized access');
+        }
+
         $validated = $request->validate([
             'rejection_reason' => 'required|string|max:500',
         ]);

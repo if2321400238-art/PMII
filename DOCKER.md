@@ -167,3 +167,4 @@ ports:
 - **Database**: SQLite (default)
 - **Process Manager**: Supervisor
 - **Node.js**: 20 (untuk build assets)
+- **FFmpeg**: untuk kompres video otomatis saat upload

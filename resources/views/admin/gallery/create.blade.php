@@ -7,7 +7,7 @@
     <div class="max-w-5xl mx-auto">
         @php
             $role = auth()->user()->role_slug
-                ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
+                ?? (auth()->guard('rayon')->check() ? 'rayon' : null);
         @endphp
         <!-- Header -->
         <div class="mb-6">

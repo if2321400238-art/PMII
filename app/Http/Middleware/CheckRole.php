@@ -25,7 +25,7 @@ class CheckRole
         if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
             $userRole = \Illuminate\Support\Facades\Auth::guard('web')->user()->role_slug;
         } elseif (\Illuminate\Support\Facades\Auth::guard('rayon')->check()) {
-            $userRole = 'rayon_admin';
+            $userRole = 'rayon';
         }
 
         // Admin always has access

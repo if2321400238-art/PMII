@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ad;
+use App\Services\MediaCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class AdController extends Controller
 {
+    public function __construct(private readonly MediaCompressionService $mediaCompressionService)
+    {
+    }
+
     public function index()
     {
         $ads = Ad::latest()->paginate(12);
@@ -37,7 +42,14 @@ class AdController extends Controller
             'image_path.dimensions' => 'Rasio gambar harus 10:3 (contoh 1200x360 atau 1000x300), minimal 800x240.',
         ]);
 
-        $validated['image_path'] = $request->file('image_path')->store('ads', 'public');
+        $validated['image_path'] = $this->mediaCompressionService->storeCompressedImage(
+            $request->file('image_path'),
+            'ads',
+            'public',
+            1920,
+            82,
+            82
+        );
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
 
@@ -70,7 +82,14 @@ class AdController extends Controller
             if ($ad->image_path && Storage::disk('public')->exists($ad->image_path)) {
                 Storage::disk('public')->delete($ad->image_path);
             }
-            $validated['image_path'] = $request->file('image_path')->store('ads', 'public');
+            $validated['image_path'] = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('image_path'),
+                'ads',
+                'public',
+                1920,
+                82,
+                82
+            );
         }
 
         $validated['is_active'] = $request->boolean('is_active');

@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
-use App\Models\Rayon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -44,7 +42,10 @@ class ProfileUpdateRequest extends FormRequest
         // Additional rules for Rayon
         if ($isRayon) {
             $rules['contact'] = ['nullable', 'string', 'max:50'];
+            $rules['instagram'] = ['nullable', 'string', 'max:255'];
+            $rules['tiktok'] = ['nullable', 'string', 'max:255'];
             $rules['description'] = ['nullable', 'string', 'max:1000'];
+            $rules['logo_path'] = ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'];
         }
 
         return $rules;
@@ -61,7 +62,12 @@ class ProfileUpdateRequest extends FormRequest
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah digunakan.',
             'contact.max' => 'Kontak maksimal 50 karakter.',
+            'instagram.max' => 'Akun Instagram maksimal 255 karakter.',
+            'tiktok.max' => 'Akun TikTok maksimal 255 karakter.',
             'description.max' => 'Deskripsi maksimal 1000 karakter.',
+            'logo_path.image' => 'File logo harus berupa gambar.',
+            'logo_path.mimes' => 'Format logo harus jpeg, jpg, png, atau webp.',
+            'logo_path.max' => 'Ukuran logo maksimal 2MB.',
         ];
     }
 }

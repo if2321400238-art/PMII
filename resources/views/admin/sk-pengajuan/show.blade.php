@@ -5,7 +5,7 @@
 
 @section('content')
 @php
-    $role = auth()->user()->role_slug ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
+    $role = auth()->user()->role_slug ?? (auth()->guard('rayon')->check() ? 'rayon' : null);
     $isAdmin = in_array($role, ['admin']);
 @endphp
 

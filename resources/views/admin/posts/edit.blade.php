@@ -5,10 +5,22 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-5xl mx-auto">
+        @php
+            $role = auth()->user()->role_slug
+                ?? (auth()->guard('rayon')->check() ? 'rayon' : null);
+        @endphp
         <!-- Header -->
-        <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">Edit Post</h1>
-            <p class="text-gray-600 mt-1">Edit berita atau artikel Pena Santri</p>
+        <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Edit Post</h1>
+                <p class="text-gray-600 mt-1">Edit berita atau artikel Pena Santri</p>
+            </div>
+            @if($role === 'admin')
+                <a href="{{ route('admin.categories.index') }}"
+                   class="inline-flex items-center justify-center px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Kelola Kategori
+                </a>
+            @endif
         </div>
 
         <!-- Status Approval Box -->
@@ -130,7 +142,7 @@
                     </h2>
                 </div>
                 <div class="p-6">
-                    <textarea name="content" rows="15"
+                    <textarea id="contentEditor" name="content" rows="15"
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition @error('content') border-red-500 @enderror">{{ old('content', $post->content) }}</textarea>
                     @error('content')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
@@ -208,3 +220,41 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editorElement = document.querySelector('#contentEditor');
+
+            if (!editorElement) return;
+
+            ClassicEditor
+                .create(editorElement, {
+                    toolbar: [
+                        'undo', 'redo', '|',
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'outdent', 'indent', '|',
+                        'link', 'blockQuote', 'insertTable', '|',
+                        'alignment'
+                    ],
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+                        ]
+                    },
+                    table: {
+                        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+@endpush

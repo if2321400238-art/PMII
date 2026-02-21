@@ -14,7 +14,10 @@ class Rayon extends Authenticatable
     protected $fillable = [
         'name',
         'description',
+        'logo_path',
         'contact',
+        'instagram',
+        'tiktok',
         'email',
         'password',
     ];
@@ -39,7 +42,7 @@ class Rayon extends Authenticatable
 
     public function getRoleSlugAttribute(): string
     {
-        return 'rayon_admin';
+        return 'rayon';
     }
 
     public function hasRole(string ...$roles): bool

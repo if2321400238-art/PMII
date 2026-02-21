@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\MediaCompressionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function __construct(private readonly MediaCompressionService $mediaCompressionService)
+    {
+    }
+
     /**
      * Display the user's profile form.
      * Supports all guards: web (admin), rayon
@@ -42,14 +48,29 @@ class ProfileController extends Controller
     {
         // Get user from any active guard
         $user = null;
+        $isRayon = false;
 
         if (Auth::guard('rayon')->check()) {
             $user = Auth::guard('rayon')->user();
+            $isRayon = true;
         } else {
             $user = $request->user();
         }
 
-        $user->fill($request->validated());
+        $validated = $request->validated();
+
+        if ($isRayon && $request->hasFile('logo_path')) {
+            if ($user->logo_path && Storage::disk('public')->exists($user->logo_path)) {
+                Storage::disk('public')->delete($user->logo_path);
+            }
+
+            $validated['logo_path'] = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('logo_path'),
+                'rayon/logo'
+            );
+        }
+
+        $user->fill($validated);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

@@ -11,13 +11,21 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Kelola Posts</h1>
                 <p class="text-xs md:text-sm text-gray-600 mt-1">Kelola berita dan artikel Pena Santri</p>
             </div>
-            <a href="{{ route('admin.posts.create') }}"
-               class="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition font-medium text-sm md:text-base shadow-lg shadow-green-500/30 flex items-center whitespace-nowrap">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                Buat Post Baru
-            </a>
+            <div class="flex gap-2 w-full sm:w-auto">
+                @if(auth()->guard('web')->check() && auth()->user()?->role_slug === 'admin')
+                    <a href="{{ route('admin.categories.index') }}"
+                       class="px-4 md:px-5 py-2 md:py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium text-sm md:text-base flex items-center whitespace-nowrap">
+                        Kelola Kategori
+                    </a>
+                @endif
+                <a href="{{ route('admin.posts.create') }}"
+                   class="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition font-medium text-sm md:text-base shadow-lg shadow-green-500/30 flex items-center whitespace-nowrap">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Buat Post Baru
+                </a>
+            </div>
         </div>
 
         @if(session('success'))

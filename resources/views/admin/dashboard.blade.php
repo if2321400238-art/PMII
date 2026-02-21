@@ -6,10 +6,10 @@
 @section('content')
 @php
     $role = auth()->user()->role_slug
-        ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
+        ?? (auth()->guard('rayon')->check() ? 'rayon' : null);
     $roleLabel = match ($role) {
         'admin' => 'Admin',
-        'rayon_admin' => 'Rayon Admin',
+        'rayon' => 'Rayon',
         default => 'User',
     };
 @endphp

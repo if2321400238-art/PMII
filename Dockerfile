@@ -23,6 +23,7 @@ RUN apk add --no-cache \
     oniguruma-dev \
     libxml2-dev \
     libzip-dev \
+    ffmpeg \
     imagemagick \
     imagemagick-dev
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Anggota;
 use App\Models\Rayon;
 use App\Services\KTAGeneratorService;
+use App\Services\MediaCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Storage;
 
 class AnggotaController extends Controller
 {
+    public function __construct(private readonly MediaCompressionService $mediaCompressionService)
+    {
+    }
+
     public function index(Request $request)
     {
         $query = Anggota::with('rayon');
@@ -69,7 +74,10 @@ class AnggotaController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('anggota', 'public');
+            $validated['foto'] = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('foto'),
+                'anggota'
+            );
         }
 
         $anggota = Anggota::create($validated);
@@ -82,6 +90,10 @@ class AnggotaController extends Controller
 
     public function edit(Anggota $anggota)
     {
+        if (Auth::guard('rayon')->check() && $anggota->rayon_id !== Auth::guard('rayon')->id()) {
+            abort(403, 'Unauthorized access');
+        }
+
         $rayonCurrent = Auth::guard('rayon')->check()
             ? Rayon::find(Auth::guard('rayon')->id())
             : null;
@@ -94,6 +106,10 @@ class AnggotaController extends Controller
 
     public function update(Request $request, Anggota $anggota)
     {
+        if (Auth::guard('rayon')->check() && $anggota->rayon_id !== Auth::guard('rayon')->id()) {
+            abort(403, 'Unauthorized access');
+        }
+
         $rayonId = Auth::guard('rayon')->check() ? Auth::guard('rayon')->id() : null;
 
         if ($rayonId) {
@@ -110,7 +126,10 @@ class AnggotaController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('anggota', 'public');
+            $validated['foto'] = $this->mediaCompressionService->storeCompressedImage(
+                $request->file('foto'),
+                'anggota'
+            );
         }
 
         $anggota->update($validated);
@@ -120,12 +139,20 @@ class AnggotaController extends Controller
 
     public function destroy(Anggota $anggota)
     {
+        if (Auth::guard('rayon')->check() && $anggota->rayon_id !== Auth::guard('rayon')->id()) {
+            abort(403, 'Unauthorized access');
+        }
+
         $anggota->delete();
         return redirect()->route('admin.anggota.index')->with('success', 'Anggota berhasil dihapus');
     }
 
     public function downloadKTA(Anggota $anggota, KTAGeneratorService $ktaGenerator)
     {
+        if (Auth::guard('rayon')->check() && $anggota->rayon_id !== Auth::guard('rayon')->id()) {
+            abort(403, 'Unauthorized access');
+        }
+
         try {
             // Load relationships
             $anggota->load(['rayon']);

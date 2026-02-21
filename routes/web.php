@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
 use App\Http\Controllers\Admin\AdController as AdminAdController;
 use App\Http\Controllers\Admin\ProfilOrganisasiController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CategoryController;
 
 use App\Http\Controllers\ProfileController;
 
@@ -137,16 +138,20 @@ Route::middleware(['auth.any'])->prefix('admin')->name('admin.')->group(function
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Posts Management (Admin, Rayon Admin)
-    Route::middleware('role:admin,rayon_admin')->group(function () {
+    // Posts Management (Admin, Rayon)
+    Route::middleware('role:admin,rayon')->group(function () {
         Route::resource('posts', AdminPostController::class);
+    });
+
+    // Posts Approval (Admin only)
+    Route::middleware('role:admin')->group(function () {
         Route::post('/posts/{post}/approve', [AdminPostController::class, 'approve'])->name('posts.approve');
         Route::post('/posts/{post}/reject', [AdminPostController::class, 'reject'])->name('posts.reject');
         Route::post('/posts/{post}/publish', [AdminPostController::class, 'publish'])->name('posts.publish');
     });
 
-    // Anggota Management (Admin, Rayon Admin)
-    Route::middleware('role:admin,rayon_admin')->group(function () {
+    // Anggota Management (Admin, Rayon)
+    Route::middleware('role:admin,rayon')->group(function () {
         Route::resource('anggota', AnggotaController::class);
         Route::get('/anggota/{anggota}/download-kta', [AnggotaController::class, 'downloadKTA'])->name('anggota.download-kta');
     });
@@ -154,9 +159,13 @@ Route::middleware(['auth.any'])->prefix('admin')->name('admin.')->group(function
     // Rayon Management (Admin only)
     Route::middleware('role:admin')->resource('rayon', RayonController::class);
 
-    // Gallery Management (Admin, Rayon Admin)
-    Route::middleware('role:admin,rayon_admin')->group(function () {
+    // Gallery Management (Admin, Rayon)
+    Route::middleware('role:admin,rayon')->group(function () {
         Route::resource('gallery', AdminGalleryController::class);
+    });
+
+    // Gallery Approval (Admin only)
+    Route::middleware('role:admin')->group(function () {
         Route::post('/gallery/{gallery}/approve', [AdminGalleryController::class, 'approve'])->name('gallery.approve');
         Route::post('/gallery/{gallery}/reject', [AdminGalleryController::class, 'reject'])->name('gallery.reject');
     });
@@ -165,6 +174,7 @@ Route::middleware(['auth.any'])->prefix('admin')->name('admin.')->group(function
     Route::middleware('role:admin')->group(function () {
         Route::resource('download', AdminDownloadController::class);
         Route::resource('ads', AdminAdController::class)->except(['show']);
+        Route::resource('categories', CategoryController::class)->except(['show']);
     });
 
     // Profil Organisasi (Admin only)

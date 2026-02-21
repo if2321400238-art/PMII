@@ -5,7 +5,7 @@
 @section('content')
 @php
     $role = auth()->user()->role_slug
-    ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
+    ?? (auth()->guard('rayon')->check() ? 'rayon' : null);
 @endphp
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto">

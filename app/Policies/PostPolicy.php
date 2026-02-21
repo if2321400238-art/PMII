@@ -38,7 +38,12 @@ class PostPolicy
      */
     public function update(Authenticatable $user, Post $post): bool
     {
-        return ($user instanceof User && $user->id === $post->author_id) || $this->role($user) === 'admin';
+        if ($this->role($user) === 'admin') {
+            return true;
+        }
+
+        return (int) $post->author_id === (int) $user->getAuthIdentifier()
+            && $post->author_type === get_class($user);
     }
 
     /**
@@ -46,7 +51,12 @@ class PostPolicy
      */
     public function delete(Authenticatable $user, Post $post): bool
     {
-        return ($user instanceof User && $user->id === $post->author_id) || $this->role($user) === 'admin';
+        if ($this->role($user) === 'admin') {
+            return true;
+        }
+
+        return (int) $post->author_id === (int) $user->getAuthIdentifier()
+            && $post->author_type === get_class($user);
     }
 
     /**
@@ -88,7 +98,7 @@ class PostPolicy
         }
 
         if ($user instanceof Rayon) {
-            return 'rayon_admin';
+            return 'rayon';
         }
 
         return null;

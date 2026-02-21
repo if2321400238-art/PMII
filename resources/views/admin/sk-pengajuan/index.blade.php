@@ -6,7 +6,7 @@
 @section('content')
 @php
     $role = auth()->user()->role_slug
-        ?? (auth()->guard('rayon')->check() ? 'rayon_admin' : null);
+    ?? (auth()->guard('rayon')->check() ? 'rayon' : null);
 @endphp
 <div class="container mx-auto px-4 py-4 md:py-8">
     <div class="max-w-7xl mx-auto">
@@ -22,7 +22,7 @@
                 </h1>
                 <p class="text-gray-600 text-sm md:text-base mt-1">Kelola pengajuan Surat Keputusan organisasi</p>
             </div>
-            @if(in_array($role, ['korwil_admin', 'rayon_admin']))
+            @if(in_array($role, ['admin']))
                 <a href="{{ route('admin.sk-pengajuan.create') }}"
                    class="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition font-medium shadow-lg shadow-green-500/30 flex items-center justify-center text-sm md:text-base w-full sm:w-auto">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
