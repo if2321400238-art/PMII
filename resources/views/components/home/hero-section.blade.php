@@ -91,9 +91,7 @@
         $profil->hero_image ?? null,
         $profil->hero_image_2 ?? null,
         $profil->hero_image_3 ?? null,
-    ])->filter(function ($image) {
-        return filled($image) && \Illuminate\Support\Facades\Storage::disk('public')->exists($image);
-    })->values()->all();
+    ])->filter()->values()->all();
 @endphp
 
 <section class="bg-slate-50 overflow-hidden hero-shell">
@@ -112,7 +110,7 @@
                             <div class="hero-slider absolute inset-0">
                                 @foreach ($heroImages as $index => $heroImage)
                                     <div class="hero-slide absolute inset-0 transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-index="{{ $index }}">
-                                        <img src="{{ asset('storage/' . $heroImage) }}" alt="Hero PMII {{ $index + 1 }}" class="w-full h-full object-cover" onerror="this.style.opacity='0'; this.parentElement.classList.add('bg-gradient-to-br','from-blue-800','to-blue-900');">
+                                        <img src="{{ route('img.optimized', ['path' => $heroImage, 'w' => 900]) }}" alt="Hero PMII {{ $index + 1 }}" class="w-full h-full object-cover" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'low' }}" decoding="async" onerror="this.style.opacity='0'; this.parentElement.classList.add('bg-gradient-to-br','from-blue-800','to-blue-900');">
                                         <div class="absolute inset-0 bg-gradient-to-b from-[#0f172a]/35 via-[#1e3a5f]/45 to-[#0f172a]/80"></div>
                                     </div>
                                 @endforeach
@@ -126,7 +124,7 @@
                                 <span class="inline-flex rounded-full border border-white/40 bg-white/10 px-3 py-1 text-[11px] font-medium tracking-wide uppercase text-white backdrop-blur-sm">
                                     PMII UNUJA
                                 </span>
-                                
+
                             </div>
 
                             <div class="hero-mobile-content p-4 rounded-2xl bg-gradient-to-t from-[#071a35]/55 via-[#071a35]/28 to-transparent">
@@ -150,7 +148,7 @@
                             <div class="absolute bottom-4 right-4 z-30 flex gap-2" role="tablist" aria-label="Slide hero">
                                 @foreach ($heroImages as $index => $heroImage)
                                     <button
-                                        class="hero-dot h-2.5 rounded-full {{ $index === 0 ? 'w-6 bg-white' : 'w-2.5 bg-white/40' }} transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                        class="hero-dot h-2.5 w-2.5 rounded-full {{ $index === 0 ? 'bg-white' : 'bg-white/40' }} transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                                         data-slide="{{ $index }}"
                                         aria-label="Tampilkan slide {{ $index + 1 }}"
                                     ></button>
@@ -197,7 +195,7 @@
                                 <div class="hero-slider absolute inset-0">
                                     @foreach ($heroImages as $index => $heroImage)
                                         <div class="hero-slide absolute inset-0 transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-index="{{ $index }}">
-                                            <img src="{{ asset('storage/' . $heroImage) }}" alt="Hero PMII {{ $index + 1 }}" class="w-full h-full object-cover" onerror="this.style.opacity='0'; this.parentElement.classList.add('bg-gradient-to-br','from-blue-800','to-blue-900');">
+                                            <img src="{{ route('img.optimized', ['path' => $heroImage, 'w' => 1280]) }}" alt="Hero PMII {{ $index + 1 }}" class="w-full h-full object-cover" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" fetchpriority="{{ $index === 0 ? 'high' : 'low' }}" decoding="async" onerror="this.style.opacity='0'; this.parentElement.classList.add('bg-gradient-to-br','from-blue-800','to-blue-900');">
                                             <div class="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-[#1e3a5f]/35 to-[#1e3a5f]/55"></div>
                                         </div>
                                     @endforeach

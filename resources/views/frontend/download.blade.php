@@ -10,10 +10,11 @@
         <!-- Mobile cards -->
         <div class="md:hidden divide-y">
             @forelse($downloads as $download)
-                <article class="p-4 {{ !$download->fileExists() ? 'bg-red-50' : '' }}">
+                @php($isFileAvailable = $fileAvailability[$download->id] ?? false)
+                <article class="p-4 {{ !$isFileAvailable ? 'bg-red-50' : '' }}">
                     <div class="flex items-start justify-between gap-3">
                         <h2 class="font-semibold text-gray-900">{{ $download->nama_file }}</h2>
-                        @if(!$download->fileExists())
+                        @if(!$isFileAvailable)
                             <span class="shrink-0 text-xs bg-red-100 text-red-800 px-2 py-1 rounded">File Missing</span>
                         @endif
                     </div>
@@ -27,7 +28,7 @@
                     <p class="mt-3 text-sm text-gray-600">{{ $download->deskripsi ?? '-' }}</p>
 
                     <div class="mt-4">
-                        @if($download->fileExists())
+                        @if($isFileAvailable)
                             <a href="{{ route('download.show', $download) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
                                 Lihat Detail & Download
                             </a>
@@ -58,10 +59,11 @@
                 </thead>
                 <tbody class="divide-y">
                     @forelse($downloads as $download)
-                        <tr class="hover:bg-gray-50 {{ !$download->fileExists() ? 'bg-red-50' : '' }}">
+                        @php($isFileAvailable = $fileAvailability[$download->id] ?? false)
+                        <tr class="hover:bg-gray-50 {{ !$isFileAvailable ? 'bg-red-50' : '' }}">
                             <td class="px-6 py-4 font-semibold">
                                 {{ $download->nama_file }}
-                                @if(!$download->fileExists())
+                                @if(!$isFileAvailable)
                                     <span class="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded">File Missing</span>
                                 @endif
                             </td>
@@ -72,7 +74,7 @@
                             </td>
                             <td class="px-6 py-4 text-gray-600">{{ $download->deskripsi ?? '-' }}</td>
                             <td class="px-6 py-4 text-center">
-                                @if($download->fileExists())
+                                @if($isFileAvailable)
                                     <a href="{{ route('download.show', $download) }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
                                         Lihat Detail & Download
                                     </a>

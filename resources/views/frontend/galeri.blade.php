@@ -8,7 +8,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 mb-10 md:mb-12">
         @forelse($galleries as $gallery)
-            <a href="{{ route('gallery.show', $gallery) }}" class="relative group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 h-56 md:h-52 bg-slate-100">
+            <a href="{{ route('gallery.show', $gallery) }}" class="block relative group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 w-full bg-slate-100" style="height: 14rem;">
                 @if($gallery->type === 'photo' && $gallery->file_path)
                     <img src="{{ asset('storage/' . $gallery->file_path) }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                 @elseif($gallery->type === 'video')

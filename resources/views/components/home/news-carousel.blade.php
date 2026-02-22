@@ -1,6 +1,6 @@
 <section class="news-pinboard-section py-14 md:py-18 overflow-hidden section-reveal cinematic-section premium-section" data-reveal data-cinematic>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-        <h2 class="parallax-title premium-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#1d4ed8] mb-7 md:mb-9" data-parallax-title>Berita Terkini</h2>
+        <h2 class="parallax-title premium-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#1d4ed8] mb-7 md:mb-9" data-parallax-title>Papan Berita</h2>
 
         @php
             $pinnedPosts = $beritaTerkini->take(4);
@@ -24,7 +24,7 @@
                         <div class="news-card-sheet">
                             <div class="news-card-media">
                                 @if ($post->thumbnail)
-                                    <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
+                                    <img src="{{ route('img.optimized', ['path' => $post->thumbnail, 'w' => 640]) }}" alt="{{ $post->title }}" class="w-full h-full object-cover" loading="lazy" decoding="async" fetchpriority="low">
                                 @else
                                     <div class="w-full h-full bg-gradient-to-br from-yellow-500 to-blue-600"></div>
                                 @endif
@@ -35,6 +35,11 @@
                                 <h3 class="text-[15px] md:text-[19px] font-extrabold leading-snug text-slate-900 line-clamp-2 break-words">
                                     <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-blue-700">{{ $post->title }}</a>
                                 </h3>
+                                <p class="text-[11px] md:text-xs text-slate-500 mt-1">
+                                    <span>Oleh {{ $post->author->name ?? 'Admin' }}</span>
+                                    <span class="mx-1">•</span>
+                                    <span>{{ ($post->published_at ?? $post->created_at)?->translatedFormat('d M Y') }}</span>
+                                </p>
                                 <p class="text-[12px] md:text-sm text-slate-600 mt-1 line-clamp-2">{{ strip_tags($post->content) }}</p>
                             </div>
                         </div>

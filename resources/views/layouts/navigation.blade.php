@@ -17,10 +17,6 @@
 <header class="relative text-white {{ $isHomePage ? '' : 'bg-[#1e3a5f]/95 backdrop-blur-md rounded-2xl shadow-2xl shadow-black/40 border border-white/10' }}"
         x-data="{ open: false }"
         id="mainNavbar">
-    @php
-        $profil = \App\Models\ProfilOrganisasi::first();
-    @endphp
-
     <!-- Top Navigation -->
     <nav class="flex items-center justify-between px-6 py-3 border-b border-white/10 gap-6">
         <!-- Logo -->
@@ -179,7 +175,7 @@
                 Download
             </a>
 
-            
+
 
             <!-- Account -->
             <div class="pt-3 mt-3 border-t border-white/10">

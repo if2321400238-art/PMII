@@ -28,10 +28,6 @@
         <meta name="twitter:description" content="@yield('description', 'Pergerakan Mahasiswa Islam Indonesia - Komisariat UNUJA')">
         <meta name="twitter:image" content="@yield('image', asset('images/PMII-og.jpg'))">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
@@ -94,7 +90,7 @@
         </style>
         @stack('head')
     </head>
-    <body class="font-sans antialiased" @if(request()->routeIs('home')) style="overflow: hidden;" @endif>
+    <body class="font-sans antialiased">
         <!-- Loading Screen (Only on Homepage) -->
         @if(request()->routeIs('home'))
         <div id="loadingScreen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, #0f172a, #1e3a5f); display: flex !important; align-items: center; justify-content: center; z-index: 99999; opacity: 1 !important;">
@@ -172,55 +168,23 @@
             const loadingScreen = document.getElementById('loadingScreen');
 
             if (loadingScreen) {
-                console.log('Loading script initialized');
-
-                // Ensure loading screen shows immediately
-                document.addEventListener('DOMContentLoaded', function() {
-                    console.log('DOMContentLoaded - Loading screen found');
-                    console.log('Background style:', loadingScreen.style.background);
-
-                    loadingScreen.style.display = 'flex';
-                    loadingScreen.style.opacity = '1';
-                    console.log('Loading screen forced to display with inline styles');
-                });
-
-                // Track when page started loading
-                const pageLoadStart = Date.now();
-                const minimumLoadingTime = 2000; // Show loading for at least 2 seconds
-
                 // Hide loading screen when page is fully loaded
                 window.addEventListener('load', function() {
-                    console.log('Window loaded');
-                    const bodyElement = document.body;
-
-                    const elapsedTime = Date.now() - pageLoadStart;
-                    const remainingTime = Math.max(0, minimumLoadingTime - elapsedTime);
-
-                    console.log('Elapsed time:', elapsedTime, 'Remaining time:', remainingTime);
-
+                    loadingScreen.style.opacity = '0';
                     setTimeout(() => {
-                        console.log('Starting fade out');
-                        loadingScreen.style.opacity = '0';
-                        bodyElement.style.overflow = 'auto'; // Re-enable scrolling
-                        setTimeout(() => {
-                            loadingScreen.style.display = 'none';
-                            console.log('Loading screen hidden');
-                        }, 500);
-                    }, remainingTime);
+                        loadingScreen.style.display = 'none';
+                    }, 250);
                 });
 
-                // Fallback: hide after 5 seconds max (in case assets take too long)
+                // Fallback: hide quickly if load event is delayed
                 setTimeout(() => {
-                    const bodyElement = document.body;
                     if (loadingScreen && window.getComputedStyle(loadingScreen).display !== 'none') {
-                        console.log('Fallback timeout triggered');
                         loadingScreen.style.opacity = '0';
-                        bodyElement.style.overflow = 'auto';
                         setTimeout(() => {
                             loadingScreen.style.display = 'none';
-                        }, 500);
+                        }, 250);
                     }
-                }, 5000);
+                }, 1200);
             }
         </script>
     </body>

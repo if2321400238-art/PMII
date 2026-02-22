@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Download;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 class DownloadController extends Controller
@@ -11,9 +12,21 @@ class DownloadController extends Controller
     public function index()
     {
         $downloads = Download::latest()->paginate(15);
+        $fileAvailability = $this->buildFileAvailabilityMap($downloads);
         $kategoris = Download::distinct()->pluck('kategori');
 
-        return view('frontend.download', compact('downloads', 'kategoris'));
+        return view('frontend.download', compact('downloads', 'kategoris', 'fileAvailability'));
+    }
+
+    private function buildFileAvailabilityMap(LengthAwarePaginator $downloads): array
+    {
+        $availability = [];
+
+        foreach ($downloads->items() as $download) {
+            $availability[$download->id] = Storage::disk('public')->exists($download->file_path);
+        }
+
+        return $availability;
     }
 
     public function show(Download $download)

@@ -41,12 +41,31 @@ Project Laravel ini telah dikonfigurasi untuk berjalan di Docker.
 # Build dan start containers
 docker-compose up -d
 
+# Start dev mode lengkap (app + db + vite watcher)
+docker-compose up -d app mysql vite
+
 # Lihat logs
 docker-compose logs -f
+
+# Lihat log vite (tailwind/js hot reload)
+docker-compose logs -f vite
 
 # Stop containers
 docker-compose down
 ```
+
+### Tailwind / Vite Hot Reload (tanpa build manual)
+Jalankan service `vite` saat development agar perubahan class Tailwind langsung ter-apply.
+
+```bash
+# Menyalakan watcher vite
+docker-compose up -d vite
+
+# Memastikan watcher aktif
+docker-compose logs -f vite
+```
+
+Setelah aktif, buka aplikasi seperti biasa di browser. Perubahan file di `resources/views`, `resources/css`, dan `resources/js` akan otomatis terdeteksi.
 
 ### Production Build
 ```bash

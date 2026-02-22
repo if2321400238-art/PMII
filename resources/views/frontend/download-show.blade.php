@@ -117,36 +117,5 @@
         </div>
     </div>
 
-    <!-- Related Downloads -->
-    @php
-        $related = \App\Models\Download::where('kategori', $download->kategori)
-            ->where('id', '!=', $download->id)
-            ->latest()
-            ->take(3)
-            ->get();
-    @endphp
-
-    @if($related->count() > 0)
-        <div class="mt-12 pt-8 border-t">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">File Terkait</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach($related as $item)
-                    <a href="{{ route('download.show', $item) }}" class="group">
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                            <div class="aspect-square bg-gray-100 flex items-center justify-center p-4">
-                                <div class="text-center">
-                                    <p class="text-4xl font-bold text-gray-400">{{ strtoupper(pathinfo($item->file_path, PATHINFO_EXTENSION))[0] ?? 'F' }}</p>
-                                </div>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition line-clamp-2">{{ $item->nama_file }}</h3>
-                                <p class="text-sm text-gray-600 mt-2 line-clamp-2">{{ $item->deskripsi ?? '-' }}</p>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    @endif
 </div>
 @endsection

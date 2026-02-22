@@ -7,6 +7,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\OptimizedImageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\RayonController;
@@ -20,6 +21,10 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ProfileController;
 
 // Frontend Routes
+Route::get('/img/{path}', [OptimizedImageController::class, 'show'])
+    ->where('path', '.*')
+    ->name('img.optimized');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Rubrik Routes
